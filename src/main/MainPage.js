@@ -17,6 +17,7 @@ import {
   Checkbox,
   Badge,
   Container,
+  Typography,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
@@ -54,8 +55,8 @@ import useFeatures from "../common/util/useFeatures";
 import "./main.css";
 import MainMenu from "./components/MainMenu";
 import PageLayout from "../common/components/PageLayout";
-import Typography from "@mui/material/Typography";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import Header from "../common/components/Header";
 
 const useStyles = makeStyles((theme) => ({
   sidebar: {
@@ -344,47 +345,7 @@ const MainPage = () => {
   return (
     <>
       <PageLayout menu={<MainMenu />}>
-        <div className={classes.appbar}>
-          <div className={classes.count}>
-            <div className={classes.circleCount}>
-              <div>
-                <div className={`${classes.circle} ${classes.green}`}></div>
-              </div>
-              <Typography variant="h6" component={"h6"}>
-                15 Online
-              </Typography>
-            </div>
-            <div className={classes.circleCount}>
-              <div>
-                <div className={classes.circle}></div>
-              </div>
-              <Typography variant="h6" component={"h6"}>
-                5 Offline
-              </Typography>
-            </div>
-            <div className={classes.circleCount}>
-              <div>
-                <div className={`${classes.circle} ${classes.yellow}`}></div>
-              </div>
-              <Typography variant="h6" component={"h6"}>
-                3 Idle
-              </Typography>
-            </div>
-          </div>
-          <div className={classes.profile}>
-            <div>
-              <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSrf1xjorLVFcNPL_A746ew0_fIzLFTY5Ngw&usqp=CAU"
-                alt="logo"
-                className={classes.profileImg}
-              />
-            </div>
-            <Typography variant="h6" component={"h6"}>
-              Admin
-            </Typography>
-            <KeyboardArrowDownIcon sx={{ color: "gray", marginLeft: 1 }} />
-          </div>
-        </div>
+        <Header />
         <div className={classes.container}>
           <Container maxWidth="xl" className={classes.container}>
             <MapView>
