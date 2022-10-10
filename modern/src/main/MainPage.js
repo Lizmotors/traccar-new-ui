@@ -55,7 +55,6 @@ import useFeatures from "../common/util/useFeatures";
 import "./main.css";
 import MainMenu from "./components/MainMenu";
 import PageLayout from "../common/components/PageLayout";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import Header from "../common/components/Header";
 
 const useStyles = makeStyles((theme) => ({
