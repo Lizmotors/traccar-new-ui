@@ -1,0 +1,10 @@
+.css-o4b71y-MuiAccordionSummary-content.Mui-expanded {
+    margin: 0 !important;
+}
+.css-1elwnq4-MuiPaper-root-MuiAccordion-root.Mui-expanded {
+    margin: 0 !important;
+}
+
+.css-1elwnq4-MuiPaper-root-MuiAccordion-root:before {
+    height: 0 !important;
+}
