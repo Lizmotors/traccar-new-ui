@@ -69,6 +69,7 @@ import PublishIcon from "@mui/icons-material/Publish";
 import StorageIcon from "@mui/icons-material/Storage";
 import BuildIcon from "@mui/icons-material/Build";
 import LogoutIcon from "@mui/icons-material/Logout";
+import MainMenu from "../../main/components/MainMenu";
 
 const useStyles = makeStyles((theme) => ({
   last_content: {
@@ -344,7 +345,8 @@ const ReportsMenu = () => {
 
   return (
     <>
-      <List>
+      <MainMenu />
+      {/* <List>
         <div className={classes.logocont}>
           <div>
             <img
@@ -529,22 +531,13 @@ const ReportsMenu = () => {
                   >
                     <AddIcon />
                   </IconButton>
-                  {/* {desktop && (
-                        <IconButton onClick={handleClose}>
-                          <CloseIcon />
-                        </IconButton>
-                      )} */}
                 </Toolbar>
               </Paper>
               <div className={classes.deviceList}>
                 <DevicesList devices={filteredDevices} />
               </div>
             </Paper>
-            {/* {desktop && (
-                  <div className={classes.bottomMenu}>
-                    <BottomMenu />
-                  </div>
-                )} */}
+
             {!features.disableEvents && (
               <EventsDrawer
                 open={eventsOpen}
@@ -826,7 +819,7 @@ const ReportsMenu = () => {
             primary={t("loginLogout")}
           />
         </ListItemButton>
-      </List>
+      </List> */}
     </>
   );
 };

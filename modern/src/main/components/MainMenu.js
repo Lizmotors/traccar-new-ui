@@ -70,6 +70,13 @@ import EventsDrawer from "../EventsDrawer";
 import "../main.css";
 import StatusCard from "../StatusCard";
 import { devicesActions } from "../../store";
+import TimelineIcon from "@mui/icons-material/Timeline";
+import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
+import PauseCircleFilledIcon from "@mui/icons-material/PauseCircleFilled";
+import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
+import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+import RouteIcon from "@mui/icons-material/Route";
+import BarChartIcon from "@mui/icons-material/BarChart";
 
 const MenuItems = ({ title, link, icon, selected }) => (
   <ListItemButton
@@ -456,312 +463,471 @@ const SettingsMenu = () => {
             primary={"Telemoto"}
           />
         </div>
-        {!readonly && (
-          <>
-            <MenuItems
-              title={t("mapTitle")}
-              link="/"
-              icon={<FmdGoodIcon />}
-              selected={location.pathname === `/`}
-            />
-            {/* <MenuItems
-              title={"Devices"}
-              link={`/settings/device`}
-              icon={<AddLocationAltIcon />}
-              selected={location.pathname === `/settings/device`}
-            /> */}
-            <Accordion
-              //defaultExpanded
-              style={{ border: "none", boxShadow: "none", padding: 0 }}
+        <MenuItems
+          title={t("mapTitle")}
+          link="/"
+          icon={<FmdGoodIcon />}
+          selected={location.pathname === `/`}
+        />
+        <Accordion
+          //defaultExpanded
+          style={{ border: "none", boxShadow: "none", padding: 0 }}
+        >
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon sx={{ color: "#1875d8" }} />}
+            style={{
+              border: "none",
+              boxShadow: "none",
+              padding: 0,
+              paddingRight: 50,
+              margin: 0,
+            }}
+          >
+            <ListItemButton
+              sx={{ color: "#1875d8" }}
+              //component={Link}
+              //selected={selected}
             >
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon sx={{ color: "#1875d8" }} />}
-                style={{
-                  border: "none",
-                  boxShadow: "none",
-                  padding: 0,
-                  paddingRight: 50,
-                  margin: 0,
-                }}
-              >
-                <ListItemButton
-                  sx={{ color: "#1875d8" }}
-                  //component={Link}
-                  //selected={selected}
-                >
-                  <ListItemIcon sx={{ color: "#1875d8" }}>
-                    <AddLocationAltIcon />
-                  </ListItemIcon>
-                  <ListItemText
-                    primaryTypographyProps={{
-                      fontWeight: "bold",
-                      variant: "body1",
-                    }}
-                    style={{ fontWeight: "bold" }}
-                    primary={"Devices"}
-                  />
-                </ListItemButton>
-              </AccordionSummary>
-              <AccordionDetails
-                style={{ border: "none", boxShadow: "none", paddingTop: 0 }}
-                className={classes.details}
-              >
-                <Paper
-                  square
-                  elevation={3}
-                  className={`${classes.sidebar} ${
-                    !devicesOpen && classes.sidebarCollapsed
-                  }`}
-                >
-                  <Paper
-                    square
-                    elevation={3}
-                    className={classes.toolbarContainer}
-                  >
-                    <Toolbar className={classes.toolbar} disableGutters>
-                      {!desktop && (
-                        <IconButton
-                          edge="start"
-                          sx={{ mr: 2 }}
-                          onClick={handleClose}
-                        >
-                          <ArrowBackIcon />
-                        </IconButton>
-                      )}
-                      <OutlinedInput
-                        ref={filterRef}
-                        placeholder={t("sharedSearchDevices")}
-                        value={filterKeyword}
-                        onChange={(event) =>
-                          setFilterKeyword(event.target.value)
-                        }
-                        endAdornment={
-                          <InputAdornment position="end">
-                            <IconButton
-                              size="small"
-                              edge="end"
-                              onClick={() =>
-                                setFilterAnchorEl(filterRef.current)
-                              }
-                            >
-                              <Badge
-                                color="info"
-                                variant="dot"
-                                invisible={
-                                  !filterStatuses.length && !filterGroups.length
-                                }
-                              >
-                                <TuneIcon fontSize="small" />
-                              </Badge>
-                            </IconButton>
-                          </InputAdornment>
-                        }
-                        size="small"
-                        fullWidth
-                      />
-                      <Popover
-                        open={!!filterAnchorEl}
-                        anchorEl={filterAnchorEl}
-                        onClose={() => setFilterAnchorEl(null)}
-                        anchorOrigin={{
-                          vertical: "bottom",
-                          horizontal: "left",
-                        }}
-                      >
-                        <div className={classes.filterPanel}>
-                          <FormControl>
-                            <InputLabel>{t("deviceStatus")}</InputLabel>
-                            <Select
-                              label={t("deviceStatus")}
-                              value={filterStatuses}
-                              onChange={(e) =>
-                                setFilterStatuses(e.target.value)
-                              }
-                              multiple
-                            >
-                              <MenuItem value="online">{`${t(
-                                "deviceStatusOnline"
-                              )} (${deviceStatusCount("online")})`}</MenuItem>
-                              <MenuItem value="offline">{`${t(
-                                "deviceStatusOffline"
-                              )} (${deviceStatusCount("offline")})`}</MenuItem>
-                              <MenuItem value="unknown">{`${t(
-                                "deviceStatusUnknown"
-                              )} (${deviceStatusCount("unknown")})`}</MenuItem>
-                            </Select>
-                          </FormControl>
-                          <FormControl>
-                            <InputLabel>{t("settingsGroups")}</InputLabel>
-                            <Select
-                              label={t("settingsGroups")}
-                              value={filterGroups}
-                              onChange={(e) => setFilterGroups(e.target.value)}
-                              multiple
-                            >
-                              {Object.values(groups)
-                                .sort((a, b) => a.name.localeCompare(b.name))
-                                .map((group) => (
-                                  <MenuItem key={group.id} value={group.id}>
-                                    {group.name}
-                                  </MenuItem>
-                                ))}
-                            </Select>
-                          </FormControl>
-                          <FormControl>
-                            <InputLabel>{t("sharedSortBy")}</InputLabel>
-                            <Select
-                              label={t("sharedSortBy")}
-                              value={filterSort}
-                              onChange={(e) => setFilterSort(e.target.value)}
-                              displayEmpty
-                            >
-                              <MenuItem value="">{"\u00a0"}</MenuItem>
-                              <MenuItem value="name">
-                                {t("sharedName")}
-                              </MenuItem>
-                              <MenuItem value="lastUpdate">
-                                {t("deviceLastUpdate")}
-                              </MenuItem>
-                            </Select>
-                          </FormControl>
-                          <FormGroup>
-                            <FormControlLabel
-                              control={
-                                <Checkbox
-                                  checked={filterMap}
-                                  onChange={(e) =>
-                                    setFilterMap(e.target.checked)
-                                  }
-                                />
-                              }
-                              label={t("sharedFilterMap")}
-                            />
-                          </FormGroup>
-                        </div>
-                      </Popover>
-                      <IconButton
-                        onClick={() => navigate("/settings/device")}
-                        disabled={deviceReadonly}
-                      >
-                        <AddIcon />
-                      </IconButton>
-                      {/* {desktop && (
-                        <IconButton onClick={handleClose}>
-                          <CloseIcon />
-                        </IconButton>
-                      )} */}
-                    </Toolbar>
-                  </Paper>
-                  <div className={classes.deviceList}>
-                    <DevicesList devices={filteredDevices} />
-                  </div>
-                </Paper>
-                {/* {desktop && (
-                  <div className={classes.bottomMenu}>
-                    <BottomMenu />
-                  </div>
-                )} */}
-                {!features.disableEvents && (
-                  <EventsDrawer
-                    open={eventsOpen}
-                    onClose={() => setEventsOpen(false)}
-                  />
-                )}
-                {selectedDeviceId && (
-                  <div className={classes.statusCard}>
-                    <StatusCard
-                      deviceId={selectedDeviceId}
-                      onClose={() => dispatch(devicesActions.select(null))}
-                    />
-                  </div>
-                )}
-              </AccordionDetails>
-            </Accordion>
-            <MenuItems
-              title={t("reportTitle")}
-              link="/reports/route"
-              icon={<AssessmentIcon />}
-              selected={location.pathname.startsWith("/reports/route")}
-            />
-
-            {!features.disableGroups && (
-              <MenuItems
-                title={t("settingsUsers")}
-                link="/settings/users"
-                icon={<PeopleIcon />}
-                selected={location.pathname === `/settings/users`}
-              />
-            )}
-            {!features.disableDrivers && (
-              <MenuItems
-                title={t("reportTrips")}
-                link="/reports/trip"
-                icon={<PersonIcon />}
-                selected={location.pathname === `/reports/trip`}
-              />
-            )}
-            {!features.disableCalendars && (
-              <MenuItems
-                title={t("settingsTitle")}
-                link="/settings/preferences"
-                icon={<SettingsIcon />}
-                selected={location.pathname.startsWith("/settings/preferences")}
-              />
-            )}
-            <ListItemButton onClick={handleLogout}>
-              <ListItemIcon>
-                {<LogoutIcon sx={{ color: "red" }} />}
+              <ListItemIcon sx={{ color: "#1875d8" }}>
+                <AddLocationAltIcon />
               </ListItemIcon>
               <ListItemText
                 primaryTypographyProps={{
                   fontWeight: "bold",
                   variant: "body1",
-                  color: "red",
                 }}
-                primary={t("loginLogout")}
+                style={{ fontWeight: "bold" }}
+                primary={"Devices"}
               />
             </ListItemButton>
-          </>
+          </AccordionSummary>
+          <AccordionDetails
+            style={{ border: "none", boxShadow: "none", paddingTop: 0 }}
+            className={classes.details}
+          >
+            <Paper
+              square
+              elevation={3}
+              className={`${classes.sidebar} ${
+                !devicesOpen && classes.sidebarCollapsed
+              }`}
+            >
+              <Paper square elevation={3} className={classes.toolbarContainer}>
+                <Toolbar className={classes.toolbar} disableGutters>
+                  {!desktop && (
+                    <IconButton
+                      edge="start"
+                      sx={{ mr: 2 }}
+                      onClick={handleClose}
+                    >
+                      <ArrowBackIcon />
+                    </IconButton>
+                  )}
+                  <OutlinedInput
+                    ref={filterRef}
+                    placeholder={t("sharedSearchDevices")}
+                    value={filterKeyword}
+                    onChange={(event) => setFilterKeyword(event.target.value)}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          size="small"
+                          edge="end"
+                          onClick={() => setFilterAnchorEl(filterRef.current)}
+                        >
+                          <Badge
+                            color="info"
+                            variant="dot"
+                            invisible={
+                              !filterStatuses.length && !filterGroups.length
+                            }
+                          >
+                            <TuneIcon fontSize="small" />
+                          </Badge>
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                    size="small"
+                    fullWidth
+                  />
+                  <Popover
+                    open={!!filterAnchorEl}
+                    anchorEl={filterAnchorEl}
+                    onClose={() => setFilterAnchorEl(null)}
+                    anchorOrigin={{
+                      vertical: "bottom",
+                      horizontal: "left",
+                    }}
+                  >
+                    <div className={classes.filterPanel}>
+                      <FormControl>
+                        <InputLabel>{t("deviceStatus")}</InputLabel>
+                        <Select
+                          label={t("deviceStatus")}
+                          value={filterStatuses}
+                          onChange={(e) => setFilterStatuses(e.target.value)}
+                          multiple
+                        >
+                          <MenuItem value="online">{`${t(
+                            "deviceStatusOnline"
+                          )} (${deviceStatusCount("online")})`}</MenuItem>
+                          <MenuItem value="offline">{`${t(
+                            "deviceStatusOffline"
+                          )} (${deviceStatusCount("offline")})`}</MenuItem>
+                          <MenuItem value="unknown">{`${t(
+                            "deviceStatusUnknown"
+                          )} (${deviceStatusCount("unknown")})`}</MenuItem>
+                        </Select>
+                      </FormControl>
+                      <FormControl>
+                        <InputLabel>{t("settingsGroups")}</InputLabel>
+                        <Select
+                          label={t("settingsGroups")}
+                          value={filterGroups}
+                          onChange={(e) => setFilterGroups(e.target.value)}
+                          multiple
+                        >
+                          {Object.values(groups)
+                            .sort((a, b) => a.name.localeCompare(b.name))
+                            .map((group) => (
+                              <MenuItem key={group.id} value={group.id}>
+                                {group.name}
+                              </MenuItem>
+                            ))}
+                        </Select>
+                      </FormControl>
+                      <FormControl>
+                        <InputLabel>{t("sharedSortBy")}</InputLabel>
+                        <Select
+                          label={t("sharedSortBy")}
+                          value={filterSort}
+                          onChange={(e) => setFilterSort(e.target.value)}
+                          displayEmpty
+                        >
+                          <MenuItem value="">{"\u00a0"}</MenuItem>
+                          <MenuItem value="name">{t("sharedName")}</MenuItem>
+                          <MenuItem value="lastUpdate">
+                            {t("deviceLastUpdate")}
+                          </MenuItem>
+                        </Select>
+                      </FormControl>
+                      <FormGroup>
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={filterMap}
+                              onChange={(e) => setFilterMap(e.target.checked)}
+                            />
+                          }
+                          label={t("sharedFilterMap")}
+                        />
+                      </FormGroup>
+                    </div>
+                  </Popover>
+                  <IconButton
+                    onClick={() => navigate("/settings/device")}
+                    disabled={deviceReadonly}
+                  >
+                    <AddIcon />
+                  </IconButton>
+                  {/* {desktop && (
+                        <IconButton onClick={handleClose}>
+                          <CloseIcon />
+                        </IconButton>
+                      )} */}
+                </Toolbar>
+              </Paper>
+              <div className={classes.deviceList}>
+                <DevicesList devices={filteredDevices} />
+              </div>
+            </Paper>
+            {/* {desktop && (
+                  <div className={classes.bottomMenu}>
+                    <BottomMenu />
+                  </div>
+                )} */}
+            {!features.disableEvents && (
+              <EventsDrawer
+                open={eventsOpen}
+                onClose={() => setEventsOpen(false)}
+              />
+            )}
+            {selectedDeviceId && (
+              <div className={classes.statusCard}>
+                <StatusCard
+                  deviceId={selectedDeviceId}
+                  onClose={() => dispatch(devicesActions.select(null))}
+                />
+              </div>
+            )}
+          </AccordionDetails>
+        </Accordion>
+
+        <Accordion
+          //defaultExpanded
+          style={{ border: "none", boxShadow: "none", padding: 0 }}
+        >
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon sx={{ color: "#1875d8" }} />}
+            style={{
+              border: "none",
+              boxShadow: "none",
+              padding: 0,
+              paddingRight: 50,
+              margin: 0,
+            }}
+          >
+            <ListItemButton
+              sx={{ color: "#1875d8" }}
+              //component={Link}
+              //selected={selected}
+            >
+              <ListItemIcon sx={{ color: "#1875d8" }}>
+                <AssessmentIcon />
+              </ListItemIcon>
+              <ListItemText
+                primaryTypographyProps={{
+                  fontWeight: "bold",
+                  variant: "body1",
+                }}
+                style={{ fontWeight: "bold" }}
+                primary={t("reportTitle")}
+              />
+            </ListItemButton>
+          </AccordionSummary>
+          <AccordionDetails
+            style={{ border: "none", boxShadow: "none", paddingTop: 0 }}
+            className={classes.details}
+          >
+            <MenuItems
+              title={t("reportRoute")}
+              link="/reports/route"
+              icon={<TimelineIcon />}
+              selected={location.pathname === "/reports/route"}
+            />
+            <MenuItems
+              title={t("reportEvents")}
+              link="/reports/event"
+              icon={<NotificationsActiveIcon />}
+              selected={location.pathname === "/reports/event"}
+            />
+            <MenuItems
+              title={t("reportTrips")}
+              link="/reports/trip"
+              icon={<PlayCircleFilledIcon />}
+              selected={location.pathname === "/reports/trip"}
+            />
+            <MenuItems
+              title={t("reportStops")}
+              link="/reports/stop"
+              icon={<PauseCircleFilledIcon />}
+              selected={location.pathname === "/reports/stop"}
+            />
+            <MenuItems
+              title={t("reportSummary")}
+              link="/reports/summary"
+              icon={<FormatListBulletedIcon />}
+              selected={location.pathname === "/reports/summary"}
+            />
+            <MenuItems
+              title={t("reportChart")}
+              link="/reports/chart"
+              icon={<TrendingUpIcon />}
+              selected={location.pathname === "/reports/chart"}
+            />
+            <MenuItems
+              title={t("reportReplay")}
+              link="/replay"
+              icon={<RouteIcon />}
+            />
+            {admin && (
+              <>
+                <List>
+                  <MenuItems
+                    title={t("statisticsTitle")}
+                    link="/reports/statistics"
+                    icon={<BarChartIcon />}
+                    selected={location.pathname === "/reports/statistics"}
+                  />
+                </List>
+              </>
+            )}
+          </AccordionDetails>
+        </Accordion>
+
+        {!features.disableGroups && (
+          <MenuItems
+            title={t("settingsUsers")}
+            link="/settings/users"
+            icon={<PeopleIcon />}
+            selected={location.pathname === `/settings/users`}
+          />
         )}
+        {!features.disableDrivers && (
+          <MenuItems
+            title={t("reportTrips")}
+            link="/reports/trip"
+            icon={<PersonIcon />}
+            selected={location.pathname === `/reports/trip`}
+          />
+        )}
+
+        <Accordion
+          //defaultExpanded
+          style={{ border: "none", boxShadow: "none", padding: 0 }}
+        >
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon sx={{ color: "#1875d8" }} />}
+            style={{
+              border: "none",
+              boxShadow: "none",
+              padding: 0,
+              paddingRight: 50,
+              margin: 0,
+            }}
+          >
+            <ListItemButton
+              sx={{ color: "#1875d8" }}
+              //component={Link}
+              //selected={selected}
+            >
+              <ListItemIcon sx={{ color: "#1875d8" }}>
+                <SettingsIcon />
+              </ListItemIcon>
+              <ListItemText
+                primaryTypographyProps={{
+                  fontWeight: "bold",
+                  variant: "body1",
+                }}
+                style={{ fontWeight: "bold" }}
+                primary={"Settings"}
+              />
+            </ListItemButton>
+          </AccordionSummary>
+          <AccordionDetails
+            style={{ border: "none", boxShadow: "none", paddingTop: 0 }}
+            className={classes.details}
+          >
+            <MenuItems
+              title={t("sharedPreferences")}
+              link="/settings/preferences"
+              icon={<SettingsIcon />}
+              selected={location.pathname === "/settings/preferences"}
+            />
+            {!readonly && (
+              <>
+                <MenuItems
+                  title={t("sharedNotifications")}
+                  link="/settings/notifications"
+                  icon={<NotificationsIcon />}
+                  selected={location.pathname.startsWith(
+                    "/settings/notification"
+                  )}
+                />
+                <MenuItems
+                  title={t("settingsUser")}
+                  link={`/settings/user/${userId}`}
+                  icon={<PersonIcon />}
+                  selected={location.pathname === `/settings/user/${userId}`}
+                />
+                <MenuItems
+                  title={t("sharedGeofences")}
+                  link="/geofences"
+                  icon={<CreateIcon />}
+                  selected={location.pathname.startsWith("/settings/geofence")}
+                />
+                {!features.disableGroups && (
+                  <MenuItems
+                    title={t("settingsGroups")}
+                    link="/settings/groups"
+                    icon={<FolderIcon />}
+                    selected={location.pathname.startsWith("/settings/group")}
+                  />
+                )}
+                {!features.disableDrivers && (
+                  <MenuItems
+                    title={t("sharedDrivers")}
+                    link="/settings/drivers"
+                    icon={<PersonIcon />}
+                    selected={location.pathname.startsWith("/settings/driver")}
+                  />
+                )}
+                {!features.disableCalendars && (
+                  <MenuItems
+                    title={t("sharedCalendars")}
+                    link="/settings/calendars"
+                    icon={<TodayIcon />}
+                    selected={location.pathname.startsWith(
+                      "/settings/calendar"
+                    )}
+                  />
+                )}
+                {!features.disableComputedAttributes && (
+                  <MenuItems
+                    title={t("sharedComputedAttributes")}
+                    link="/settings/attributes"
+                    icon={<StorageIcon />}
+                    selected={location.pathname.startsWith(
+                      "/settings/attribute"
+                    )}
+                  />
+                )}
+                {!features.disableMaintenance && (
+                  <MenuItems
+                    title={t("sharedMaintenance")}
+                    link="/settings/maintenances"
+                    icon={<BuildIcon />}
+                    selected={location.pathname.startsWith(
+                      "/settings/maintenance"
+                    )}
+                  />
+                )}
+                <MenuItems
+                  title={t("sharedSavedCommands")}
+                  link="/settings/commands"
+                  icon={<PublishIcon />}
+                  selected={location.pathname.startsWith("/settings/command")}
+                />
+              </>
+            )}
+            {manager && (
+              <>
+                <List>
+                  {admin && (
+                    <MenuItems
+                      title={t("settingsServer")}
+                      link="/settings/server"
+                      icon={<StorageIcon />}
+                      selected={location.pathname === "/settings/server"}
+                    />
+                  )}
+                  <MenuItems
+                    title={t("settingsUsers")}
+                    link="/settings/users"
+                    icon={<PeopleIcon />}
+                    selected={
+                      location.pathname.startsWith("/settings/user") &&
+                      location.pathname !== `/settings/user/${userId}`
+                    }
+                  />
+                </List>
+              </>
+            )}
+          </AccordionDetails>
+        </Accordion>
+
+        <ListItemButton onClick={handleLogout}>
+          <ListItemIcon>{<LogoutIcon sx={{ color: "red" }} />}</ListItemIcon>
+          <ListItemText
+            primaryTypographyProps={{
+              fontWeight: "bold",
+              variant: "body1",
+              color: "red",
+            }}
+            primary={t("loginLogout")}
+          />
+        </ListItemButton>
       </List>
-      <div className={classes.last_content}>
-        {/* <div style={{ color: "grey" }}>
-          <ListItemButton>
-            <ListItemIcon>{<ErrorOutlineIcon />}</ListItemIcon>
-            <ListItemText
-              primaryTypographyProps={{
-                fontWeight: "bold",
-                variant: "body1",
-              }}
-              primary={"Help Centre"}
-            />
-          </ListItemButton>
-        </div>
-        <div>
-          <ListItemButton>
-            <ListItemIcon>{<ChatBubbleOutlineIcon />}</ListItemIcon>
-            <ListItemText
-              primaryTypographyProps={{
-                fontWeight: "bold",
-                variant: "body1",
-              }}
-              primary={"Contact us"}
-            />
-          </ListItemButton>
-        </div> */}
-        {/* <div style={{ color: "red" }}>
-          <ListItemButton onClick={handleLogout}>
-            <ListItemIcon>{<LogoutIcon sx={{ color: "red" }} />}</ListItemIcon>
-            <ListItemText
-              primaryTypographyProps={{
-                fontWeight: "bold",
-                variant: "body1",
-              }}
-              primary={t("loginLogout")}
-            />
-          </ListItemButton>
-        </div> */}
-      </div>
     </>
   );
 };

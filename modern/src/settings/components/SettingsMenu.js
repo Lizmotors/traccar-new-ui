@@ -61,6 +61,7 @@ import EventsDrawer from "../../main/EventsDrawer";
 import StatusCard from "../../main/StatusCard";
 import { devicesActions } from "../../store";
 import LogoutIcon from "@mui/icons-material/Logout";
+import MainMenu from "../../main/components/MainMenu";
 
 const useStyles = makeStyles((theme) => ({
   last_content: {
@@ -336,7 +337,8 @@ const SettingsMenu = () => {
 
   return (
     <>
-      <List>
+      <MainMenu />
+      {/* <List>
         <div className={classes.logocont}>
           <div>
             <img
@@ -521,22 +523,12 @@ const SettingsMenu = () => {
                   >
                     <AddIcon />
                   </IconButton>
-                  {/* {desktop && (
-                        <IconButton onClick={handleClose}>
-                          <CloseIcon />
-                        </IconButton>
-                      )} */}
                 </Toolbar>
               </Paper>
               <div className={classes.deviceList}>
                 <DevicesList devices={filteredDevices} />
               </div>
             </Paper>
-            {/* {desktop && (
-                  <div className={classes.bottomMenu}>
-                    <BottomMenu />
-                  </div>
-                )} */}
             {!features.disableEvents && (
               <EventsDrawer
                 open={eventsOpen}
@@ -730,7 +722,7 @@ const SettingsMenu = () => {
             primary={t("loginLogout")}
           />
         </ListItemButton>
-      </List>
+      </List> */}
     </>
   );
 };
