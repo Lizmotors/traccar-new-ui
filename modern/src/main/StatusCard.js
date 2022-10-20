@@ -91,8 +91,6 @@ const useStyles = makeStyles((theme) => ({
 const StatusRow = ({ name, content }) => {
   const classes = useStyles();
 
-  console.log("name", name);
-
   return (
     <TableRow sx={{ marginBottom: 50 }}>
       <TableCell className={classes.cell}>
