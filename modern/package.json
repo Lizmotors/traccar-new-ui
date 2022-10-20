@@ -45,7 +45,7 @@
     "workbox-streams": "^6.5.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "DISABLE_ESLINT_PLUGIN=true react-scripts start",
     "build": "react-scripts build",
     "lint": "eslint .",
     "lint:fix": "eslint --fix --ext .js ."

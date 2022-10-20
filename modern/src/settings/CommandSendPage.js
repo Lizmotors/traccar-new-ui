@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   Accordion,
   AccordionSummary,
@@ -7,16 +7,17 @@ import {
   Typography,
   Container,
   Button,
-} from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { useTranslation } from '../common/components/LocalizationProvider';
-import BaseCommandView from './components/BaseCommandView';
-import SelectField from '../common/components/SelectField';
-import PageLayout from '../common/components/PageLayout';
-import SettingsMenu from './components/SettingsMenu';
-import { useCatch } from '../reactHelper';
-import { useRestriction } from '../common/util/permissions';
+} from "@mui/material";
+import makeStyles from "@mui/styles/makeStyles";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { useTranslation } from "../common/components/LocalizationProvider";
+import BaseCommandView from "./components/BaseCommandView";
+import SelectField from "../common/components/SelectField";
+import PageLayout from "../common/components/PageLayout";
+import SettingsMenu from "./components/SettingsMenu";
+import { useCatch } from "../reactHelper";
+import { useRestriction } from "../common/util/permissions";
+import Header from "../common/components/Header";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -25,15 +26,15 @@ const useStyles = makeStyles((theme) => ({
   buttons: {
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),
-    display: 'flex',
-    justifyContent: 'space-evenly',
-    '& > *': {
-      flexBasis: '33%',
+    display: "flex",
+    justifyContent: "space-evenly",
+    "& > *": {
+      flexBasis: "33%",
     },
   },
   details: {
-    display: 'flex',
-    flexDirection: 'column',
+    display: "flex",
+    flexDirection: "column",
     gap: theme.spacing(2),
     paddingBottom: theme.spacing(3),
   },
@@ -49,7 +50,7 @@ const CommandSendPage = () => {
   const [savedId, setSavedId] = useState(0);
   const [item, setItem] = useState({});
 
-  const limitCommands = useRestriction('limitCommands');
+  const limitCommands = useRestriction("limitCommands");
 
   const handleSend = useCatch(async () => {
     let command;
@@ -66,9 +67,9 @@ const CommandSendPage = () => {
 
     command.deviceId = parseInt(deviceId, 10);
 
-    const response = await fetch('/api/commands/send', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    const response = await fetch("/api/commands/send", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(command),
     });
 
@@ -82,23 +83,25 @@ const CommandSendPage = () => {
   const validate = () => savedId || (item && item.type);
 
   return (
-    <PageLayout menu={<SettingsMenu />} breadcrumbs={['settingsTitle', 'deviceCommand']}>
+    <PageLayout
+      menu={<SettingsMenu />}
+      //breadcrumbs={["settingsTitle", "deviceCommand"]}
+    >
+      <Header />
       <Container maxWidth="xs" className={classes.container}>
         <Accordion defaultExpanded>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography variant="subtitle1">
-              {t('sharedRequired')}
-            </Typography>
+            <Typography variant="subtitle1">{t("sharedRequired")}</Typography>
           </AccordionSummary>
           <AccordionDetails className={classes.details}>
             <SelectField
               value={savedId}
               emptyValue={limitCommands ? null : 0}
-              emptyTitle={t('sharedNew')}
+              emptyTitle={t("sharedNew")}
               onChange={(e) => setSavedId(e.target.value)}
               endpoint={`/api/commands/send?deviceId=${deviceId}`}
               titleGetter={(it) => it.description}
-              label={t('sharedSavedCommand')}
+              label={t("sharedSavedCommand")}
             />
             {!limitCommands && !savedId && (
               <BaseCommandView item={item} setItem={setItem} />
@@ -112,7 +115,7 @@ const CommandSendPage = () => {
             variant="outlined"
             onClick={() => navigate(-1)}
           >
-            {t('sharedCancel')}
+            {t("sharedCancel")}
           </Button>
           <Button
             type="button"
@@ -121,7 +124,7 @@ const CommandSendPage = () => {
             onClick={handleSend}
             disabled={!validate()}
           >
-            {t('commandSend')}
+            {t("commandSend")}
           </Button>
         </div>
       </Container>

@@ -1,0 +1,126 @@
+html, body{
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+/* https://wallpaperaccess.com/full/1412389.jpg */
+.maincont{
+    background: url('../resources//images//bg.jpg') no-repeat 0px 0px;
+    background-size: cover;
+    font-family: 'Open Sans', sans-serif;
+    background-attachment: fixed;
+    background-position: center;
+    height: 100%;
+    padding: 0 3%;
+    
+}
+
+.logo{
+    padding-top: 70px;
+    color: #fff;
+    font-weight: bold;
+}
+
+.quotes{
+    
+}
+
+.title{
+    color: #fff;
+    font-weight: bold;
+}
+.sub-title{
+    padding-top: 20px;
+    width: 60%;
+    color: #fff;
+
+}
+
+.form-cont{
+    height: 66%;
+}
+
+.form-subcont{
+    float: right;
+    width: 33%;
+    border-radius: 10px;
+    padding: 90px 40px;
+    background-color: #fff;
+}
+
+.form-title{
+    color: #000;
+    font-weight: 700;
+    padding-bottom: 25px;
+}
+
+.field-cont{
+    width: 100%;
+    padding-bottom: 20px;
+
+
+}
+
+.field-cont input{
+    width: 100%;
+    margin-top: 8px;
+    /* padding: 15px; */
+    border-radius: 10px;
+    /* border: 1px solid gainsboro; */
+
+
+}
+.input{
+    margin-top: 10px;
+    width: 100%;
+}
+.input .MuiFormControl-root{
+    width: 100%;
+}
+.fiele-title{
+    font-size: 12px;
+    padding-left: 10px;
+    color: gray;
+
+}
+
+.remember-cont{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 30px;
+
+}
+
+.remember-text{
+    font-size: 14px;
+    color: gray;
+}
+
+.forget-text{
+    cursor: pointer;
+    color: blue;
+    font-size: 14px;
+    font-weight: 700;
+
+}
+
+.login-btn{
+    width: 100%;
+
+}
+
+.login-btn button{
+    cursor: pointer;
+    width: 100%;
+    background-color: blue;
+    border: none;
+    outline: none;
+    padding: 10px;
+    border-radius: 10px;
+    color:#fff;
+    font-weight: 700;
+    font-size: 16px;
+}

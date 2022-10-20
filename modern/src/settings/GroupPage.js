@@ -1,26 +1,30 @@
-import React, { useState } from 'react';
-import TextField from '@mui/material/TextField';
+import React, { useState } from "react";
+import TextField from "@mui/material/TextField";
 
 import {
-  Accordion, AccordionSummary, AccordionDetails, Typography,
-} from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import EditItemView from './components/EditItemView';
-import EditAttributesAccordion from './components/EditAttributesAccordion';
-import SelectField from '../common/components/SelectField';
-import LinkField from '../common/components/LinkField';
-import { useTranslation } from '../common/components/LocalizationProvider';
-import SettingsMenu from './components/SettingsMenu';
-import useCommonDeviceAttributes from '../common/attributes/useCommonDeviceAttributes';
-import useGroupAttributes from '../common/attributes/useGroupAttributes';
-import useFeatures from '../common/util/useFeatures';
-import { formatNotificationTitle } from '../common/util/formatter';
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Typography,
+} from "@mui/material";
+import makeStyles from "@mui/styles/makeStyles";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import EditItemView from "./components/EditItemView";
+import EditAttributesAccordion from "./components/EditAttributesAccordion";
+import SelectField from "../common/components/SelectField";
+import LinkField from "../common/components/LinkField";
+import { useTranslation } from "../common/components/LocalizationProvider";
+import SettingsMenu from "./components/SettingsMenu";
+import useCommonDeviceAttributes from "../common/attributes/useCommonDeviceAttributes";
+import useGroupAttributes from "../common/attributes/useGroupAttributes";
+import useFeatures from "../common/util/useFeatures";
+import { formatNotificationTitle } from "../common/util/formatter";
+import Header from "../common/components/Header";
 
 const useStyles = makeStyles((theme) => ({
   details: {
-    display: 'flex',
-    flexDirection: 'column',
+    display: "flex",
+    flexDirection: "column",
     gap: theme.spacing(2),
     paddingBottom: theme.spacing(3),
   },
@@ -46,36 +50,37 @@ const GroupPage = () => {
       setItem={setItem}
       validate={validate}
       menu={<SettingsMenu />}
-      breadcrumbs={['settingsTitle', 'groupDialog']}
+      //breadcrumbs={["settingsTitle", "groupDialog"]}
     >
+      <Header />
       {item && (
         <>
           <Accordion defaultExpanded>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography variant="subtitle1">
-                {t('sharedRequired')}
-              </Typography>
+              <Typography variant="subtitle1">{t("sharedRequired")}</Typography>
             </AccordionSummary>
             <AccordionDetails className={classes.details}>
               <TextField
-                value={item.name || ''}
-                onChange={(event) => setItem({ ...item, name: event.target.value })}
-                label={t('sharedName')}
+                value={item.name || ""}
+                onChange={(event) =>
+                  setItem({ ...item, name: event.target.value })
+                }
+                label={t("sharedName")}
               />
             </AccordionDetails>
           </Accordion>
           <Accordion>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography variant="subtitle1">
-                {t('sharedExtra')}
-              </Typography>
+              <Typography variant="subtitle1">{t("sharedExtra")}</Typography>
             </AccordionSummary>
             <AccordionDetails className={classes.details}>
               <SelectField
                 value={item.groupId || 0}
-                onChange={(event) => setItem({ ...item, groupId: Number(event.target.value) })}
+                onChange={(event) =>
+                  setItem({ ...item, groupId: Number(event.target.value) })
+                }
                 endpoint="/api/groups"
-                label={t('groupParent')}
+                label={t("groupParent")}
               />
             </AccordionDetails>
           </Accordion>
@@ -88,7 +93,7 @@ const GroupPage = () => {
             <Accordion>
               <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                 <Typography variant="subtitle1">
-                  {t('sharedConnections')}
+                  {t("sharedConnections")}
                 </Typography>
               </AccordionSummary>
               <AccordionDetails className={classes.details}>
@@ -98,7 +103,7 @@ const GroupPage = () => {
                   baseId={item.id}
                   keyBase="groupId"
                   keyLink="geofenceId"
-                  label={t('sharedGeofences')}
+                  label={t("sharedGeofences")}
                 />
                 <LinkField
                   endpointAll="/api/notifications"
@@ -107,7 +112,7 @@ const GroupPage = () => {
                   keyBase="groupId"
                   keyLink="notificationId"
                   titleGetter={(it) => formatNotificationTitle(t, it)}
-                  label={t('sharedNotifications')}
+                  label={t("sharedNotifications")}
                 />
                 {!features.disableDrivers && (
                   <LinkField
@@ -116,7 +121,7 @@ const GroupPage = () => {
                     baseId={item.id}
                     keyBase="groupId"
                     keyLink="driverId"
-                    label={t('sharedDrivers')}
+                    label={t("sharedDrivers")}
                   />
                 )}
                 {!features.disableComputedAttributes && (
@@ -127,7 +132,7 @@ const GroupPage = () => {
                     keyBase="groupId"
                     keyLink="attributeId"
                     titleGetter={(it) => it.description}
-                    label={t('sharedComputedAttributes')}
+                    label={t("sharedComputedAttributes")}
                   />
                 )}
                 <LinkField
@@ -137,7 +142,7 @@ const GroupPage = () => {
                   keyBase="groupId"
                   keyLink="commandId"
                   titleGetter={(it) => it.description}
-                  label={t('sharedSavedCommands')}
+                  label={t("sharedSavedCommands")}
                 />
                 {!features.disableMaintenance && (
                   <LinkField
@@ -146,7 +151,7 @@ const GroupPage = () => {
                     baseId={item.id}
                     keyBase="groupId"
                     keyLink="maintenanceId"
-                    label={t('sharedMaintenance')}
+                    label={t("sharedMaintenance")}
                   />
                 )}
               </AccordionDetails>

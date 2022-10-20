@@ -1,18 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
-  Accordion, AccordionSummary, AccordionDetails, Typography, TextField,
-} from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import EditItemView from './components/EditItemView';
-import { useTranslation } from '../common/components/LocalizationProvider';
-import BaseCommandView from './components/BaseCommandView';
-import SettingsMenu from './components/SettingsMenu';
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Typography,
+  TextField,
+} from "@mui/material";
+import makeStyles from "@mui/styles/makeStyles";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import EditItemView from "./components/EditItemView";
+import { useTranslation } from "../common/components/LocalizationProvider";
+import BaseCommandView from "./components/BaseCommandView";
+import SettingsMenu from "./components/SettingsMenu";
+import Header from "../common/components/Header";
 
 const useStyles = makeStyles((theme) => ({
   details: {
-    display: 'flex',
-    flexDirection: 'column',
+    display: "flex",
+    flexDirection: "column",
     gap: theme.spacing(2),
     paddingBottom: theme.spacing(3),
   },
@@ -33,20 +38,21 @@ const CommandPage = () => {
       setItem={setItem}
       validate={validate}
       menu={<SettingsMenu />}
-      breadcrumbs={['settingsTitle', 'sharedSavedCommand']}
+      //breadcrumbs={["settingsTitle", "sharedSavedCommand"]}
     >
+      <Header />
       {item && (
         <Accordion defaultExpanded>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography variant="subtitle1">
-              {t('sharedRequired')}
-            </Typography>
+            <Typography variant="subtitle1">{t("sharedRequired")}</Typography>
           </AccordionSummary>
           <AccordionDetails className={classes.details}>
             <TextField
-              value={item.description || ''}
-              onChange={(event) => setItem({ ...item, description: event.target.value })}
-              label={t('sharedDescription')}
+              value={item.description || ""}
+              onChange={(event) =>
+                setItem({ ...item, description: event.target.value })
+              }
+              label={t("sharedDescription")}
             />
             <BaseCommandView item={item} setItem={setItem} />
           </AccordionDetails>

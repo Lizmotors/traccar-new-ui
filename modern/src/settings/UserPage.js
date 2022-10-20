@@ -33,6 +33,7 @@ import { useAdministrator, useRestriction, useManager } from '../common/util/per
 import useQuery from '../common/util/useQuery';
 import { useCatch } from '../reactHelper';
 import { formatNotificationTitle } from '../common/util/formatter';
+import Header from "../common/components/Header";
 
 const useStyles = makeStyles((theme) => ({
   details: {
@@ -112,8 +113,9 @@ const UserPage = () => {
       validate={validate}
       onItemSaved={onItemSaved}
       menu={<SettingsMenu />}
-      breadcrumbs={['settingsTitle', 'settingsUser']}
+      //breadcrumbs={['settingsTitle', 'settingsUser']}
     >
+      <Header />
       {item && (
         <>
           <Accordion defaultExpanded={!attribute}>

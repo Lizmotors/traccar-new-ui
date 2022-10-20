@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Accordion,
   AccordionSummary,
@@ -13,21 +13,22 @@ import {
   Autocomplete,
   Button,
   Snackbar,
-} from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import EditItemView from './components/EditItemView';
-import { useTranslation } from '../common/components/LocalizationProvider';
-import usePositionAttributes from '../common/attributes/usePositionAttributes';
-import SettingsMenu from './components/SettingsMenu';
-import SelectField from '../common/components/SelectField';
-import { useCatch } from '../reactHelper';
-import { snackBarDurationLongMs } from '../common/util/duration';
+} from "@mui/material";
+import makeStyles from "@mui/styles/makeStyles";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import EditItemView from "./components/EditItemView";
+import { useTranslation } from "../common/components/LocalizationProvider";
+import usePositionAttributes from "../common/attributes/usePositionAttributes";
+import SettingsMenu from "./components/SettingsMenu";
+import SelectField from "../common/components/SelectField";
+import { useCatch } from "../reactHelper";
+import { snackBarDurationLongMs } from "../common/util/duration";
+import Header from "../common/components/Header";
 
 const useStyles = makeStyles((theme) => ({
   details: {
-    display: 'flex',
-    flexDirection: 'column',
+    display: "flex",
+    flexDirection: "column",
     gap: theme.spacing(2),
     paddingBottom: theme.spacing(3),
   },
@@ -43,11 +44,13 @@ const ComputedAttributePage = () => {
   const [deviceId, setDeviceId] = useState();
   const [result, setResult] = useState();
 
-  const options = Object.entries(positionAttributes).filter(([, value]) => !value.property).map(([key, value]) => ({
-    key,
-    name: value.name,
-    type: value.type,
-  }));
+  const options = Object.entries(positionAttributes)
+    .filter(([, value]) => !value.property)
+    .map(([key, value]) => ({
+      key,
+      name: value.name,
+      type: value.type,
+    }));
 
   const filter = createFilterOptions({
     stringify: (option) => option.name,
@@ -57,8 +60,8 @@ const ComputedAttributePage = () => {
     const query = new URLSearchParams({ deviceId });
     const url = `/api/attributes/computed/test?${query.toString()}`;
     const response = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(item),
     });
     if (response.ok) {
@@ -77,24 +80,28 @@ const ComputedAttributePage = () => {
       setItem={setItem}
       validate={validate}
       menu={<SettingsMenu />}
-      breadcrumbs={['settingsTitle', 'sharedComputedAttribute']}
+      //breadcrumbs={["settingsTitle", "sharedComputedAttribute"]}
     >
+      <Header />
       {item && (
         <>
           <Accordion defaultExpanded>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography variant="subtitle1">
-                {t('sharedRequired')}
-              </Typography>
+              <Typography variant="subtitle1">{t("sharedRequired")}</Typography>
             </AccordionSummary>
             <AccordionDetails className={classes.details}>
               <TextField
-                value={item.description || ''}
-                onChange={(e) => setItem({ ...item, description: e.target.value })}
-                label={t('sharedDescription')}
+                value={item.description || ""}
+                onChange={(e) =>
+                  setItem({ ...item, description: e.target.value })
+                }
+                label={t("sharedDescription")}
               />
               <Autocomplete
-                value={options.find((option) => option.key === item.attribute) || item.attribute}
+                value={
+                  options.find((option) => option.key === item.attribute) ||
+                  item.attribute
+                }
                 onChange={(_, option) => {
                   const attribute = option ? option.key || option : null;
                   if (option && option.type) {
@@ -116,48 +123,46 @@ const ComputedAttributePage = () => {
                 options={options}
                 getOptionLabel={(option) => option.name || option}
                 renderOption={(props, option) => (
-                  <li {...props}>
-                    {option.name}
-                  </li>
+                  <li {...props}>{option.name}</li>
                 )}
                 renderInput={(params) => (
-                  <TextField {...params} label={t('sharedAttribute')} />
+                  <TextField {...params} label={t("sharedAttribute")} />
                 )}
                 freeSolo
               />
               <TextField
-                value={item.expression || ''}
-                onChange={(e) => setItem({ ...item, expression: e.target.value })}
-                label={t('sharedExpression')}
+                value={item.expression || ""}
+                onChange={(e) =>
+                  setItem({ ...item, expression: e.target.value })
+                }
+                label={t("sharedExpression")}
                 multiline
                 rows={4}
               />
               <FormControl disabled={item.attribute in positionAttributes}>
-                <InputLabel>{t('sharedType')}</InputLabel>
+                <InputLabel>{t("sharedType")}</InputLabel>
                 <Select
-                  label={t('sharedType')}
-                  value={item.type || ''}
+                  label={t("sharedType")}
+                  value={item.type || ""}
                   onChange={(e) => setItem({ ...item, type: e.target.value })}
                 >
-                  <MenuItem value="string">{t('sharedTypeString')}</MenuItem>
-                  <MenuItem value="number">{t('sharedTypeNumber')}</MenuItem>
-                  <MenuItem value="boolean">{t('sharedTypeBoolean')}</MenuItem>
+                  <MenuItem value="string">{t("sharedTypeString")}</MenuItem>
+                  <MenuItem value="number">{t("sharedTypeNumber")}</MenuItem>
+                  <MenuItem value="boolean">{t("sharedTypeBoolean")}</MenuItem>
                 </Select>
               </FormControl>
             </AccordionDetails>
           </Accordion>
           <Accordion>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography variant="subtitle1">
-                {t('sharedTest')}
-              </Typography>
+              <Typography variant="subtitle1">{t("sharedTest")}</Typography>
             </AccordionSummary>
             <AccordionDetails className={classes.details}>
               <SelectField
                 value={deviceId || 0}
                 onChange={(e) => setDeviceId(Number(e.target.value))}
                 endpoint="/api/devices"
-                label={t('sharedDevice')}
+                label={t("sharedDevice")}
               />
               <Button
                 variant="outlined"
@@ -165,7 +170,7 @@ const ComputedAttributePage = () => {
                 onClick={testAttribute}
                 disabled={!deviceId}
               >
-                {t('sharedTestExpression')}
+                {t("sharedTestExpression")}
               </Button>
               <Snackbar
                 open={!!result}
