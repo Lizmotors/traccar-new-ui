@@ -45,6 +45,9 @@ import AccumulatorsPage from "./settings/AccumulatorsPage";
 import CommandSendPage from "./settings/CommandSendPage";
 import App from "./App";
 import ChangeServerPage from "./other/ChangeServerPage";
+import Apis from "./blockChain/Api";
+import Logs from "./blockChain/Logs";
+import Tokens from "./blockChain/Token";
 
 const Navigation = () => {
   const navigate = useNavigate();
@@ -97,6 +100,12 @@ const Navigation = () => {
         <Route path="event/:id" element={<EventPage />} />
         <Route path="replay" element={<ReplayPage />} />
         <Route path="geofences" element={<GeofencesPage />} />
+
+        <Route path="blockchain">
+          <Route path="api-docs" element={<Apis />} />
+          <Route path="tokens" element={<Tokens />} />
+          <Route path="logs" element={<Logs />} />
+        </Route>
 
         <Route path="settings">
           <Route path="accumulators/:deviceId" element={<AccumulatorsPage />} />

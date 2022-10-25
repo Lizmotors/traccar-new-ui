@@ -916,6 +916,69 @@ const SettingsMenu = () => {
           </AccordionDetails>
         </Accordion>
 
+        <Accordion
+          //defaultExpanded
+          style={{ border: "none", boxShadow: "none", padding: 0 }}
+        >
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon sx={{ color: "#1875d8" }} />}
+            style={{
+              border: "none",
+              boxShadow: "none",
+              padding: 0,
+              paddingRight: 50,
+              margin: 0,
+            }}
+          >
+            <ListItemButton
+              sx={{ color: "#1875d8" }}
+              //component={Link}
+              //selected={selected}
+            >
+              <ListItemIcon sx={{ color: "#1875d8" }}>
+                <SettingsIcon />
+              </ListItemIcon>
+              <ListItemText
+                primaryTypographyProps={{
+                  fontWeight: "bold",
+                  variant: "body1",
+                }}
+                style={{ fontWeight: "bold" }}
+                primary={"Blockchain"}
+              />
+            </ListItemButton>
+          </AccordionSummary>
+          <AccordionDetails
+            style={{ border: "none", boxShadow: "none", paddingTop: 0 }}
+            className={classes.details}
+          >
+            {!readonly && (
+              <>
+                <MenuItems
+                  title={"Api Docs"}
+                  link="/blockchain/api-docs"
+                  icon={<NotificationsIcon />}
+                  selected={location.pathname.startsWith(
+                    "/blockchain/api-docs"
+                  )}
+                />
+                <MenuItems
+                  title={"Tokens"}
+                  link="/blockchain/tokens"
+                  icon={<PersonIcon />}
+                  selected={location.pathname === `/settings/user/${userId}`}
+                />
+                <MenuItems
+                  title={"Logs"}
+                  link="/blockchain/logs"
+                  icon={<CreateIcon />}
+                  selected={location.pathname.startsWith("/settings/geofence")}
+                />
+              </>
+            )}
+          </AccordionDetails>
+        </Accordion>
+
         <ListItemButton onClick={handleLogout}>
           <ListItemIcon>{<LogoutIcon sx={{ color: "red" }} />}</ListItemIcon>
           <ListItemText
