@@ -168,11 +168,11 @@ const LoginPage = () => {
     <>
       <div class="maincont">
         <div class="logo">
-          <div>CROPMED</div>
+          <div>O2Club</div>
         </div>
         <div class="form-cont">
           <div class="form-subcont">
-            <div class="form-title">Nice to see you again</div>
+            <div class="form-title">Welcome to O2Club</div>
             <div class="field-cont">
               <div class="fiele-title">{t("userEmail")}</div>
               <div className="input">
@@ -265,15 +265,9 @@ const LoginPage = () => {
           </div>
         </div>
         <div>
-          <div class="title">Our Vision:</div>
+          <div class="title"></div>
           <div class="sub-title">
-            In addition to being a mood-booster, giving and receiving
-            compliments and positive quotes has uplifting effects on both
-            parties. As the giver, giving a compliment can boost your
-            self-confidence as well as enhance your social skills and spark
-            creativity. Compliments can inspire the giver and give the receiver
-            the confidence needed to fulfill their goals. Positive messages
-            boost the self-esteem of everyone involved.
+            
           </div>
         </div>
         <Snackbar
