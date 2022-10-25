@@ -16,6 +16,6 @@
  */
 
 Ext.application({
-    name: 'Traccar',
+    name: 'O2Club',
     extend: 'Traccar.Application'
 });
