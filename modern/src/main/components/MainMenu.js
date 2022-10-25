@@ -32,6 +32,7 @@ import ListIcon from "@mui/icons-material/ViewList";
 import TuneIcon from "@mui/icons-material/Tune";
 import SettingsIcon from "@mui/icons-material/Settings";
 import CreateIcon from "@mui/icons-material/Create";
+import EmojiEvents from "@mui/icons-material/EmojiEvents";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import FolderIcon from "@mui/icons-material/Folder";
 import PersonIcon from "@mui/icons-material/Person";
@@ -44,6 +45,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "../../common/components/LocalizationProvider";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import Logo from "../../resources/images/logo192.png";
 import {
   useAdministrator,
   useManager,
@@ -115,7 +117,7 @@ const useStyles = makeStyles((theme) => ({
   logoimg: {
     width: 70,
     height: 70,
-    marginRight: 30,
+    marginRight: 0,
   },
   sidebar: {
     display: "flex",
@@ -448,19 +450,24 @@ const SettingsMenu = () => {
       <List>
         <div className={classes.logocont}>
           <div>
-            <img
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMSx0KZI3nc2gOVLuJOB3-J5JXJDQdrTyVAQ&usqp=CAU"
-              alt="logo"
-              className={classes.logoimg}
-            />
+            <img src={Logo} alt="logo" className={classes.logoimg} />
           </div>
           <ListItemText
             primaryTypographyProps={{
               fontWeight: "bold",
               variant: "h5",
+              //color: "#1875d8",
+              color: "#00008B",
+            }}
+            primary={"O2Club"}
+            //style={{ textAlign: "center" }}
+
+            secondary="A Green Reward Program"
+            secondaryTypographyProps={{
+              //fontWeight: "bold",
+              variant: "subtitle2",
               color: "#1875d8",
             }}
-            primary={"Telemoto"}
           />
         </div>
         <MenuItems
@@ -973,6 +980,14 @@ const SettingsMenu = () => {
                   link="/blockchain/logs"
                   icon={<CreateIcon />}
                   selected={location.pathname.startsWith("/settings/geofence")}
+                />
+                <MenuItems
+                  title={"Reward Engine"}
+                  link="/blockchain/reward-engine"
+                  icon={<EmojiEvents />}
+                  selected={location.pathname.startsWith(
+                    "/blockchain/reward-engine"
+                  )}
                 />
               </>
             )}

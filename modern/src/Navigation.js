@@ -48,6 +48,7 @@ import ChangeServerPage from "./other/ChangeServerPage";
 import Apis from "./blockChain/Api";
 import Logs from "./blockChain/Logs";
 import Tokens from "./blockChain/Token";
+import TokenDocs from "./blockChain/TokenDocs";
 
 const Navigation = () => {
   const navigate = useNavigate();
@@ -105,6 +106,7 @@ const Navigation = () => {
           <Route path="api-docs" element={<Apis />} />
           <Route path="tokens" element={<Tokens />} />
           <Route path="logs" element={<Logs />} />
+          <Route path="reward-engine" element={<TokenDocs />} />
         </Route>
 
         <Route path="settings">
