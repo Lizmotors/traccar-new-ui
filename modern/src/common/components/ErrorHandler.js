@@ -1,8 +1,8 @@
-import { Snackbar, Alert } from '@mui/material';
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { usePrevious } from '../../reactHelper';
-import { errorsActions } from '../../store';
+import { Snackbar, Alert } from "@mui/material";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { usePrevious } from "../../reactHelper";
+import { errorsActions } from "../../store";
 
 const ErrorHandler = () => {
   const dispatch = useDispatch();
@@ -11,12 +11,17 @@ const ErrorHandler = () => {
   const previousError = usePrevious(error);
 
   return (
-    <Snackbar open={!!error}>
+    <Snackbar
+      open={!!error}
+      anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      sx={{ width: 300 }}
+    >
       <Alert
         elevation={6}
         onClose={() => dispatch(errorsActions.pop())}
         severity="error"
         variant="filled"
+        sx={{ padding: "15px 25px", borderRadius: 5 }}
       >
         {error || previousError}
       </Alert>

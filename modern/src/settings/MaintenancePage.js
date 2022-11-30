@@ -136,7 +136,6 @@ const MaintenancePage = () => {
       menu={<SettingsMenu />}
       //breadcrumbs={["settingsTitle", "sharedMaintenance"]}
     >
-      <Header />
       {item && (
         <>
           <Accordion defaultExpanded>

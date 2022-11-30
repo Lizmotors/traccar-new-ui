@@ -13,6 +13,7 @@ import {
   Autocomplete,
   Button,
   Snackbar,
+  Alert,
 } from "@mui/material";
 import makeStyles from "@mui/styles/makeStyles";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -82,7 +83,6 @@ const ComputedAttributePage = () => {
       menu={<SettingsMenu />}
       //breadcrumbs={["settingsTitle", "sharedComputedAttribute"]}
     >
-      <Header />
       {item && (
         <>
           <Accordion defaultExpanded>
@@ -174,10 +174,22 @@ const ComputedAttributePage = () => {
               </Button>
               <Snackbar
                 open={!!result}
+                anchorOrigin={{ vertical: "top", horizontal: "right" }}
                 onClose={() => setResult(null)}
                 autoHideDuration={snackBarDurationLongMs}
                 message={result}
-              />
+                sx={{ width: 300 }}
+              >
+                <Alert
+                  elevation={6}
+                  onClose={() => setResult(null)}
+                  severity="success"
+                  variant="filled"
+                  sx={{ minWidth: 300, padding: "15px 25px", borderRadius: 5 }}
+                >
+                  {result}
+                </Alert>
+              </Snackbar>
             </AccordionDetails>
           </Accordion>
         </>

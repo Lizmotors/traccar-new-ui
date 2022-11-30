@@ -50,11 +50,7 @@ const ComputedAttributesPage = () => {
   }, [timestamp]);
 
   return (
-    <PageLayout
-      menu={<SettingsMenu />}
-      //breadcrumbs={["settingsTitle", "sharedComputedAttributes"]}
-    >
-      <Header />
+    <>
       <SearchHeader keyword={searchKeyword} setKeyword={setSearchKeyword} />
       <Table>
         <TableHead>
@@ -95,7 +91,7 @@ const ComputedAttributesPage = () => {
         </TableBody>
       </Table>
       <CollectionFab editPath="/settings/attribute" disabled={!administrator} />
-    </PageLayout>
+    </>
   );
 };
 

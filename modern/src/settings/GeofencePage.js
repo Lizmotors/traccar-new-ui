@@ -52,7 +52,6 @@ const GeofencePage = () => {
       menu={<SettingsMenu />}
       //breadcrumbs={["settingsTitle", "sharedGeofence"]}
     >
-      <Header />
       {item && (
         <>
           <Accordion defaultExpanded>

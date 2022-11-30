@@ -77,11 +77,7 @@ const RouteReportPage = () => {
   });
 
   return (
-    <PageLayout
-      menu={<ReportsMenu />}
-      //breadcrumbs={["reportTitle", "reportRoute"]}
-    >
-      <Header />
+    <>
       <div className={classes.container}>
         {selectedItem && (
           <div className={classes.containerMap}>
@@ -162,7 +158,7 @@ const RouteReportPage = () => {
           </Table>
         </div>
       </div>
-    </PageLayout>
+    </>
   );
 };
 

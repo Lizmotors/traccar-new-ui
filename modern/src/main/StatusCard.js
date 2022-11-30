@@ -42,7 +42,7 @@ import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 const useStyles = makeStyles((theme) => ({
   card: {
     width: theme.dimensions.popupMaxWidth,
-    padding: 20,
+    padding: 10,
     borderRadius: 20,
   },
   media: {
@@ -63,8 +63,8 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1, 1, 0, 2),
   },
   content: {
-    paddingTop: theme.spacing(1),
-    paddingBottom: theme.spacing(1),
+    paddingTop: 0,
+    paddingBottom: 0,
   },
   negative: {
     color: theme.palette.colors.negative,
@@ -126,8 +126,6 @@ const StatusCard = ({ deviceId, onClose }) => {
     "totalDistance",
     "course",
   ]);
-
-  console.log("positionItems", positionItems);
 
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -205,7 +203,7 @@ const StatusCard = ({ deviceId, onClose }) => {
                   onClick={onClose}
                   onTouchStart={onClose}
                 >
-                  <HighlightOffIcon fontSize="large" />
+                  <HighlightOffIcon fontSize="medium" />
                 </IconButton>
               </div>
             )}
@@ -239,7 +237,7 @@ const StatusCard = ({ deviceId, onClose }) => {
                     <StatusRow
                       key={"key"}
                       name={"Identifier"}
-                      content={"868DTDYD67"}
+                      content={device.uniqueId}
                     />
                   </TableBody>
                 </Table>

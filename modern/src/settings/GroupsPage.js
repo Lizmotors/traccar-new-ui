@@ -48,11 +48,7 @@ const GroupsPage = () => {
   }, [timestamp]);
 
   return (
-    <PageLayout
-      menu={<SettingsMenu />}
-      //breadcrumbs={["settingsTitle", "settingsGroups"]}
-    >
-      <Header />
+    <>
       <SearchHeader keyword={searchKeyword} setKeyword={setSearchKeyword} />
       <Table>
         <TableHead>
@@ -82,7 +78,7 @@ const GroupsPage = () => {
         </TableBody>
       </Table>
       <CollectionFab editPath="/settings/group" />
-    </PageLayout>
+    </>
   );
 };
 

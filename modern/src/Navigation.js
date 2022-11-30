@@ -49,6 +49,8 @@ import Apis from "./blockChain/Api";
 import Logs from "./blockChain/Logs";
 import Tokens from "./blockChain/Token";
 import TokenDocs from "./blockChain/TokenDocs";
+import SettingsMain from "./settings/SettingsMain";
+import ReportsMain from "./reports/ReportsMain";
 
 const Navigation = () => {
   const navigate = useNavigate();
@@ -109,7 +111,9 @@ const Navigation = () => {
           <Route path="reward-engine" element={<TokenDocs />} />
         </Route>
 
-        <Route path="settings">
+        {/* <Route path="/settings" element={<SettingsMain />} /> */}
+
+        <Route path="settings" element={<SettingsMain />}>
           <Route path="accumulators/:deviceId" element={<AccumulatorsPage />} />
           <Route path="calendars" element={<CalendarsPage />} />
           <Route path="calendar/:id" element={<CalendarPage />} />
@@ -144,7 +148,7 @@ const Navigation = () => {
           <Route path="user" element={<UserPage />} />
         </Route>
 
-        <Route path="reports">
+        <Route path="reports" element={<ReportsMain />}>
           <Route path="chart" element={<ChartReportPage />} />
           <Route path="event" element={<EventReportPage />} />
           <Route path="route" element={<RouteReportPage />} />

@@ -80,7 +80,6 @@ const DevicePage = () => {
       menu={<SettingsMenu />}
       //breadcrumbs={["sharedDevice"]}
     >
-      <Header />
       {item && (
         <>
           <Accordion defaultExpanded>

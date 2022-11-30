@@ -170,11 +170,7 @@ const TripReportPage = () => {
   };
 
   return (
-    <PageLayout
-      menu={<ReportsMenu />}
-      //breadcrumbs={["reportTitle", "reportTrips"]}
-    >
-      <Header />
+    <>
       <div className={classes.container}>
         {selectedItem && (
           <div className={classes.containerMap}>
@@ -242,7 +238,7 @@ const TripReportPage = () => {
           </Table>
         </div>
       </div>
-    </PageLayout>
+    </>
   );
 };
 

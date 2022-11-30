@@ -97,11 +97,7 @@ const ChartReportPage = () => {
   });
 
   return (
-    <PageLayout
-      menu={<ReportsMenu />}
-      //breadcrumbs={["reportTitle", "reportChart"]}
-    >
-      <Header />
+    <>
       <ReportFilter handleSubmit={handleSubmit} showOnly>
         <div className={classes.filterItem}>
           <FormControl fullWidth>
@@ -152,7 +148,7 @@ const ChartReportPage = () => {
           </ResponsiveContainer>
         </div>
       )}
-    </PageLayout>
+    </>
   );
 };
 

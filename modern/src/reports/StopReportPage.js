@@ -115,11 +115,7 @@ const StopReportPage = () => {
   };
 
   return (
-    <PageLayout
-      menu={<ReportsMenu />}
-      //breadcrumbs={["reportTitle", "reportStops"]}
-    >
-      <Header />
+    <>
       <div className={classes.container}>
         {selectedItem && (
           <div className={classes.containerMap}>
@@ -193,7 +189,7 @@ const StopReportPage = () => {
           </Table>
         </div>
       </div>
-    </PageLayout>
+    </>
   );
 };
 

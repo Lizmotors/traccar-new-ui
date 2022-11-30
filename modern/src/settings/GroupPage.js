@@ -52,7 +52,6 @@ const GroupPage = () => {
       menu={<SettingsMenu />}
       //breadcrumbs={["settingsTitle", "groupDialog"]}
     >
-      <Header />
       {item && (
         <>
           <Accordion defaultExpanded>

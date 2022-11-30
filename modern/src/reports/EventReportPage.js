@@ -173,11 +173,7 @@ const EventReportPage = () => {
   };
 
   return (
-    <PageLayout
-      menu={<ReportsMenu />}
-      //breadcrumbs={["reportTitle", "reportEvents"]}
-    >
-      <Header />
+    <>
       <div className={classes.container}>
         {selectedItem && (
           <div className={classes.containerMap}>
@@ -273,7 +269,7 @@ const EventReportPage = () => {
           </Table>
         </div>
       </div>
-    </PageLayout>
+    </>
   );
 };
 

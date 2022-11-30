@@ -48,11 +48,7 @@ const DriversPage = () => {
   }, [timestamp]);
 
   return (
-    <PageLayout
-      menu={<SettingsMenu />}
-      //breadcrumbs={["settingsTitle", "sharedDrivers"]}
-    >
-      <Header />
+    <>
       <SearchHeader keyword={searchKeyword} setKeyword={setSearchKeyword} />
       <Table>
         <TableHead>
@@ -84,7 +80,7 @@ const DriversPage = () => {
         </TableBody>
       </Table>
       <CollectionFab editPath="/settings/driver" />
-    </PageLayout>
+    </>
   );
 };
 

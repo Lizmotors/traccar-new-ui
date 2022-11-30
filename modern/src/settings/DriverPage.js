@@ -40,7 +40,6 @@ const DriverPage = () => {
       menu={<SettingsMenu />}
       //breadcrumbs={["settingsTitle", "sharedDriver"]}
     >
-      <Header />
       {item && (
         <>
           <Accordion defaultExpanded>

@@ -116,7 +116,6 @@ const CalendarPage = () => {
       menu={<SettingsMenu />}
       //breadcrumbs={["settingsTitle", "sharedCalendar"]}
     >
-      <Header />
       {item && (
         <>
           <Accordion defaultExpanded>

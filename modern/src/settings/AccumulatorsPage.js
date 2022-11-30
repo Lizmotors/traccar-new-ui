@@ -82,11 +82,7 @@ const AccumulatorsPage = () => {
   });
 
   return (
-    <PageLayout
-      menu={<SettingsMenu />}
-      //breadcrumbs={["sharedDeviceAccumulators"]}
-    >
-      <Header />
+    <>
       {item && (
         <Container maxWidth="xs" className={classes.container}>
           <Accordion defaultExpanded>
@@ -144,7 +140,7 @@ const AccumulatorsPage = () => {
           </div>
         </Container>
       )}
-    </PageLayout>
+    </>
   );
 };
 

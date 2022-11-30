@@ -23,9 +23,11 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),
     display: "flex",
-    justifyContent: "space-evenly",
+    justifyContent: "flex-end",
     "& > *": {
-      flexBasis: "33%",
+      flexBasis: "15%",
+      marginRight: 50,
+      marginTop: 40,
     },
   },
   details: {
@@ -89,25 +91,27 @@ const EditItemView = ({
   });
 
   return (
-    <PageLayout menu={menu} breadcrumbs={breadcrumbs}>
-      {item ? (
-        children
-      ) : (
-        <Accordion defaultExpanded>
-          <AccordionSummary>
-            <Typography variant="subtitle1">
-              <Skeleton width="10em" />
-            </Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            {[...Array(3)].map((_, i) => (
-              <Skeleton key={-i} width="100%">
-                <TextField />
-              </Skeleton>
-            ))}
-          </AccordionDetails>
-        </Accordion>
-      )}
+    <>
+      <Container maxWidth="xs" className={classes.container}>
+        {item ? (
+          children
+        ) : (
+          <Accordion defaultExpanded>
+            <AccordionSummary>
+              <Typography variant="subtitle1">
+                <Skeleton width="10em" />
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              {[...Array(3)].map((_, i) => (
+                <Skeleton key={-i} width="100%">
+                  <TextField />
+                </Skeleton>
+              ))}
+            </AccordionDetails>
+          </Accordion>
+        )}
+      </Container>
       <div className={classes.buttons}>
         <Button
           type="button"
@@ -128,7 +132,7 @@ const EditItemView = ({
           {t("sharedSave")}
         </Button>
       </div>
-    </PageLayout>
+    </>
   );
 };
 

@@ -52,11 +52,7 @@ const CommandsPage = () => {
   }, [timestamp]);
 
   return (
-    <PageLayout
-      menu={<SettingsMenu />}
-      //breadcrumbs={["settingsTitle", "sharedSavedCommands"]}
-    >
-      <Header />
+    <>
       <SearchHeader keyword={searchKeyword} setKeyword={setSearchKeyword} />
       <Table>
         <TableHead>
@@ -92,7 +88,7 @@ const CommandsPage = () => {
         </TableBody>
       </Table>
       <CollectionFab editPath="/settings/command" disabled={limitCommands} />
-    </PageLayout>
+    </>
   );
 };
 

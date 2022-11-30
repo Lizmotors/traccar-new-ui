@@ -54,6 +54,7 @@ const NotificationPage = () => {
           body: JSON.stringify(item),
         });
         if (!response.ok) {
+          console.log("res error", response.text());
           throw Error(await response.text());
         }
       })
@@ -71,7 +72,6 @@ const NotificationPage = () => {
       menu={<SettingsMenu />}
       //breadcrumbs={["settingsTitle", "sharedNotification"]}
     >
-      <Header />
       {item && (
         <>
           <Accordion defaultExpanded>

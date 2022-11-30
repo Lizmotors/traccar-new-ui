@@ -83,11 +83,7 @@ const CommandSendPage = () => {
   const validate = () => savedId || (item && item.type);
 
   return (
-    <PageLayout
-      menu={<SettingsMenu />}
-      //breadcrumbs={["settingsTitle", "deviceCommand"]}
-    >
-      <Header />
+    <>
       <Container maxWidth="xs" className={classes.container}>
         <Accordion defaultExpanded>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -128,7 +124,7 @@ const CommandSendPage = () => {
           </Button>
         </div>
       </Container>
-    </PageLayout>
+    </>
   );
 };
 

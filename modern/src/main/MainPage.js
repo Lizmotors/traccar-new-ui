@@ -57,6 +57,16 @@ import MainMenu from "./components/MainMenu";
 import PageLayout from "../common/components/PageLayout";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import Header from "../common/components/Header";
+import {
+  CircularProgressbar,
+  CircularProgressbarWithChildren,
+  buildStyles,
+} from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import MenuIcon from "@mui/icons-material/Menu";
+import Grid from "@mui/material/Grid";
 
 const useStyles = makeStyles((theme) => ({
   sidebar: {
@@ -70,7 +80,7 @@ const useStyles = makeStyles((theme) => ({
     width: theme.dimensions.drawerWidthDesktop,
     bottom: theme.dimensions.bottomBarHeight,
     transition: "transform .5s ease",
-    backgroundColor: "white",
+    //backgroundColor: "white",
     [theme.breakpoints.down("md")]: {
       width: "100%",
       margin: 0,
@@ -128,7 +138,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   sidebarToggleBg: {
-    backgroundColor: "white",
+    //backgroundColor: "white",
     color: "rgba(0, 0, 0, 0.6)",
     "&:hover": {
       backgroundColor: "white",
@@ -149,7 +159,7 @@ const useStyles = makeStyles((theme) => ({
     width: theme.dimensions.drawerWidthTablet,
   },
   appbar: {
-    background: "white",
+    //background: "white",
     display: "flex",
     justifyContent: "space-between",
     padding: "30px 50px",
@@ -197,7 +207,57 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     height: "100%",
   },
+  bottomText: {
+    paddingBottom: 6,
+  },
+  bottomTitle: {
+    paddingBottom: 20,
+  },
+  headerCont: {
+    display: "flex",
+    justifyContent: "space-between",
+    padding: "10px 20px",
+    height: "100%",
+    alignItems: "center",
+    flexWrap: "wrap",
+  },
+  titleCont: {
+    display: "flex",
+    justifyContent: "space-between",
+    paddingBottom: 20,
+  },
+  subTitleCont: {
+    display: "flex",
+  },
+  subTitleWidth: {
+    width: 150,
+  },
+  cardCircle: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: 150,
+    height: 200,
+  },
+  cardSubTitleWidth: {
+    width: 100,
+  },
+  flexBottom: {
+    paddingBottom: 20,
+  },
 }));
+
+const CountList = ({ title, count }) => {
+  const classes = useStyles();
+  return (
+    <div className={classes.subTitleCont}>
+      <Typography className={classes.subTitleWidth} variant="subtitle2">
+        {title}
+      </Typography>
+      <Typography variant="subtitle2">{count}</Typography>
+    </div>
+  );
+};
 
 const MainPage = () => {
   const classes = useStyles();
@@ -232,6 +292,12 @@ const MainPage = () => {
   const [filterGroups, setFilterGroups] = useState([]);
   const [filterSort, setFilterSort] = usePersistedState("filterSort", "");
   const [filterMap, setFilterMap] = usePersistedState("filterMap", false);
+  const [count, setCount] = useState({
+    online: 0,
+    offline: 0,
+    expired: 0,
+    never: 0,
+  });
 
   const filterRef = useRef();
   const [filterAnchorEl, setFilterAnchorEl] = useState(null);
@@ -327,6 +393,17 @@ const MainPage = () => {
       });
     }
     setFilteredDevices(filtered);
+    let countData = { online: 0, offline: 0, expired: 0, never: 0 };
+    let format = filtered.map((ele) => {
+      if (ele.status === "offline") {
+        countData.offline += 1;
+      } else if (ele.status === "online") {
+        countData.online += 1;
+      } else if (ele.disabled) {
+        countData.expired += 1;
+      }
+    });
+    setCount({ ...countData });
     setFilteredPositions(
       filterMap
         ? filtered.map((device) => positions[device.id]).filter(Boolean)
@@ -346,8 +423,155 @@ const MainPage = () => {
     <>
       <PageLayout menu={<MainMenu />}>
         <Header />
+        <div className={classes.headerCont}>
+          <div className={classes.flexBottom}>
+            <Card className={classes.cardCircle}>
+              <CardContent>
+                <Typography
+                  className={classes.cardSubTitleWidth}
+                  variant="subtitle2"
+                >
+                  Online
+                </Typography>
+                <div style={{ padding: 15 }}>
+                  <CircularProgressbar
+                    value={Math.ceil(
+                      (count.online / filteredDevices.length) * 100
+                    )}
+                    text={`${Math.ceil(
+                      (count.online / filteredDevices.length) * 100
+                    )}%`}
+                    background
+                    backgroundPadding={0}
+                    styles={buildStyles({
+                      backgroundColor: "#E2FBD7",
+                      textColor: "#000000",
+                      pathColor: "#34B53A",
+                      trailColor: "transparent",
+                    })}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+          <div className={classes.flexBottom}>
+            <Card className={classes.cardCircle}>
+              <CardContent>
+                <Typography
+                  className={classes.cardSubTitleWidth}
+                  variant="subtitle2"
+                >
+                  Idle
+                </Typography>
+                <div style={{ padding: 15 }}>
+                  <CircularProgressbar
+                    value={Math.ceil(
+                      (count.never / filteredDevices.length) * 100
+                    )}
+                    text={`${Math.ceil(
+                      (count.never / filteredDevices.length) * 100
+                    )}%`}
+                    background
+                    backgroundPadding={0}
+                    styles={buildStyles({
+                      backgroundColor: "#FBFAD7",
+                      textColor: "#000000",
+                      pathColor: "#F2E250",
+                      trailColor: "transparent",
+                    })}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+          <div className={classes.flexBottom}>
+            <Card className={classes.cardCircle}>
+              <CardContent>
+                <Typography
+                  className={classes.cardSubTitleWidth}
+                  variant="subtitle2"
+                >
+                  Offline
+                </Typography>
+                <div style={{ padding: 15 }}>
+                  <CircularProgressbar
+                    value={Math.ceil(
+                      (count.offline / filteredDevices.length) * 100
+                    )}
+                    text={`${Math.ceil(
+                      (count.offline / filteredDevices.length) * 100
+                    )}%`}
+                    background
+                    backgroundPadding={0}
+                    styles={buildStyles({
+                      backgroundColor: "#FBDDD7",
+                      textColor: "#000000",
+                      pathColor: "#EB340C",
+                      trailColor: "transparent",
+                    })}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+          <div className={classes.flexBottom}>
+            <Card sx={{ width: 230 }}>
+              <CardContent>
+                <div className={classes.titleCont}>
+                  <Typography variant="h6" component="div">
+                    Devices
+                  </Typography>
+                  <MenuIcon />
+                </div>
+                <CountList title="Count" count={filteredDevices.length} />
+                <CountList title="Online" count={count.online} />
+                <CountList title="Offline" count={count.offline} />
+                <CountList title="Never connected" count={count.never} />
+                <CountList title="Expired" count={count.expired} />
+              </CardContent>
+            </Card>
+          </div>
+          <div className={classes.flexBottom}>
+            <Card sx={{ width: 230 }}>
+              <CardContent>
+                <div className={classes.titleCont}>
+                  <Typography variant="h6" component="div">
+                    Alerts
+                  </Typography>
+                  <MenuIcon />
+                </div>
+                <CountList title="Speeding" count="02" />
+                <CountList title="Fuel" count="02" />
+                <CountList title="Geofencing" count="02" />
+                <CountList title="Idle Duration" count="02" />
+                <CountList title="SOS" count="02" />
+              </CardContent>
+            </Card>
+          </div>
+          <div className={classes.flexBottom}>
+            <Card sx={{ width: 230 }}>
+              <CardContent>
+                <div className={classes.titleCont}>
+                  <Typography variant="h6" component="div">
+                    Tasks
+                  </Typography>
+                  <MenuIcon />
+                </div>
+                <CountList title="Count" count="02" />
+                <CountList title="Scheduled" count="02" />
+                <CountList title="Inprogress" count="02" />
+                <CountList title="Compleated" count="02" />
+                <CountList title="Failed" count="02" />
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
         <div className={classes.container}>
-          <Container maxWidth="xl" className={classes.container}>
+          <Container
+            style={{ height: 800, width: "100%", maxWidth: "100%" }}
+            className={classes.container}
+          >
             <MapView>
               <MapOverlay />
               <MapGeofence />

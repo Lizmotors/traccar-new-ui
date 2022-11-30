@@ -8,6 +8,6 @@ export default {
   eventsDrawerWidth: "320px",
   bottomBarHeight: 56,
   popupMapOffset: 300,
-  popupMaxWidth: 358,
+  popupMaxWidth: 308,
   popupImageHeight: 144,
 };

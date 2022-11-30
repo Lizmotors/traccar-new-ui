@@ -61,11 +61,7 @@ const StatisticsPage = () => {
   });
 
   return (
-    <PageLayout
-      menu={<ReportsMenu />}
-      //breadcrumbs={["reportTitle", "statisticsTitle"]}
-    >
-      <Header />
+    <>
       <div className={classes.header}>
         <ReportFilter handleSubmit={handleSubmit} showOnly ignoreDevice>
           <ColumnSelect
@@ -101,7 +97,7 @@ const StatisticsPage = () => {
           )}
         </TableBody>
       </Table>
-    </PageLayout>
+    </>
   );
 };
 

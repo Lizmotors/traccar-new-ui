@@ -40,7 +40,6 @@ const CommandPage = () => {
       menu={<SettingsMenu />}
       //breadcrumbs={["settingsTitle", "sharedSavedCommand"]}
     >
-      <Header />
       {item && (
         <Accordion defaultExpanded>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>

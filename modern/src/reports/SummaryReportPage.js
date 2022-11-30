@@ -119,11 +119,7 @@ const SummaryReportPage = () => {
   };
 
   return (
-    <PageLayout
-      menu={<ReportsMenu />}
-      //breadcrumbs={["reportTitle", "reportSummary"]}
-    >
-      <Header />
+    <>
       <div className={classes.header}>
         <ReportFilter handleSubmit={handleSubmit} multiDevice includeGroups>
           <div className={classes.filterItem}>
@@ -170,7 +166,7 @@ const SummaryReportPage = () => {
           )}
         </TableBody>
       </Table>
-    </PageLayout>
+    </>
   );
 };
 

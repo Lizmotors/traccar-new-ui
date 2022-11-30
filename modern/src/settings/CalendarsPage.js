@@ -48,11 +48,7 @@ const CalendarsPage = () => {
   }, [timestamp]);
 
   return (
-    <PageLayout
-      menu={<SettingsMenu />}
-      //breadcrumbs={["settingsTitle", "sharedCalendars"]}
-    >
-      <Header />
+    <>
       <SearchHeader keyword={searchKeyword} setKeyword={setSearchKeyword} />
       <Table>
         <TableHead>
@@ -82,7 +78,7 @@ const CalendarsPage = () => {
         </TableBody>
       </Table>
       <CollectionFab editPath="/settings/calendar" />
-    </PageLayout>
+    </>
   );
 };
 

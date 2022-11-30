@@ -107,7 +107,7 @@ const useStyles = makeStyles((theme) => ({
     // width: theme.dimensions.drawerWidthDesktop,
     // bottom: theme.dimensions.bottomBarHeight,
     // transition: "transform .5s ease",
-    backgroundColor: "white",
+    //backgroundColor: "white",
     // [theme.breakpoints.down("md")]: {
     //   width: "100%",
     //   margin: 0,
@@ -165,10 +165,10 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   sidebarToggleBg: {
-    backgroundColor: "white",
+    //backgroundColor: "white",
     color: "rgba(0, 0, 0, 0.6)",
     "&:hover": {
-      backgroundColor: "white",
+      //backgroundColor: "white",
     },
   },
   bottomMenu: {
@@ -186,7 +186,7 @@ const useStyles = makeStyles((theme) => ({
     width: theme.dimensions.drawerWidthTablet,
   },
   appbar: {
-    background: "white",
+    //background: "white",
     display: "flex",
     justifyContent: "space-between",
     padding: "30px 50px",

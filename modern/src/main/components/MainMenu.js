@@ -55,7 +55,7 @@ import {
 import useFeatures from "../../common/util/useFeatures";
 import PlayCircleFilledIcon from "@mui/icons-material/PlayCircleFilled";
 import { nativePostMessage } from "../../common/components/NativeInterface";
-import { sessionActions } from "../../store";
+import { sessionActions, devicesActions } from "../../store";
 import { makeStyles } from "@mui/styles";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
@@ -71,7 +71,6 @@ import BottomMenu from "../../common/components/BottomMenu";
 import EventsDrawer from "../EventsDrawer";
 import "../main.css";
 import StatusCard from "../StatusCard";
-import { devicesActions } from "../../store";
 import TimelineIcon from "@mui/icons-material/Timeline";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import PauseCircleFilledIcon from "@mui/icons-material/PauseCircleFilled";
@@ -79,26 +78,40 @@ import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import RouteIcon from "@mui/icons-material/Route";
 import BarChartIcon from "@mui/icons-material/BarChart";
+import HomeIcon from "@mui/icons-material/Home";
+import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
+import LinkIcon from "@mui/icons-material/Link";
 
-const MenuItems = ({ title, link, icon, selected }) => (
-  <ListItemButton
-    sx={{ color: "#1875d8" }}
-    key={link}
-    component={Link}
-    to={link}
-    selected={selected}
-  >
-    <ListItemIcon sx={{ color: "#1875d8" }}>{icon}</ListItemIcon>
-    <ListItemText
-      primaryTypographyProps={{
-        fontWeight: "bold",
-        variant: "body1",
+const MenuItems = ({ title, link, icon, selected }) => {
+  const dispatch = useDispatch();
+  const deviceOpen = useSelector((state) => state.devices.open);
+
+  return (
+    <ListItemButton
+      sx={{ color: "#1875d8" }}
+      key={link}
+      component={Link}
+      to={link}
+      selected={selected}
+      onClick={() => {
+        if (link !== "/") {
+          console.log("link", link);
+          dispatch(devicesActions.toggleDevice(!deviceOpen));
+        }
       }}
-      style={{ fontWeight: "bold" }}
-      primary={title}
-    />
-  </ListItemButton>
-);
+    >
+      <ListItemIcon sx={{ color: "#1875d8" }}>{icon}</ListItemIcon>
+      <ListItemText
+        primaryTypographyProps={{
+          fontWeight: "bold",
+          variant: "body1",
+        }}
+        style={{ fontWeight: "bold" }}
+        primary={title}
+      />
+    </ListItemButton>
+  );
+};
 
 const useStyles = makeStyles((theme) => ({
   last_content: {
@@ -122,25 +135,13 @@ const useStyles = makeStyles((theme) => ({
   sidebar: {
     display: "flex",
     flexDirection: "column",
-    //minHeight: 150,
-    //maxHeight: 450,
+    //minHeight: 45,
+    //height: "100%",
     height: 450,
     overflow: "auto",
     margin: 0,
     padding: 0,
-    // position: "fixed",
-    // left: 0,
-    // top: 0,
-    // zIndex: 3,
-    // margin: theme.spacing(1.5),
-    // width: theme.dimensions.drawerWidthDesktop,
-    // bottom: theme.dimensions.bottomBarHeight,
-    // transition: "transform .5s ease",
-    backgroundColor: "white",
-    // [theme.breakpoints.down("md")]: {
-    //   width: "100%",
-    //   margin: 0,
-    // },
+    //backgroundColor: "white",
   },
   sidebarCollapsed: {
     transform: `translateX(-${theme.dimensions.drawerWidthDesktop})`,
@@ -194,10 +195,10 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   sidebarToggleBg: {
-    backgroundColor: "white",
+    //backgroundColor: "white",
     color: "rgba(0, 0, 0, 0.6)",
     "&:hover": {
-      backgroundColor: "white",
+      //backgroundColor: "white",
     },
   },
   bottomMenu: {
@@ -215,7 +216,7 @@ const useStyles = makeStyles((theme) => ({
     width: theme.dimensions.drawerWidthTablet,
   },
   appbar: {
-    background: "white",
+    //background: "white",
     display: "flex",
     justifyContent: "space-between",
     padding: "30px 50px",
@@ -272,11 +273,14 @@ const SettingsMenu = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const [open, setOpen] = useState(location.pathname.split("/")[1]);
+
   const readonly = useRestriction("readonly");
   const admin = useAdministrator();
   const manager = useManager();
   const userId = useSelector((state) => state.session.user.id);
   const user = useSelector((state) => state.session.user);
+  const deviceOpen = useSelector((state) => state.devices.open);
   const dispatch = useDispatch();
 
   const features = useFeatures();
@@ -329,6 +333,14 @@ const SettingsMenu = () => {
       setDevicesOpen(false);
     }
   }, [desktop, mapOnSelect, selectedDeviceId]);
+
+  const handleOpen = (name) => {
+    if (open === name) {
+      setOpen("");
+    } else {
+      setOpen(name);
+    }
+  };
 
   const onClick = useCallback(
     (_, deviceId) => {
@@ -445,6 +457,10 @@ const SettingsMenu = () => {
     dispatch(sessionActions.updateUser(null));
   };
 
+  const pathName = location.pathname.split("/");
+
+  console.log("path", pathName, location.pathname);
+
   return (
     <>
       <List>
@@ -471,13 +487,17 @@ const SettingsMenu = () => {
           />
         </div>
         <MenuItems
-          title={t("mapTitle")}
+          title={"Home"}
           link="/"
-          icon={<FmdGoodIcon />}
+          icon={<HomeIcon />}
           selected={location.pathname === `/`}
         />
         <Accordion
-          //defaultExpanded
+          //defaultExpanded={location.pathname === "/" ? true : false}
+          onChange={() => {
+            dispatch(devicesActions.toggleDevice(!deviceOpen));
+          }}
+          expanded={deviceOpen}
           style={{ border: "none", boxShadow: "none", padding: 0 }}
         >
           <AccordionSummary
@@ -659,7 +679,7 @@ const SettingsMenu = () => {
                 onClose={() => setEventsOpen(false)}
               />
             )}
-            {selectedDeviceId && (
+            {selectedDeviceId && location.pathname === "/" && (
               <div className={classes.statusCard}>
                 <StatusCard
                   deviceId={selectedDeviceId}
@@ -670,8 +690,17 @@ const SettingsMenu = () => {
           </AccordionDetails>
         </Accordion>
 
-        <Accordion
+        <MenuItems
+          title={t("reportTitle")}
+          link="/reports/route"
+          icon={<AssessmentIcon />}
+          selected={location.pathname === "/reports/route"}
+        />
+
+        {/* <Accordion
           //defaultExpanded
+          onChange={() => handleOpen("reports")}
+          expanded={open === "reports" ? true : false}
           style={{ border: "none", boxShadow: "none", padding: 0 }}
         >
           <AccordionSummary
@@ -760,7 +789,7 @@ const SettingsMenu = () => {
               </>
             )}
           </AccordionDetails>
-        </Accordion>
+        </Accordion> */}
 
         {!features.disableGroups && (
           <MenuItems
@@ -774,13 +803,46 @@ const SettingsMenu = () => {
           <MenuItems
             title={t("reportTrips")}
             link="/reports/trip"
-            icon={<PersonIcon />}
+            icon={<RouteIcon />}
             selected={location.pathname === `/reports/trip`}
           />
         )}
 
-        <Accordion
+        <MenuItems
+          title={t("sharedGeofences")}
+          link="/geofences"
+          icon={<CreateIcon />}
+          selected={location.pathname.startsWith("/settings/geofence")}
+        />
+        {!features.disableCalendars && (
+          <MenuItems
+            title={"Schedule"}
+            link="/settings/calendars"
+            icon={<TodayIcon />}
+            selected={location.pathname.startsWith("/settings/calendar")}
+          />
+        )}
+
+        {!features.disableMaintenance && (
+          <MenuItems
+            title={t("sharedMaintenance")}
+            link="/settings/maintenances"
+            icon={<BusinessCenterIcon />}
+            selected={location.pathname.startsWith("/settings/maintenance")}
+          />
+        )}
+
+        <MenuItems
+          title={"Settings"}
+          link="/settings/notifications"
+          selected={location.pathname.startsWith("/settings/notification")}
+          icon={<SettingsIcon />}
+        />
+
+        {/* <Accordion
           //defaultExpanded
+          onChange={() => handleOpen("settings")}
+          expanded={open === "settings" ? true : false}
           style={{ border: "none", boxShadow: "none", padding: 0 }}
         >
           <AccordionSummary
@@ -921,7 +983,7 @@ const SettingsMenu = () => {
               </>
             )}
           </AccordionDetails>
-        </Accordion>
+        </Accordion> */}
 
         <Accordion
           //defaultExpanded
@@ -943,7 +1005,7 @@ const SettingsMenu = () => {
               //selected={selected}
             >
               <ListItemIcon sx={{ color: "#1875d8" }}>
-                <SettingsIcon />
+                <LinkIcon />
               </ListItemIcon>
               <ListItemText
                 primaryTypographyProps={{
@@ -981,20 +1043,19 @@ const SettingsMenu = () => {
                   icon={<CreateIcon />}
                   selected={location.pathname.startsWith("/settings/geofence")}
                 />
-                <MenuItems
-                  title={"Reward Engine"}
-                  link="/blockchain/reward-engine"
-                  icon={<EmojiEvents />}
-                  selected={location.pathname.startsWith(
-                    "/blockchain/reward-engine"
-                  )}
-                />
               </>
             )}
           </AccordionDetails>
         </Accordion>
 
-        <ListItemButton onClick={handleLogout}>
+        <MenuItems
+          title={"Reward Engine"}
+          link="/blockchain/reward-engine"
+          icon={<EmojiEvents />}
+          selected={location.pathname.startsWith("/blockchain/reward-engine")}
+        />
+
+        {/* <ListItemButton onClick={handleLogout}>
           <ListItemIcon>{<LogoutIcon sx={{ color: "red" }} />}</ListItemIcon>
           <ListItemText
             primaryTypographyProps={{
@@ -1004,7 +1065,7 @@ const SettingsMenu = () => {
             }}
             primary={t("loginLogout")}
           />
-        </ListItemButton>
+        </ListItemButton> */}
       </List>
     </>
   );

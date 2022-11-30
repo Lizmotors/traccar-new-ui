@@ -61,11 +61,7 @@ const NotificationsPage = () => {
   };
 
   return (
-    <PageLayout
-      menu={<SettingsMenu />}
-      //breadcrumbs={["settingsTitle", "sharedNotifications"]}
-    >
-      <Header />
+    <>
       <SearchHeader keyword={searchKeyword} setKeyword={setSearchKeyword} />
       <Table>
         <TableHead>
@@ -105,7 +101,7 @@ const NotificationsPage = () => {
         </TableBody>
       </Table>
       <CollectionFab editPath="/settings/notification" />
-    </PageLayout>
+    </>
   );
 };
 

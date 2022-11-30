@@ -71,11 +71,7 @@ const MaintenacesPage = () => {
   };
 
   return (
-    <PageLayout
-      menu={<SettingsMenu />}
-      //breadcrumbs={["settingsTitle", "sharedMaintenance"]}
-    >
-      <Header />
+    <>
       <SearchHeader keyword={searchKeyword} setKeyword={setSearchKeyword} />
       <Table>
         <TableHead>
@@ -113,7 +109,7 @@ const MaintenacesPage = () => {
         </TableBody>
       </Table>
       <CollectionFab editPath="/settings/maintenance" />
-    </PageLayout>
+    </>
   );
 };
 
