@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { map } from './core/MapView';
 
 const MapRoutePath = ({ positions }) => {
+  console.log('pos',positions)
   const id = useId();
 
   const theme = useTheme();

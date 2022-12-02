@@ -76,10 +76,28 @@ const RouteReportPage = () => {
     }
   });
 
+  console.log('itesm', items[items.length-1],items)
+
   return (
     <>
       <div className={classes.container}>
-        {selectedItem && (
+        {
+          items && items.length>0 &&
+          <div className={classes.containerMap}>
+            <MapView>
+              <MapGeofence />
+              {[...new Set(items.map((it) => it?.deviceId))].map((deviceId) => (
+                <MapRoutePath
+                  key={deviceId}
+                  positions={items}
+                />
+              ))}
+              <MapPositions positions={[items[items.length-1]]} />
+            </MapView>
+            <MapCamera positions={items} />
+          </div>
+        }
+        {/* {selectedItem && (
           <div className={classes.containerMap}>
             <MapView>
               <MapGeofence />
@@ -95,7 +113,7 @@ const RouteReportPage = () => {
             </MapView>
             <MapCamera positions={items} />
           </div>
-        )}
+        )} */}
         <div className={classes.containerMain}>
           <div className={classes.header}>
             <ReportFilter handleSubmit={handleSubmit} multiDevice>
