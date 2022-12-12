@@ -62,8 +62,20 @@ const RegisterPage = () => {
           <div>CROPMED</div>
         </div>
         <div class="form-cont">
-          <div class="form-subcont">
-            <div class="form-title">Nice to see you again</div>
+          <div
+            class={`form-subcont  ${
+              localStorage.getItem("mode") &&
+              localStorage.getItem("mode") === "dark"
+                ? "form-subcont1"
+                : ""
+            }`}
+          >
+            <div class={`form-title  ${
+                localStorage.getItem("mode") &&
+                localStorage.getItem("mode") === "dark"
+                  ? "form-title1"
+                  : ""
+              }`}>Nice to see you again</div>
             <div className={classes.header}>
               <IconButton color="primary" onClick={() => navigate("/login")}>
                 <ArrowBackIcon />

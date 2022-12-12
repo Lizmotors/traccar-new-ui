@@ -58,7 +58,7 @@ const TokenDocs = (props) => {
     >
       <Header />
 
-      <div style={{ width: "100%", height: "100%", padding: "10px 25px" }}>
+      <div style={{ width: "100%", height: "90vh", padding: "10px 25px" }}>
         <h1>Reward Engine</h1>
         <iframe
           style={{ width: "100%", height: "100%", border: "none" }}

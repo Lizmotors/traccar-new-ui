@@ -1,4 +1,4 @@
-import { grey } from '@mui/material/colors';
+import { grey } from "@mui/material/colors";
 
 export default {
   MuiUseMediaQuery: {
@@ -6,30 +6,30 @@ export default {
       noSsr: true,
     },
   },
-  MuiOutlinedInput: {
-    styleOverrides: {
-      root: {
-        backgroundColor: grey[50],
-      },
-    },
-  },
+  // MuiOutlinedInput: {
+  //   styleOverrides: {
+  //     root: {
+  //       backgroundColor: grey[50],
+  //     },
+  //   },
+  // },
   MuiButton: {
     styleOverrides: {
       sizeMedium: {
-        height: '40px',
+        height: "40px",
       },
     },
   },
   MuiFormControl: {
     defaultProps: {
-      size: 'small',
+      size: "small",
     },
   },
   MuiSnackbar: {
     defaultProps: {
       anchorOrigin: {
-        vertical: 'bottom',
-        horizontal: 'center',
+        vertical: "bottom",
+        horizontal: "center",
       },
     },
   },

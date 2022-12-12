@@ -95,8 +95,7 @@ const MenuItems = ({ title, link, icon, selected }) => {
       selected={selected}
       onClick={() => {
         if (link !== "/") {
-          console.log("link", link);
-          dispatch(devicesActions.toggleDevice(!deviceOpen));
+          dispatch(devicesActions.toggleDevice(false));
         }
       }}
     >
@@ -458,8 +457,6 @@ const SettingsMenu = () => {
   };
 
   const pathName = location.pathname.split("/");
-
-  console.log("path", pathName, location.pathname);
 
   return (
     <>

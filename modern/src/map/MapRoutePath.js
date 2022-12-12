@@ -1,10 +1,9 @@
-import { useTheme } from '@mui/styles';
-import { useId, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { map } from './core/MapView';
+import { useTheme } from "@mui/styles";
+import { useId, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { map } from "./core/MapView";
 
 const MapRoutePath = ({ positions }) => {
-  console.log('pos',positions)
   const id = useId();
 
   const theme = useTheme();
@@ -14,7 +13,7 @@ const MapRoutePath = ({ positions }) => {
     if (position) {
       const attributes = state.devices.items[position.deviceId]?.attributes;
       if (attributes) {
-        const color = attributes['web.reportColor'];
+        const color = attributes["web.reportColor"];
         if (color) {
           return color;
         }
@@ -25,11 +24,11 @@ const MapRoutePath = ({ positions }) => {
 
   useEffect(() => {
     map.addSource(id, {
-      type: 'geojson',
+      type: "geojson",
       data: {
-        type: 'Feature',
+        type: "Feature",
         geometry: {
-          type: 'LineString',
+          type: "LineString",
           coordinates: [],
         },
       },
@@ -37,14 +36,14 @@ const MapRoutePath = ({ positions }) => {
     map.addLayer({
       source: id,
       id,
-      type: 'line',
+      type: "line",
       layout: {
-        'line-join': 'round',
-        'line-cap': 'round',
+        "line-join": "round",
+        "line-cap": "round",
       },
       paint: {
-        'line-color': ['get', 'color'],
-        'line-width': 2,
+        "line-color": ["get", "color"],
+        "line-width": 10,
       },
     });
 
@@ -59,11 +58,14 @@ const MapRoutePath = ({ positions }) => {
   }, []);
 
   useEffect(() => {
-    const coordinates = positions.map((item) => [item.longitude, item.latitude]);
+    const coordinates = positions.map((item) => [
+      item.longitude,
+      item.latitude,
+    ]);
     map.getSource(id).setData({
-      type: 'Feature',
+      type: "Feature",
       geometry: {
-        type: 'LineString',
+        type: "LineString",
         coordinates,
       },
       properties: {

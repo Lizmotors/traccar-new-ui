@@ -17,14 +17,6 @@ const useStyles = makeStyles(() => ({
   menu: {
     zIndex: 1204,
   },
-  bodyLight: {
-    backgroundColor: "#fff",
-    height: "100%",
-  },
-  bodyDark: {
-    backgroundColor: "#112D74",
-    height: "100%",
-  },
 }));
 
 const App = () => {
@@ -35,15 +27,7 @@ const App = () => {
   const initialized = useSelector((state) => !!state.session.user);
 
   return (
-    <div
-      className={
-        localStorage.getItem("mode")
-          ? localStorage.getItem("mode") === "dark"
-            ? classes.bodyDark
-            : classes.bodyLight
-          : classes.bodyDark
-      }
-    >
+    <div>
       <SocketController />
       <CachingController />
       {!initialized ? (

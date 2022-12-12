@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   IconButton,
   Table,
@@ -6,6 +6,10 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  Button,
+  Typography,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import GpsFixedIcon from "@mui/icons-material/GpsFixed";
 import LocationSearchingIcon from "@mui/icons-material/LocationSearching";
@@ -15,6 +19,7 @@ import {
   formatHours,
   formatVolume,
   formatTime,
+  formatDistanceRewards,
 } from "../common/util/formatter";
 import ReportFilter from "./components/ReportFilter";
 import { useAttributePreference } from "../common/util/preferences";
@@ -33,6 +38,9 @@ import MapMarkers from "../map/MapMarkers";
 import MapCamera from "../map/MapCamera";
 import MapGeofence from "../map/MapGeofence";
 import Header from "../common/components/Header";
+import { BASE_URL, BLOCK_BASE_URL } from "../env";
+import { snackBarDurationLongMs } from "../common/util/duration";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 const columnsArray = [
   ["startTime", "reportStartTime"],
@@ -58,6 +66,8 @@ const TripReportPage = () => {
   const speedUnit = useAttributePreference("speedUnit");
   const volumeUnit = useAttributePreference("volumeUnit");
 
+  const [result, setResult] = useState();
+
   const [columns, setColumns] = usePersistedState("tripColumns", [
     "startTime",
     "endTime",
@@ -68,6 +78,9 @@ const TripReportPage = () => {
   const [loading, setLoading] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [route, setRoute] = useState(null);
+  const [rewardsData, setRewardsData] = useState([]);
+  const [deviceData, setDeviceData] = useState({});
+  const [btnLoading, setBtnLoading] = useState(false);
 
   const createMarkers = () => [
     {
@@ -117,6 +130,19 @@ const TripReportPage = () => {
       }
     } else {
       setLoading(true);
+      try {
+        const response = await fetch(`/api/devices/${deviceId}`, {
+          headers: { Accept: "application/json" },
+        });
+        if (response.ok) {
+          setDeviceData(await response.json());
+        } else {
+          throw Error(await response.text());
+        }
+      } finally {
+        setLoading(false);
+      }
+
       try {
         const response = await fetch(`/api/reports/trips?${query.toString()}`, {
           headers: { Accept: "application/json" },
@@ -169,6 +195,55 @@ const TripReportPage = () => {
     }
   };
 
+  const getRewardsData = async () => {
+    try {
+      const response = await fetch(`${BASE_URL}/blockChain`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({}),
+      });
+      if (response.ok) {
+        //console.log("res", await response.json());
+        const datas = await response.json();
+        console.log("datas", datas);
+        setRewardsData(datas?.result);
+      } else {
+        throw Error(await response.text());
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handlePayment = async (datas) => {
+    setBtnLoading(true);
+    try {
+      const response = await fetch(`${BASE_URL}/blockChain/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(datas),
+      });
+      if (response.ok) {
+        setBtnLoading(false);
+        //console.log("res", await response.json());
+        const datas = await response.json();
+        console.log("data", datas);
+        setResult("Payment Done Successfully");
+        getRewardsData();
+      } else {
+        throw Error(await response.text());
+      }
+    } finally {
+      setBtnLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getRewardsData();
+  }, []);
+
+  console.log("rewa", deviceData);
+
   return (
     <>
       <div className={classes.container}>
@@ -203,39 +278,134 @@ const TripReportPage = () => {
                 {columns.map((key) => (
                   <TableCell key={key}>{t(columnsMap.get(key))}</TableCell>
                 ))}
+                <TableCell>Rewards</TableCell>
+                <TableCell>Transaction Id</TableCell>
+                <TableCell>Status</TableCell>
+                <TableCell>Action</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {!loading ? (
-                items.map((item) => (
-                  <TableRow key={item.startPositionId}>
-                    <TableCell className={classes.columnAction} padding="none">
-                      {selectedItem === item ? (
-                        <IconButton
-                          size="small"
-                          onClick={() => setSelectedItem(null)}
+                items.map((item) => {
+                  console.log("item", item, rewardsData);
+                  const findData = rewardsData.find(
+                    (ele) =>
+                      item.deviceId == ele.deviceId &&
+                      item.startTime == ele.startdate &&
+                      item.endTime == ele.endDate
+                  );
+                  console.log("fi", findData);
+                  const rewards =
+                    Number(
+                      formatDistanceRewards(item["distance"], distanceUnit, t)
+                    ) / 4;
+                  console.log("re", rewards / 4);
+                  return (
+                    <TableRow key={item.startPositionId}>
+                      <TableCell
+                        className={classes.columnAction}
+                        padding="none"
+                      >
+                        {selectedItem === item ? (
+                          <IconButton
+                            size="small"
+                            onClick={() => setSelectedItem(null)}
+                          >
+                            <GpsFixedIcon fontSize="small" />
+                          </IconButton>
+                        ) : (
+                          <IconButton
+                            size="small"
+                            onClick={() => setSelectedItem(item)}
+                          >
+                            <LocationSearchingIcon fontSize="small" />
+                          </IconButton>
+                        )}
+                      </TableCell>
+                      {columns.map((key) => (
+                        <TableCell key={key}>
+                          {formatValue(item, key)}
+                        </TableCell>
+                      ))}
+                      <TableCell>
+                        {findData ? findData?.rewards : rewards}
+                      </TableCell>
+                      <TableCell>
+                        {findData ? findData?.transactionId : ""}
+                      </TableCell>
+                      <TableCell>
+                        {findData ? "Already paid" : "yet to paid"}
+                      </TableCell>
+                      <TableCell>
+                        <LoadingButton
+                          loading={btnLoading}
+                          onClick={() => {
+                            if (findData) {
+                              window.open(
+                                findData?.transactionLink,
+                                "_blank",
+                                "noopener,noreferrer"
+                              );
+                            } else {
+                              handlePayment({
+                                toAccount: deviceData?.phone
+                                  ? deviceData?.phone
+                                  : "0x9Cc41DA122b93E993Cb113b5E1f8d54A5d42C178",
+                                deviceId: item.deviceId,
+                                startdate: item.startTime,
+                                endDate: item.endTime,
+                                status: "true",
+                                transactionLink: "1",
+                                transactionId: "1",
+                                meters: Number(
+                                  formatDistanceRewards(
+                                    item["distance"],
+                                    distanceUnit,
+                                    t
+                                  )
+                                ),
+                                rewards: rewards,
+                                amount: rewards,
+                              });
+                            }
+                          }}
+                          variant="outlined"
+                          color="secondary"
+                          className={classes.filterButton}
+                          //disabled={disabled}
                         >
-                          <GpsFixedIcon fontSize="small" />
-                        </IconButton>
-                      ) : (
-                        <IconButton
-                          size="small"
-                          onClick={() => setSelectedItem(item)}
-                        >
-                          <LocationSearchingIcon fontSize="small" />
-                        </IconButton>
-                      )}
-                    </TableCell>
-                    {columns.map((key) => (
-                      <TableCell key={key}>{formatValue(item, key)}</TableCell>
-                    ))}
-                  </TableRow>
-                ))
+                          <Typography variant="button" noWrap>
+                            {findData ? "Track Status" : "Pay Now"}
+                          </Typography>
+                        </LoadingButton>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })
               ) : (
-                <TableShimmer columns={columns.length + 1} startAction />
+                <TableShimmer columns={columns.length + 5} startAction />
               )}
             </TableBody>
           </Table>
+
+          <Snackbar
+            open={!!result}
+            anchorOrigin={{ vertical: "top", horizontal: "right" }}
+            onClose={() => setResult(null)}
+            autoHideDuration={snackBarDurationLongMs}
+            message={result}
+            sx={{ width: 300 }}
+          >
+            <Alert
+              elevation={6}
+              onClose={() => setResult(null)}
+              severity="success"
+              variant="filled"
+              sx={{ minWidth: 300, padding: "15px 25px", borderRadius: 5 }}
+            >
+              {result}
+            </Alert>
+          </Snackbar>
         </div>
       </div>
     </>

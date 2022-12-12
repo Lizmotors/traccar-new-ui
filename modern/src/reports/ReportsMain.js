@@ -47,11 +47,6 @@ const SettingsMain = () => {
   };
 
   useEffect(() => {
-    console.log(
-      "not use",
-      location,
-      location.pathname == "/settings/notification"
-    );
     if (location.pathname == "/settings/notification") {
       setValue("/settings/notifications");
     } else if (location.pathname == "/settings/group") {
@@ -68,8 +63,6 @@ const SettingsMain = () => {
       setValue(location?.pathname);
     }
   }, [location]);
-
-  console.log("props", value);
 
   return (
     <div>

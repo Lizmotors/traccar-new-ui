@@ -2,7 +2,7 @@ import { makeStyles } from "@mui/styles";
 
 export default makeStyles((theme) => ({
   container: {
-    height: "50%",
+    height: "100%",
     display: "flex",
     flexDirection: "column",
   },

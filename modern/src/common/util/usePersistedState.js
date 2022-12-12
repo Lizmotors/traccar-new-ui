@@ -7,7 +7,6 @@ export const savePersistedState = (key, value) => {
 export default (key, defaultValue) => {
   const [value, setValue] = useState(() => {
     const stickyValue = window.localStorage.getItem(key);
-    console.log(stickyValue);
     return stickyValue ? JSON.parse(stickyValue) : defaultValue;
   });
 

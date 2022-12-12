@@ -14,38 +14,38 @@ const colors = {
 
 export default {
   mode: localStorage.getItem("mode") ? localStorage.getItem("mode") : "dark",
-  ...(localStorage.getItem("mode") && localStorage.getItem("mode") === "light"
-    ? {
-        // palette values for dark mode
-        // primary: deepOrange,
-        // divider: deepOrange[700],
-        // background: {
-        //   default: deepOrange[900],
-        //   paper: deepOrange[900],
-        // },
+  // ...(localStorage.getItem("mode") && localStorage.getItem("mode") === "light"
+  //   ? {
+  //       // palette values for dark mode
+  //       // primary: deepOrange,
+  //       // divider: deepOrange[700],
+  //       // background: {
+  //       //   default: deepOrange[900],
+  //       //   paper: deepOrange[900],
+  //       // },
 
-        text: {
-          primary: grey[800],
-          secondary: grey[500],
-        },
-      }
-    : {
-        // palette values for light mode
-        // primary: amber,
-        // divider: amber[200],
-        primary: "#112D74",
-        backgroundColor: {
-          default: "#112D74",
-          paper: "#112D74",
-        },
-        text: {
-          primary: "#fff",
-          secondary: "#fff",
-        },
-      }),
-  // background: {
-  //   default: colors.background,
-  // },
+  //       text: {
+  //         primary: grey[800],
+  //         secondary: grey[500],
+  //       },
+  //     }
+  //   : {
+  //       // palette values for light mode
+  //       // primary: amber,
+  //       // divider: amber[200],
+  //       primary: "#112D74",
+  //       backgroundColor: {
+  //         default: "#112D74",
+  //         paper: "#112D74",
+  //       },
+  //       text: {
+  //         primary: "#fff",
+  //         secondary: "#fff",
+  //       },
+  //     }),
+  // // background: {
+  // //   default: colors.background,
+  // // },
   primary: {
     main: colors.primary,
   },

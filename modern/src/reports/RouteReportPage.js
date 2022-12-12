@@ -76,27 +76,21 @@ const RouteReportPage = () => {
     }
   });
 
-  console.log('itesm', items[items.length-1],items)
-
   return (
     <>
       <div className={classes.container}>
-        {
-          items && items.length>0 &&
+        {items && items.length > 0 && (
           <div className={classes.containerMap}>
             <MapView>
               <MapGeofence />
               {[...new Set(items.map((it) => it?.deviceId))].map((deviceId) => (
-                <MapRoutePath
-                  key={deviceId}
-                  positions={items}
-                />
+                <MapRoutePath key={deviceId} positions={items} />
               ))}
-              <MapPositions positions={[items[items.length-1]]} />
+              <MapPositions positions={[items[items.length - 1]]} />
             </MapView>
             <MapCamera positions={items} />
           </div>
-        }
+        )}
         {/* {selectedItem && (
           <div className={classes.containerMap}>
             <MapView>

@@ -39,6 +39,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { nativePostMessage } from "./NativeInterface";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { sessionActions } from "../../store";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
 
 const useStyles = makeStyles((theme) => ({
   sidebar: {
@@ -347,6 +348,7 @@ const Header = () => {
             {user.name}
           </Typography>
         </div>
+
         <MenuItem
           className={classNames(
             classes.profileMenuItem,
@@ -356,6 +358,31 @@ const Header = () => {
           to={`/settings/user/${userId}`}
         >
           <AccountIcon className={classes.profileMenuIcon} /> Profile
+        </MenuItem>
+        <MenuItem
+          className={classNames(
+            classes.profileMenuItem,
+            classes.headerMenuItem
+          )}
+          onClick={() => {
+            if (localStorage.getItem("mode")) {
+              if (localStorage.getItem("mode") === "dark") {
+                localStorage.setItem("mode", "light");
+              } else {
+                localStorage.setItem("mode", "dark");
+              }
+            } else {
+              localStorage.setItem("mode", "dark");
+            }
+            window.location.reload();
+            console.log("call");
+          }}
+        >
+          <DarkModeIcon className={classes.profileMenuIcon} />{" "}
+          {localStorage.getItem("mode") &&
+          localStorage.getItem("mode") === "dark"
+            ? "Light"
+            : "Dark"}
         </MenuItem>
         <MenuItem
           className={classNames(

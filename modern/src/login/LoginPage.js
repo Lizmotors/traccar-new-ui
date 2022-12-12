@@ -171,10 +171,26 @@ const LoginPage = () => {
           <div>CROPMED</div>
         </div>
         <div class="form-cont">
-          <div class="form-subcont">
-            <div class="form-title">Nice to see you again</div>
+          <div
+            class={`form-subcont  ${
+              localStorage.getItem("mode") &&
+              localStorage.getItem("mode") === "dark"
+                ? "form-subcont1"
+                : ""
+            }`}
+          >
+            <div
+              class={`form-title  ${
+                localStorage.getItem("mode") &&
+                localStorage.getItem("mode") === "dark"
+                  ? "form-title1"
+                  : ""
+              }`}
+            >
+              Nice to see you again
+            </div>
             <div class="field-cont">
-              <div class="fiele-title">{t("userEmail")}</div>
+              <div class={"fiele-title"}>{t("userEmail")}</div>
               <div className="input">
                 <TextField
                   required
