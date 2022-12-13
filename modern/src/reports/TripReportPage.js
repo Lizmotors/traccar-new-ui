@@ -216,6 +216,7 @@ const TripReportPage = () => {
   };
 
   const handlePayment = async (datas) => {
+    //console.log("data", datas);
     setBtnLoading(true);
     try {
       const response = await fetch(`${BASE_URL}/blockChain/register`, {
@@ -334,7 +335,7 @@ const TripReportPage = () => {
                         {findData ? findData?.transactionId : ""}
                       </TableCell>
                       <TableCell>
-                        {findData ? "Already paid" : "yet to paid"}
+                        {findData ? "Already paid" : "Unpaid"}
                       </TableCell>
                       <TableCell>
                         <LoadingButton
@@ -365,7 +366,7 @@ const TripReportPage = () => {
                                   )
                                 ),
                                 rewards: rewards,
-                                amount: rewards,
+                                amount: rewards * 1000000000000000000,
                               });
                             }
                           }}

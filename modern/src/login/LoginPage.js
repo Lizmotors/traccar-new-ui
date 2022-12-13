@@ -34,7 +34,7 @@ import {
 import LogoImage from "./LogoImage";
 import { useCatch } from "../reactHelper";
 import "./login.css";
-import Logo from "../resources/images/logo-o2-name.png";
+import Logo from "../resources/images/login-logo.png";
 
 const useStyles = makeStyles((theme) => ({
   options: {

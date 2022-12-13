@@ -121,14 +121,14 @@ const DevicePage = () => {
                 onChange={(event) =>
                   setItem({ ...item, phone: event.target.value })
                 }
-                label={t("sharedPhone")}
+                label={"wallet Address"}
               />
               <TextField
                 value={item.model || ""}
                 onChange={(event) =>
                   setItem({ ...item, model: event.target.value })
                 }
-                label={t("deviceModel")}
+                label={"Contract"}
               />
               <TextField
                 value={item.contact || ""}
