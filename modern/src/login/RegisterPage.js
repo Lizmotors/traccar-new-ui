@@ -13,6 +13,7 @@ import LoginLayout from "./LoginLayout";
 import { useTranslation } from "../common/components/LocalizationProvider";
 import { snackBarDurationShortMs } from "../common/util/duration";
 import { useCatch } from "../reactHelper";
+import Logo from "../resources/images/logo-o2-name.png";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -59,7 +60,7 @@ const RegisterPage = () => {
     <>
       <div class="maincont">
         <div class="logo">
-          <div>CROPMED</div>
+          <img src={Logo} alt="logo" />
         </div>
         <div class="form-cont">
           <div
@@ -70,12 +71,16 @@ const RegisterPage = () => {
                 : ""
             }`}
           >
-            <div class={`form-title  ${
+            <div
+              class={`form-title  ${
                 localStorage.getItem("mode") &&
                 localStorage.getItem("mode") === "dark"
                   ? "form-title1"
                   : ""
-              }`}>Nice to see you again</div>
+              }`}
+            >
+              Nice to see you again
+            </div>
             <div className={classes.header}>
               <IconButton color="primary" onClick={() => navigate("/login")}>
                 <ArrowBackIcon />
@@ -139,7 +144,7 @@ const RegisterPage = () => {
             </div>
           </div>
         </div>
-        <div>
+        {/* <div>
           <div class="title">Our Vision:</div>
           <div class="sub-title">
             In addition to being a mood-booster, giving and receiving
@@ -150,7 +155,7 @@ const RegisterPage = () => {
             the confidence needed to fulfill their goals. Positive messages
             boost the self-esteem of everyone involved.
           </div>
-        </div>
+        </div> */}
         <Snackbar
           open={snackbarOpen}
           onClose={() => navigate("/login")}

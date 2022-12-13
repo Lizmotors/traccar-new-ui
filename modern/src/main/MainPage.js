@@ -423,7 +423,7 @@ const MainPage = () => {
     <>
       <PageLayout menu={<MainMenu />}>
         <Header />
-        <div className={classes.headerCont}>
+        {/* <div className={classes.headerCont}>
           <div className={classes.flexBottom}>
             <Card className={classes.cardCircle}>
               <CardContent>
@@ -565,7 +565,7 @@ const MainPage = () => {
               </CardContent>
             </Card>
           </div>
-        </div>
+        </div> */}
 
         <div className={classes.container}>
           <Container

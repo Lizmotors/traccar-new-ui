@@ -24,6 +24,10 @@ html, body{
     font-weight: bold;
 }
 
+.logo img{
+    width: 100px;
+}
+
 .quotes{
     
 }

@@ -45,7 +45,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "../../common/components/LocalizationProvider";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import Logo from "../../resources/images/logo192.png";
+import Logo from "../../resources/images/logo-o2-name.png";
 import {
   useAdministrator,
   useManager,
@@ -124,11 +124,13 @@ const useStyles = makeStyles((theme) => ({
   logocont: {
     display: "flex",
     alignItems: "center",
+    justifyContent: "center",
     padding: "30px 50px",
   },
   logoimg: {
-    width: 70,
-    height: 70,
+    textAlign: "centre",
+    width: 150,
+    //height: 70,
     marginRight: 0,
   },
   sidebar: {
@@ -465,7 +467,7 @@ const SettingsMenu = () => {
           <div>
             <img src={Logo} alt="logo" className={classes.logoimg} />
           </div>
-          <ListItemText
+          {/* <ListItemText
             primaryTypographyProps={{
               fontWeight: "bold",
               variant: "h5",
@@ -481,7 +483,7 @@ const SettingsMenu = () => {
               variant: "subtitle2",
               color: "#1875d8",
             }}
-          />
+          /> */}
         </div>
         <MenuItems
           title={"Home"}
