@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { LinearProgress, useMediaQuery } from "@mui/material";
@@ -25,6 +25,12 @@ const App = () => {
   const desktop = useMediaQuery(theme.breakpoints.up("md"));
 
   const initialized = useSelector((state) => !!state.session.user);
+
+  useEffect(() => {
+    if (!localStorage.getItem("mode")) {
+      localStorage.setItem("mode", "light");
+    }
+  }, []);
 
   return (
     <div>

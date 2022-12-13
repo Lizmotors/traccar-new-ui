@@ -13,7 +13,7 @@ const colors = {
 };
 
 export default {
-  mode: localStorage.getItem("mode") ? localStorage.getItem("mode") : "dark",
+  mode: localStorage.getItem("mode") ? localStorage.getItem("mode") : "light",
   // ...(localStorage.getItem("mode") && localStorage.getItem("mode") === "light"
   //   ? {
   //       // palette values for dark mode
