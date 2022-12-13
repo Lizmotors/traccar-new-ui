@@ -366,7 +366,7 @@ const TripReportPage = () => {
                                   )
                                 ),
                                 rewards: rewards,
-                                amount: rewards * 1000000000000000000,
+                                amount: String(rewards * 1000000000000000000),
                               });
                             }
                           }}
