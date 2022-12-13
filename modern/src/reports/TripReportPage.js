@@ -301,6 +301,7 @@ const TripReportPage = () => {
                       formatDistanceRewards(item["distance"], distanceUnit, t)
                     ) / 4;
                   console.log("re", rewards / 4);
+                  console.log("pa", parseFloat(0));
                   return (
                     <TableRow key={item.startPositionId}>
                       <TableCell
@@ -348,26 +349,31 @@ const TripReportPage = () => {
                                 "noopener,noreferrer"
                               );
                             } else {
-                              handlePayment({
-                                toAccount: deviceData?.phone
-                                  ? deviceData?.phone
-                                  : "0x9Cc41DA122b93E993Cb113b5E1f8d54A5d42C178",
-                                deviceId: item.deviceId,
-                                startdate: item.startTime,
-                                endDate: item.endTime,
-                                status: "true",
-                                transactionLink: "1",
-                                transactionId: "1",
-                                meters: Number(
-                                  formatDistanceRewards(
-                                    item["distance"],
-                                    distanceUnit,
-                                    t
-                                  )
-                                ),
-                                rewards: rewards,
-                                amount: String(rewards * 1000000000000000000),
-                              });
+                              if (parseFloat(rewards) > parseFloat(0)) {
+                                handlePayment({
+                                  toAccount: deviceData?.phone
+                                    ? deviceData?.phone
+                                    : "0x9Cc41DA122b93E993Cb113b5E1f8d54A5d42C178",
+                                  deviceId: item.deviceId,
+                                  startdate: item.startTime,
+                                  endDate: item.endTime,
+                                  status: "true",
+                                  transactionLink: "1",
+                                  transactionId: "1",
+                                  meters: Number(
+                                    formatDistanceRewards(
+                                      item["distance"],
+                                      distanceUnit,
+                                      t
+                                    )
+                                  ),
+                                  rewards: rewards,
+                                  amount: String(rewards * 1000000000000000000),
+                                });
+                                console.log("call");
+                              } else {
+                                alert("You Trip has not been verified yet");
+                              }
                             }
                           }}
                           variant="outlined"
