@@ -43,6 +43,8 @@ import useMapOverlays from "../map/overlay/useMapOverlays";
 import { useCatch } from "../reactHelper";
 import Header from "../common/components/Header";
 import Grid from "@mui/material/Grid";
+import "./style.css";
+import Divider from "@mui/material/Divider";
 
 const deviceFields = [
   { id: "name", name: "sharedName" },
@@ -56,6 +58,7 @@ const deviceFields = [
 const useStyles = makeStyles((theme) => ({
   container: {
     marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(5),
   },
   details: {
     display: "flex",
@@ -163,296 +166,276 @@ const PreferencesPage = () => {
         className={classes.container}
         style={{ height: "100%" }}
       >
-        <Grid container spacing={4} rowSpacing={8} style={{ height: "100%" }}>
-          <Grid item xs={6}>
-            <Accordion defaultExpanded>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography variant="subtitle1">
-                  {t("sharedPreferences")}
-                </Typography>
-              </AccordionSummary>
-              <AccordionDetails className={classes.details}>
-                <FormControl>
-                  <InputLabel>{t("loginLanguage")}</InputLabel>
-                  <Select
-                    label={t("loginLanguage")}
-                    value={language}
-                    onChange={(e) => setLanguage(e.target.value)}
-                  >
-                    {languageList.map((it) => (
-                      <MenuItem key={it.code} value={it.code}>
-                        {it.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </AccordionDetails>
-            </Accordion>
-          </Grid>
-          <Grid item xs={6}>
-            <Accordion defaultExpanded>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography variant="subtitle1">{t("userToken")}</Typography>
-              </AccordionSummary>
-              <AccordionDetails className={classes.details}>
-                <TextField
-                  label={t("userExpirationTime")}
-                  type="date"
-                  value={tokenExpiration}
-                  onChange={(e) => {
-                    setTokenExpiration(e.target.value);
-                    setToken(null);
-                  }}
-                />
-                <FormControl>
-                  <OutlinedInput
-                    multiline
-                    rows={6}
-                    readOnly
-                    type="text"
-                    value={token || ""}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <div className={classes.tokenActions}>
-                          <IconButton
-                            size="small"
-                            edge="end"
-                            onClick={generateToken}
-                            disabled={!!token}
-                          >
-                            <CachedIcon fontSize="small" />
-                          </IconButton>
-                          <IconButton
-                            size="small"
-                            edge="end"
-                            onClick={() => navigator.clipboard.writeText(token)}
-                            disabled={!token}
-                          >
-                            <ContentCopyIcon fontSize="small" />
-                          </IconButton>
-                        </div>
-                      </InputAdornment>
-                    }
-                  />
-                </FormControl>
-              </AccordionDetails>
-            </Accordion>
-          </Grid>
-          <Grid item xs={6}>
-            <Accordion defaultExpanded>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography variant="subtitle1">{t("mapTitle")}</Typography>
-              </AccordionSummary>
-              <AccordionDetails className={classes.details}>
-                <FormControl>
-                  <InputLabel>{t("mapActive")}</InputLabel>
-                  <Select
-                    label={t("mapActive")}
-                    value={activeMapStyles}
-                    onChange={(e, child) => {
-                      const clicked = mapStyles.find(
-                        (s) => s.id === child.props.value
-                      );
-                      if (clicked.available) {
-                        setActiveMapStyles(e.target.value);
-                      } else if (clicked.id !== "custom") {
-                        const query = new URLSearchParams({
-                          attribute: clicked.attribute,
-                        });
-                        navigate(
-                          `/settings/user/${userId}?${query.toString()}`
-                        );
-                      }
-                    }}
-                    multiple
-                  >
-                    {mapStyles.map((style) => (
-                      <MenuItem key={style.id} value={style.id}>
-                        <Typography
-                          component="span"
-                          color={style.available ? "textPrimary" : "error"}
-                        >
-                          {style.title}
-                        </Typography>
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-                <FormControl>
-                  <InputLabel>{t("mapOverlay")}</InputLabel>
-                  <Select
-                    label={t("mapOverlay")}
-                    value={selectedMapOverlay}
-                    onChange={(e) => {
-                      const clicked = mapOverlays.find(
-                        (o) => o.id === e.target.value
-                      );
-                      if (!clicked || clicked.available) {
-                        setSelectedMapOverlay(e.target.value);
-                      } else if (clicked.id !== "custom") {
-                        const query = new URLSearchParams({
-                          attribute: clicked.attribute,
-                        });
-                        navigate(
-                          `/settings/user/${userId}?${query.toString()}`
-                        );
-                      }
-                    }}
-                  >
-                    <MenuItem value="">{"\u00a0"}</MenuItem>
-                    {mapOverlays.map((overlay) => (
-                      <MenuItem key={overlay.id} value={overlay.id}>
-                        <Typography
-                          component="span"
-                          color={overlay.available ? "textPrimary" : "error"}
-                        >
-                          {overlay.title}
-                        </Typography>
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-                <Autocomplete
-                  multiple
-                  freeSolo
-                  options={Object.keys(positionAttributes)}
-                  getOptionLabel={(option) =>
-                    positionAttributes.hasOwnProperty(option)
-                      ? positionAttributes[option].name
-                      : option
-                  }
-                  value={positionItems}
-                  onChange={(_, option) => {
-                    setPositionItems(option);
-                  }}
-                  filterOptions={(options, params) => {
-                    const filtered = filter(options, params);
-                    if (
-                      params.inputValue &&
-                      !filtered.includes(params.inputValue)
-                    ) {
-                      filtered.push(params.inputValue);
-                    }
-                    return filtered;
-                  }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      placeholder={t("sharedAttributes")}
-                    />
-                  )}
-                />
-                <FormGroup>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={mapGeofences}
-                        onChange={(e) => setMapGeofences(e.target.checked)}
-                      />
-                    }
-                    label={t("sharedGeofences")}
-                  />
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={mapLiveRoutes}
-                        onChange={(e) => setMapLiveRoutes(e.target.checked)}
-                      />
-                    }
-                    label={t("mapLiveRoutes")}
-                  />
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={mapFollow}
-                        onChange={(e) => setMapFollow(e.target.checked)}
-                      />
-                    }
-                    label={t("deviceFollow")}
-                  />
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={mapCluster}
-                        onChange={(e) => setMapCluster(e.target.checked)}
-                      />
-                    }
-                    label={t("mapClustering")}
-                  />
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={mapOnSelect}
-                        onChange={(e) => setMapOnSelect(e.target.checked)}
-                      />
-                    }
-                    label={t("mapOnSelect")}
-                  />
-                </FormGroup>
-              </AccordionDetails>
-            </Accordion>
-          </Grid>
-          <Grid item xs={6}>
-            <Accordion defaultExpanded>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography variant="subtitle1">{t("deviceTitle")}</Typography>
-              </AccordionSummary>
-              <AccordionDetails className={classes.details}>
-                <SelectField
-                  emptyValue={null}
-                  value={devicePrimary}
-                  onChange={(e) => setDevicePrimary(e.target.value)}
-                  data={deviceFields}
-                  titleGetter={(it) => t(it.name)}
-                  label={t("sharedPrimary")}
-                />
-                <SelectField
-                  emptyValue=""
-                  value={deviceSecondary}
-                  onChange={(e) => setDeviceSecondary(e.target.value)}
-                  data={deviceFields}
-                  titleGetter={(it) => t(it.name)}
-                  label={t("sharedSecondary")}
-                />
-              </AccordionDetails>
-            </Accordion>
-          </Grid>
-          <Grid item xs={6}>
-            <Accordion defaultExpanded>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography variant="subtitle1">{t("sharedSound")}</Typography>
-              </AccordionSummary>
-              <AccordionDetails className={classes.details}>
-                <SelectField
-                  multiple
-                  value={soundEvents}
-                  onChange={(e) => setSoundEvents(e.target.value)}
-                  endpoint="/api/notifications/types"
-                  keyGetter={(it) => it.type}
-                  titleGetter={(it) => t(prefixString("event", it.type))}
-                  label={t("reportEventTypes")}
-                />
-                <SelectField
-                  multiple
-                  value={soundAlarms}
-                  onChange={(e) => setSoundAlarms(e.target.value)}
-                  data={alarms}
-                  keyGetter={(it) => it.key}
-                  label={t("sharedAlarms")}
-                />
-              </AccordionDetails>
-            </Accordion>
-          </Grid>
-        </Grid>
+        <div className="main-div">
+          <Typography variant="h6" className="main-text">
+            {t("sharedPreferences")}
+          </Typography>
 
-        {/* <Grid container spacing={2}>
-          <Grid item xs={6}></Grid>
-        </Grid>
+          <FormControl className="form-div">
+            <InputLabel>{t("loginLanguage")}</InputLabel>
+            <Select
+              label={t("loginLanguage")}
+              value={language}
+              onChange={(e) => setLanguage(e.target.value)}
+            >
+              {languageList.map((it) => (
+                <MenuItem key={it.code} value={it.code}>
+                  {it.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </div>
 
-        <Grid container spacing={2}>
-          <Grid item xs={6}></Grid>
-          <Grid item xs={6}></Grid>
-        </Grid> */}
+        <Divider className="divider" />
+
+        <div className="main-div">
+          <Typography variant="h6" className="main-text">
+            {t("userToken")}
+          </Typography>
+
+          <TextField
+            className="form-div"
+            label={t("userExpirationTime")}
+            type="date"
+            value={tokenExpiration}
+            onChange={(e) => {
+              setTokenExpiration(e.target.value);
+              setToken(null);
+            }}
+          />
+          <FormControl className="form-div">
+            <OutlinedInput
+              multiline
+              rows={6}
+              readOnly
+              type="text"
+              value={token || ""}
+              endAdornment={
+                <InputAdornment position="end">
+                  <div className={classes.tokenActions}>
+                    <IconButton
+                      size="small"
+                      edge="end"
+                      onClick={generateToken}
+                      disabled={!!token}
+                    >
+                      <CachedIcon fontSize="small" />
+                    </IconButton>
+                    <IconButton
+                      size="small"
+                      edge="end"
+                      onClick={() => navigator.clipboard.writeText(token)}
+                      disabled={!token}
+                    >
+                      <ContentCopyIcon fontSize="small" />
+                    </IconButton>
+                  </div>
+                </InputAdornment>
+              }
+            />
+          </FormControl>
+        </div>
+
+        <Divider className="divider" />
+
+        <div className="main-div">
+          <Typography variant="h6" className="main-text">
+            {t("mapTitle")}
+          </Typography>
+
+          <FormControl className="form-div">
+            <InputLabel>{t("mapActive")}</InputLabel>
+            <Select
+              label={t("mapActive")}
+              value={activeMapStyles}
+              onChange={(e, child) => {
+                const clicked = mapStyles.find(
+                  (s) => s.id === child.props.value
+                );
+                if (clicked.available) {
+                  setActiveMapStyles(e.target.value);
+                } else if (clicked.id !== "custom") {
+                  const query = new URLSearchParams({
+                    attribute: clicked.attribute,
+                  });
+                  navigate(`/settings/user/${userId}?${query.toString()}`);
+                }
+              }}
+              multiple
+            >
+              {mapStyles.map((style) => (
+                <MenuItem key={style.id} value={style.id}>
+                  <Typography
+                    component="span"
+                    color={style.available ? "textPrimary" : "error"}
+                  >
+                    {style.title}
+                  </Typography>
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl className="form-div">
+            <InputLabel>{t("mapOverlay")}</InputLabel>
+            <Select
+              label={t("mapOverlay")}
+              value={selectedMapOverlay}
+              onChange={(e) => {
+                const clicked = mapOverlays.find(
+                  (o) => o.id === e.target.value
+                );
+                if (!clicked || clicked.available) {
+                  setSelectedMapOverlay(e.target.value);
+                } else if (clicked.id !== "custom") {
+                  const query = new URLSearchParams({
+                    attribute: clicked.attribute,
+                  });
+                  navigate(`/settings/user/${userId}?${query.toString()}`);
+                }
+              }}
+            >
+              <MenuItem value="">{"\u00a0"}</MenuItem>
+              {mapOverlays.map((overlay) => (
+                <MenuItem key={overlay.id} value={overlay.id}>
+                  <Typography
+                    component="span"
+                    color={overlay.available ? "textPrimary" : "error"}
+                  >
+                    {overlay.title}
+                  </Typography>
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <Autocomplete
+            className="auto-complete"
+            multiple
+            freeSolo
+            options={Object.keys(positionAttributes)}
+            getOptionLabel={(option) =>
+              positionAttributes.hasOwnProperty(option)
+                ? positionAttributes[option].name
+                : option
+            }
+            value={positionItems}
+            onChange={(_, option) => {
+              setPositionItems(option);
+            }}
+            filterOptions={(options, params) => {
+              const filtered = filter(options, params);
+              if (params.inputValue && !filtered.includes(params.inputValue)) {
+                filtered.push(params.inputValue);
+              }
+              return filtered;
+            }}
+            renderInput={(params) => (
+              <TextField {...params} placeholder={t("sharedAttributes")} />
+            )}
+          />
+          <FormGroup className="check-cont">
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={mapGeofences}
+                  onChange={(e) => setMapGeofences(e.target.checked)}
+                />
+              }
+              label={t("sharedGeofences")}
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={mapLiveRoutes}
+                  onChange={(e) => setMapLiveRoutes(e.target.checked)}
+                />
+              }
+              label={t("mapLiveRoutes")}
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={mapFollow}
+                  onChange={(e) => setMapFollow(e.target.checked)}
+                />
+              }
+              label={t("deviceFollow")}
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={mapCluster}
+                  onChange={(e) => setMapCluster(e.target.checked)}
+                />
+              }
+              label={t("mapClustering")}
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={mapOnSelect}
+                  onChange={(e) => setMapOnSelect(e.target.checked)}
+                />
+              }
+              label={t("mapOnSelect")}
+            />
+          </FormGroup>
+        </div>
+
+        <Divider className="divider" />
+
+        <div className="main-div">
+          <Typography variant="h6" className="main-text">
+            {t("deviceTitle")}
+          </Typography>
+
+          <SelectField
+            customStyle="form-div"
+            emptyValue={null}
+            value={devicePrimary}
+            onChange={(e) => setDevicePrimary(e.target.value)}
+            data={deviceFields}
+            titleGetter={(it) => t(it.name)}
+            label={t("sharedPrimary")}
+          />
+          <SelectField
+            customStyle="form-div"
+            emptyValue=""
+            value={deviceSecondary}
+            onChange={(e) => setDeviceSecondary(e.target.value)}
+            data={deviceFields}
+            titleGetter={(it) => t(it.name)}
+            label={t("sharedSecondary")}
+          />
+        </div>
+
+        <Divider className="divider" />
+
+        <div className="main-div">
+          <Typography variant="h6" className="main-text">
+            {t("sharedSound")}
+          </Typography>
+
+          <SelectField
+            multiple
+            customStyle="form-div"
+            value={soundEvents}
+            onChange={(e) => setSoundEvents(e.target.value)}
+            endpoint="/api/notifications/types"
+            keyGetter={(it) => it.type}
+            titleGetter={(it) => t(prefixString("event", it.type))}
+            label={t("reportEventTypes")}
+          />
+          <SelectField
+            multiple
+            customStyle="form-div"
+            value={soundAlarms}
+            onChange={(e) => setSoundAlarms(e.target.value)}
+            data={alarms}
+            keyGetter={(it) => it.key}
+            label={t("sharedAlarms")}
+          />
+        </div>
       </Container>
     </>
   );

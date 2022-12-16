@@ -423,6 +423,7 @@ const MainPage = () => {
     <>
       <PageLayout menu={<MainMenu />}>
         <Header />
+        <div className="header-padding"></div>
         {/* <div className={classes.headerCont}>
           <div className={classes.flexBottom}>
             <Card className={classes.cardCircle}>

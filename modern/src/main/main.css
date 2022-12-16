@@ -25,3 +25,33 @@
     border-radius: 10px !important;
     background-color: #ffffff !important;
 }
+
+.popper .makeStyles-toolbar-40 {
+    padding: 0px 0px !important;
+}
+
+.popper .makeStyles-toolbar-40 > * {
+    margin: 0px 0px !important;
+    padding-top: 10px !important;
+    padding-bottom: 5px !important;
+}
+
+.popper .css-1d3z3hw-MuiOutlinedInput-notchedOutline {
+    border: none !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.23) !important;
+    padding: 0px 0 !important;
+}
+
+.popper .css-19qh8xo-MuiInputBase-input-MuiOutlinedInput-input {
+    padding: 8.5px 8px !important;
+    font-size: 14px !important;
+    padding-right: 0 !important;
+}
+
+.makeStyles-listInner-59 {
+    margin: 5px 0px !important;
+}
+
+.popper-main .css-15v22id-MuiAccordionDetails-root {
+    padding: 8px 8px 16px !important;
+}

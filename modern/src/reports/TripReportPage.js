@@ -341,7 +341,7 @@ const TripReportPage = () => {
                       <TableCell>
                         <LoadingButton
                           loading={btnLoading}
-                          onClick={() => {
+                          onClick={async () => {
                             if (findData) {
                               window.open(
                                 findData?.transactionLink,
@@ -349,7 +349,9 @@ const TripReportPage = () => {
                                 "noopener,noreferrer"
                               );
                             } else {
-                              if (parseFloat(rewards) > parseFloat(0)) {
+                              if (
+                                parseFloat(Math.abs(rewards)) > parseFloat(0)
+                              ) {
                                 handlePayment({
                                   toAccount: deviceData?.phone
                                     ? deviceData?.phone
@@ -370,7 +372,6 @@ const TripReportPage = () => {
                                   rewards: rewards,
                                   amount: String(rewards * 1000000000000000000),
                                 });
-                                console.log("call");
                               } else {
                                 alert("You Trip has not been verified yet");
                               }

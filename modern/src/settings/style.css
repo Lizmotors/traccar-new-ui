@@ -2,3 +2,34 @@
     text-transform: initial !important;
     font-size: 1rem !important;
 }
+
+.main-div{
+    width: 100%;
+    padding-bottom: 30px;
+}
+
+.main-text{
+    padding-bottom: 15px;
+}
+
+.form-div{
+    width: 45%;
+    margin-right: 50px;
+}
+
+.css-jedpe8-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiSelect-select {
+    padding: 15px !important;
+}
+
+.divider{
+    margin: 0px 0 20px 0;
+}
+
+.auto-complete{
+    padding: 25px 0;
+}
+
+.check-cont{
+    display: flex;
+    flex-direction: row;
+}

@@ -17,6 +17,7 @@ import {
   Badge,
   Container,
   Typography,
+  AppBar,
 } from "@mui/material";
 import React, { useState } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -295,107 +296,113 @@ const Header = () => {
   };
 
   return (
-    <div className={classes.appbar}>
-      <IconButton
-        aria-haspopup="true"
-        color="inherit"
-        className={classNames(classes.headerMenuButton, classes.profileArrow)}
-        aria-controls="profile-menu"
-        onClick={(e) => setProfileMenu(e.currentTarget)}
-      >
-        <div
-          className={classes.profile}
-          style={{ cursor: "pointer" }}
-          onClick={() => {
-            // if (localStorage.getItem("mode")) {
-            //   if (localStorage.getItem("mode") === "dark") {
-            //     localStorage.setItem("mode", "light");
-            //   } else {
-            //     localStorage.setItem("mode", "dark");
-            //   }
-            // } else {
-            //   localStorage.setItem("mode", "dark");
-            // }
-            // window.location.reload();
-            // console.log("call");
-          }}
+    <AppBar position="fixed" color="inherit">
+      <div className={classes.appbar}>
+        <IconButton
+          aria-haspopup="true"
+          color="inherit"
+          className={classNames(classes.headerMenuButton, classes.profileArrow)}
+          aria-controls="profile-menu"
+          onClick={(e) => setProfileMenu(e.currentTarget)}
         >
-          <div>
-            <img
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSrf1xjorLVFcNPL_A746ew0_fIzLFTY5Ngw&usqp=CAU"
-              alt="logo"
-              className={classes.profileImg}
-            />
+          <div
+            className={classes.profile}
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              // if (localStorage.getItem("mode")) {
+              //   if (localStorage.getItem("mode") === "dark") {
+              //     localStorage.setItem("mode", "light");
+              //   } else {
+              //     localStorage.setItem("mode", "dark");
+              //   }
+              // } else {
+              //   localStorage.setItem("mode", "dark");
+              // }
+              // window.location.reload();
+              // console.log("call");
+            }}
+          >
+            <div>
+              <img
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSrf1xjorLVFcNPL_A746ew0_fIzLFTY5Ngw&usqp=CAU"
+                alt="logo"
+                className={classes.profileImg}
+              />
+            </div>
+            <Typography variant="h6" component={"h6"}>
+              {user.name}
+            </Typography>
+            <KeyboardArrowDownIcon sx={{ color: "gray", marginLeft: 1 }} />
           </div>
-          <Typography variant="h6" component={"h6"}>
-            {user.name}
-          </Typography>
-          <KeyboardArrowDownIcon sx={{ color: "gray", marginLeft: 1 }} />
-        </div>
-      </IconButton>
+        </IconButton>
 
-      <Menu
-        id="profile-menu"
-        open={Boolean(profileMenu)}
-        anchorEl={profileMenu}
-        onClose={() => setProfileMenu(null)}
-        className={classes.headerMenu}
-        classes={{ paper: classes.profileMenu }}
-        disableAutoFocusItem
-      >
-        <div className={classes.profileMenuUser}>
-          <Typography variant="h4" weight="medium">
-            {user.name}
-          </Typography>
-        </div>
-
-        <MenuItem
-          className={classNames(
-            classes.profileMenuItem,
-            classes.headerMenuItem
-          )}
-          component={Link}
-          to={`/settings/user/${userId}`}
+        <Menu
+          id="profile-menu"
+          open={Boolean(profileMenu)}
+          anchorEl={profileMenu}
+          onClose={() => setProfileMenu(null)}
+          className={classes.headerMenu}
+          classes={{ paper: classes.profileMenu }}
+          disableAutoFocusItem
         >
-          <AccountIcon className={classes.profileMenuIcon} /> Profile
-        </MenuItem>
-        <MenuItem
-          className={classNames(
-            classes.profileMenuItem,
-            classes.headerMenuItem
-          )}
-          onClick={() => {
-            if (localStorage.getItem("mode")) {
-              if (localStorage.getItem("mode") === "dark") {
-                localStorage.setItem("mode", "light");
+          <div className={classes.profileMenuUser}>
+            <Typography variant="h4" weight="medium">
+              {user.name}
+            </Typography>
+          </div>
+
+          <MenuItem
+            className={classNames(
+              classes.profileMenuItem,
+              classes.headerMenuItem
+            )}
+            component={Link}
+            to={`/settings/user/${userId}/profile`}
+            onClick={() => {
+              setProfileMenu(null);
+            }}
+          >
+            <AccountIcon className={classes.profileMenuIcon} /> Profile
+          </MenuItem>
+          <MenuItem
+            className={classNames(
+              classes.profileMenuItem,
+              classes.headerMenuItem
+            )}
+            onClick={() => {
+              if (localStorage.getItem("mode")) {
+                if (localStorage.getItem("mode") === "dark") {
+                  localStorage.setItem("mode", "light");
+                } else {
+                  localStorage.setItem("mode", "dark");
+                }
               } else {
                 localStorage.setItem("mode", "dark");
               }
-            } else {
-              localStorage.setItem("mode", "dark");
-            }
-            window.location.reload();
-            console.log("call");
-          }}
-        >
-          <DarkModeIcon className={classes.profileMenuIcon} />{" "}
-          {localStorage.getItem("mode") &&
-          localStorage.getItem("mode") === "dark"
-            ? "Light"
-            : "Dark"}
-        </MenuItem>
-        <MenuItem
-          className={classNames(
-            classes.profileMenuItem,
-            classes.headerMenuItem
-          )}
-          sx={{ color: "red" }}
-          onClick={handleLogout}
-        >
-          <LogoutIcon className={classes.profileMenuIcon} /> {t("loginLogout")}
-        </MenuItem>
-      </Menu>
-    </div>
+              window.location.reload();
+              console.log("call");
+            }}
+          >
+            <DarkModeIcon className={classes.profileMenuIcon} />{" "}
+            {localStorage.getItem("mode") &&
+            localStorage.getItem("mode") === "dark"
+              ? "Light"
+              : "Dark"}
+          </MenuItem>
+          <MenuItem
+            className={classNames(
+              classes.profileMenuItem,
+              classes.headerMenuItem
+            )}
+            sx={{ color: "red" }}
+            onClick={handleLogout}
+          >
+            <LogoutIcon className={classes.profileMenuIcon} />{" "}
+            {t("loginLogout")}
+          </MenuItem>
+        </Menu>
+      </div>
+    </AppBar>
   );
 };
 

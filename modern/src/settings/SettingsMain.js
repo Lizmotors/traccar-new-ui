@@ -16,6 +16,7 @@ import {
   useHistory,
 } from "react-router-dom";
 import useFeatures from "../common/util/useFeatures";
+import AppBar from "@mui/material/AppBar";
 
 import PreferencesPage from "./PreferencesPage";
 import AccumulatorsPage from "./AccumulatorsPage";
@@ -34,6 +35,7 @@ import CommandPage from "./CommandPage";
 import ServerPage from "./ServerPage";
 import UsersPage from "./UsersPage";
 import DevicePage from "./DevicePage";
+import DevicesPage from "./DevicesPage";
 import UserPage from "./UserPage";
 import NotificationsPage from "./NotificationsPage";
 import NotificationPage from "./NotificationPage";
@@ -42,6 +44,9 @@ import GroupPage from "./GroupPage";
 import { useTranslation } from "../common/components/LocalizationProvider";
 import "./style.css";
 import { useSelector, useDispatch } from "react-redux";
+import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import IconButton from "@mui/material/IconButton";
 
 const SettingsMain = () => {
   const t = useTranslation();
@@ -58,20 +63,22 @@ const SettingsMain = () => {
   };
 
   useEffect(() => {
-    if (location.pathname == "/settings/notification") {
+    if (location.pathname.includes("/settings/notification")) {
       setValue("/settings/notifications");
-    } else if (location.pathname == "/settings/group") {
+    } else if (location.pathname.includes("/settings/group")) {
       setValue("/settings/groups");
-    } else if (location.pathname == "/settings/driver") {
+    } else if (location.pathname.includes("/settings/driver")) {
       setValue("/settings/drivers");
-    } else if (location.pathname == "/settings/attribute") {
+    } else if (location.pathname.includes("/settings/attribute")) {
       setValue("/settings/attributes");
-    } else if (location.pathname == "/settings/command") {
+    } else if (location.pathname.includes("/settings/command")) {
       setValue("/settings/commands");
     } else if (location.pathname.includes("/settings/device")) {
       setValue("/settings/device");
     } else if (location.pathname.includes("/settings/calendar")) {
       setValue("/settings/calendars");
+    } else if (location.pathname.includes("profile")) {
+      setValue(`/settings/user/${userId}/profile`);
     } else if (location.pathname.includes("/settings/user")) {
       setValue("/settings/users");
     } else if (location.pathname.includes("/settings/maintenance")) {
@@ -81,6 +88,8 @@ const SettingsMain = () => {
     }
   }, [location]);
 
+  console.log("call");
+
   return (
     <div>
       <PageLayout
@@ -88,39 +97,77 @@ const SettingsMain = () => {
         //breadcrumbs={["sharedDeviceAccumulators"]}
       >
         <Header />
+        <div className="header-padding"></div>
         <TabContext value={value}>
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            variant="scrollable"
-            scrollButtons="auto"
-            aria-label="scrollable auto tabs example"
-            style={{ margin: 20, textTransform: "initial" }}
+          <AppBar
+            elevation={1}
+            position="fixed"
+            sx={{
+              top: 85,
+              backgroundColor: "#fff",
+              width: "100%",
+              maxWidth:
+                window.innerWidth < 900
+                  ? window.innerWidth
+                  : window.innerWidth - 360,
+              left: window.innerWidth < 900 ? 0 : 360,
+            }}
           >
-            <Tab label={t("sharedPreferences")} value="/settings/preferences" />
-            <Tab
-              label={t("sharedNotifications")}
-              value="/settings/notifications"
-            />
-            <Tab label={t("settingsGroups")} value="/settings/groups" />
-            <Tab label={t("sharedDrivers")} value="/settings/drivers" />
-            <Tab label={"Attributes"} value="/settings/attributes" />
-            {!features.disableCalendars && (
-              <Tab label={"Calendars"} value="/settings/calendars" />
-            )}
-            {!features.disableGroups && (
-              <Tab label={"Users"} value="/settings/users" />
-            )}
-            {!features.disableMaintenance && (
+            <Tabs
+              value={value}
+              onChange={handleChange}
+              variant="scrollable"
+              scrollButtons="auto"
+              aria-label="scrollable auto tabs example"
+              style={{ margin: "10px 0", textTransform: "initial" }}
+              ScrollButtonComponent={(props) => {
+                if (props.direction === "left" && !props.disabled) {
+                  return (
+                    <IconButton {...props}>
+                      <KeyboardArrowLeftIcon />
+                    </IconButton>
+                  );
+                } else if (props.direction === "right" && !props.disabled) {
+                  return (
+                    <IconButton {...props}>
+                      <KeyboardArrowRightIcon />
+                    </IconButton>
+                  );
+                } else {
+                  return null;
+                }
+              }}
+            >
               <Tab
-                label={t("sharedMaintenance")}
-                value="/settings/maintenances"
+                label={t("sharedPreferences")}
+                value="/settings/preferences"
               />
-            )}
-            <Tab label={"Commands"} value="/settings/commands" />
-            <Tab label="Device" value="/settings/device" />
-            <Tab label="Account" value={`/settings/user/${userId}`} />
-          </Tabs>
+              <Tab
+                label={t("sharedNotifications")}
+                value="/settings/notifications"
+              />
+              <Tab label={t("settingsGroups")} value="/settings/groups" />
+              <Tab label={t("sharedDrivers")} value="/settings/drivers" />
+              <Tab label={"Attributes"} value="/settings/attributes" />
+              {!features.disableCalendars && (
+                <Tab label={"Calendars"} value="/settings/calendars" />
+              )}
+              {!features.disableGroups && (
+                <Tab label={"Users"} value="/settings/users" />
+              )}
+              {!features.disableMaintenance && (
+                <Tab
+                  label={t("sharedMaintenance")}
+                  value="/settings/maintenances"
+                />
+              )}
+              <Tab label={"Commands"} value="/settings/commands" />
+              <Tab label="Devices" value="/settings/device" />
+              <Tab label="Account" value={`/settings/user/${userId}/profile`} />
+            </Tabs>
+          </AppBar>
+          <div className="header-padding"></div>
+
           <Routes>
             <Route
               exact
@@ -144,8 +191,8 @@ const SettingsMain = () => {
             />
             <Route path="attribute/:id" element={<ComputedAttributePage />} />
             <Route path="attribute" element={<ComputedAttributePage />} />
+            <Route path="device" element={<DevicesPage />} />
             <Route path="device/:id" element={<DevicePage />} />
-            <Route path="device" element={<DevicePage />} />
             <Route path="drivers" element={<DriversPage />} />
             <Route path="driver/:id" element={<DriverPage />} />
             <Route path="driver" element={<DriverPage />} />
@@ -165,6 +212,7 @@ const SettingsMain = () => {
             <Route path="users" element={<UsersPage />} />
             <Route path="user/:id" element={<UserPage />} />
             <Route path="user" element={<UserPage />} />
+            <Route path="user/:id/profile" element={<UserPage />} />
           </Routes>
         </TabContext>
       </PageLayout>

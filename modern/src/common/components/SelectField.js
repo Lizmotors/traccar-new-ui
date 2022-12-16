@@ -1,15 +1,14 @@
-import {
-  FormControl, InputLabel, MenuItem, Select,
-} from '@mui/material';
-import React, { useState } from 'react';
-import { useEffectAsync } from '../../reactHelper';
+import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import React, { useState } from "react";
+import { useEffectAsync } from "../../reactHelper";
 
 const SelectField = ({
+  customStyle = "",
   label,
   multiple,
   value,
   emptyValue = 0,
-  emptyTitle = '\u00a0',
+  emptyTitle = "\u00a0",
   onChange,
   endpoint,
   data,
@@ -31,7 +30,7 @@ const SelectField = ({
 
   if (items) {
     return (
-      <FormControl>
+      <FormControl className={customStyle}>
         <InputLabel>{label}</InputLabel>
         <Select
           label={label}
@@ -43,7 +42,9 @@ const SelectField = ({
             <MenuItem value={emptyValue}>{emptyTitle}</MenuItem>
           )}
           {items.map((item) => (
-            <MenuItem key={keyGetter(item)} value={keyGetter(item)}>{titleGetter(item)}</MenuItem>
+            <MenuItem key={keyGetter(item)} value={keyGetter(item)}>
+              {titleGetter(item)}
+            </MenuItem>
           ))}
         </Select>
       </FormControl>

@@ -71,6 +71,7 @@ const SettingsMain = () => {
         //breadcrumbs={["sharedDeviceAccumulators"]}
       >
         <Header />
+        <div className="header-padding"></div>
         <TabContext value={value}>
           <Tabs
             value={value}

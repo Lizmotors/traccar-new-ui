@@ -498,6 +498,7 @@ const SettingsMenu = () => {
           }}
           expanded={deviceOpen}
           style={{ border: "none", boxShadow: "none", padding: 0 }}
+          className="popper-main"
         >
           <AccordionSummary
             expandIcon={<ExpandMoreIcon sx={{ color: "#1875d8" }} />}
@@ -529,21 +530,21 @@ const SettingsMenu = () => {
           </AccordionSummary>
           <AccordionDetails
             style={{ border: "none", boxShadow: "none", paddingTop: 0 }}
-            className={classes.details}
+            className={`${classes.details} popper`}
           >
             <Paper
               square
-              elevation={3}
+              elevation={0}
               className={`${classes.sidebar} ${
                 !devicesOpen && classes.sidebarCollapsed
               }`}
             >
-              <Paper square elevation={3} className={classes.toolbarContainer}>
+              <Paper square elevation={0} className={classes.toolbarContainer}>
                 <Toolbar className={classes.toolbar} disableGutters>
                   {!desktop && (
                     <IconButton
                       edge="start"
-                      sx={{ mr: 2 }}
+                      sx={{ mr: 0 }}
                       onClick={handleClose}
                     >
                       <ArrowBackIcon />
@@ -554,6 +555,7 @@ const SettingsMenu = () => {
                     placeholder={t("sharedSearchDevices")}
                     value={filterKeyword}
                     onChange={(event) => setFilterKeyword(event.target.value)}
+                    variant="standard"
                     endAdornment={
                       <InputAdornment position="end">
                         <IconButton

@@ -41,8 +41,8 @@ import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 
 const useStyles = makeStyles((theme) => ({
   card: {
-    width: theme.dimensions.popupMaxWidth,
-    padding: 10,
+    width: theme.dimensions.statusCard,
+    padding: 3,
     borderRadius: 20,
   },
   media: {
@@ -82,6 +82,7 @@ const useStyles = makeStyles((theme) => ({
   },
   cell: {
     borderBottom: "none",
+    padding: 1,
   },
   actions: {
     justifyContent: "space-between",
@@ -92,12 +93,12 @@ const StatusRow = ({ name, content }) => {
   const classes = useStyles();
 
   return (
-    <TableRow sx={{ marginBottom: 50 }}>
+    <TableRow sx={{ marginBottom: 0 }}>
       <TableCell className={classes.cell}>
-        <Typography variant="h6">{name}</Typography>
+        <Typography variant="subtitle2">{name}</Typography>
       </TableCell>
       <TableCell className={classes.cell}>
-        <Typography variant="subtitle1" color="">
+        <Typography variant="body2" color="">
           {content}
         </Typography>
       </TableCell>
@@ -194,8 +195,8 @@ const StatusCard = ({ deviceId, onClose }) => {
                 </IconButton>
               </CardMedia>
             ) : (
-              <div className={classes.header} style={{ paddingBottom: 15 }}>
-                <Typography variant="h4" color="">
+              <div className={classes.header} style={{ paddingBottom: 5 }}>
+                <Typography variant="h5" color="">
                   {device.name}
                 </Typography>
                 <IconButton

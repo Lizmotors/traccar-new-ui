@@ -57,6 +57,7 @@ const TokenDocs = (props) => {
       //breadcrumbs={["sharedDeviceAccumulators"]}
     >
       <Header />
+      <div className="header-padding"></div>
 
       <div style={{ width: "100%", height: "90vh", padding: "10px 25px" }}>
         <h1>Reward Engine</h1>
