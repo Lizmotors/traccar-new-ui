@@ -55,3 +55,51 @@
 .popper-main .css-15v22id-MuiAccordionDetails-root {
     padding: 8px 8px 16px !important;
 }
+
+.horizontal-padding{
+    padding: 0px 20px;
+    margin-top: 30px;
+}
+
+.logo-image{
+    text-align: right;
+}
+
+.logo-image img{
+    width: 400px;
+    border-radius: 30px;
+
+}
+
+.bold{
+    font-weight: 500;
+}
+
+.flex-cont{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 15px;
+}
+
+.css-46bh2p-MuiCardContent-root:last-child {
+    padding-bottom: 16px !important;
+}
+
+.bar-cont{
+    padding: 30px 0px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.bars{
+    width: 14px;
+    height: 30px;
+    border-radius: 10px;
+    background-color: grey;
+    margin-right: 5px;
+}
+
+.active-bar{
+    background-color: green;
+}

@@ -292,7 +292,12 @@ const StatusCard = ({ deviceId, onClose }) => {
           open={Boolean(anchorEl)}
           onClose={() => setAnchorEl(null)}
         >
-          <MenuItem onClick={() => navigate(`/position/${position.id}`)}>
+          <MenuItem
+            onClick={() => {
+              //navigate(`/position/${position.id}`);
+              navigate(`/device/${position.id}`);
+            }}
+          >
             <Typography color="secondary">{t("sharedShowDetails")}</Typography>
           </MenuItem>
           <MenuItem onClick={handleGeofence}>

@@ -51,6 +51,7 @@ import Tokens from "./blockChain/Token";
 import TokenDocs from "./blockChain/TokenDocs";
 import SettingsMain from "./settings/SettingsMain";
 import ReportsMain from "./reports/ReportsMain";
+import DeviceDetails from "./main/DeviceDetails";
 
 const Navigation = () => {
   const navigate = useNavigate();
@@ -97,22 +98,20 @@ const Navigation = () => {
       <Route path="/change-server" element={<ChangeServerPage />} />
       <Route path="/" element={<App />}>
         <Route index element={<MainPage />} />
+        <Route path="device/:id" element={<DeviceDetails />} />
 
         <Route path="position/:id" element={<PositionPage />} />
         <Route path="network/:positionId" element={<NetworkPage />} />
         <Route path="event/:id" element={<EventPage />} />
         <Route path="replay" element={<ReplayPage />} />
         <Route path="geofences" element={<GeofencesPage />} />
-
         <Route path="blockchain">
           <Route path="api-docs" element={<Apis />} />
           <Route path="tokens" element={<Tokens />} />
           <Route path="logs" element={<Logs />} />
           <Route path="reward-engine" element={<TokenDocs />} />
         </Route>
-
         {/* <Route path="/settings" element={<SettingsMain />} /> */}
-
         <Route path="settings" element={<SettingsMain />}>
           <Route path="accumulators/:deviceId" element={<AccumulatorsPage />} />
           <Route path="calendars" element={<CalendarsPage />} />
@@ -148,7 +147,6 @@ const Navigation = () => {
           <Route path="user/:id/profile" element={<UserPage />} />
           <Route path="user" element={<UserPage />} />
         </Route>
-
         <Route path="reports" element={<ReportsMain />}>
           <Route path="chart" element={<ChartReportPage />} />
           <Route path="event" element={<EventReportPage />} />
