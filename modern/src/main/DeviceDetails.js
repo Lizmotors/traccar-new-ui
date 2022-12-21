@@ -11,6 +11,12 @@ import {
   Snackbar,
   CardMedia,
   Alert,
+  Tooltip,
+  Avatar,
+  List,
+  ListItemAvatar,
+  ListItemText,
+  ListItemButton,
 } from "@mui/material";
 
 import { useTheme } from "@mui/material/styles";
@@ -65,6 +71,7 @@ import {
   formatVolume,
   formatTime,
   formatDistanceRewards,
+  formatPercentage,
 } from "../common/util/formatter";
 import ReportFilter from "../reports/components/ReportFilter";
 import { useAttributePreference } from "../common/util/preferences";

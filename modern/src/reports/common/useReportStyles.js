@@ -1,6 +1,23 @@
 import { makeStyles } from "@mui/styles";
 
 export default makeStyles((theme) => ({
+  batteryText: {
+    fontSize: "0.75rem",
+    fontWeight: "normal",
+    lineHeight: "0.875rem",
+  },
+  positive: {
+    color: theme.palette.colors.positive,
+  },
+  medium: {
+    color: theme.palette.colors.medium,
+  },
+  negative: {
+    color: theme.palette.colors.negative,
+  },
+  neutral: {
+    color: theme.palette.colors.neutral,
+  },
   container: {
     height: "100vh",
     display: "flex",
