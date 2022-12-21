@@ -506,7 +506,9 @@ const DeviceDetails = (props) => {
                     <TimelineIcon />
                   </div>
                   <Typography variant="h5" className="bold">
-                    {itemData?.odometer ? itemData?.odometer : "0"}
+                    {itemData?.attributes?.odometer
+                      ? itemData?.attributes?.odometer
+                      : "0"}
                   </Typography>
                   <AreaChart
                     width={140}
