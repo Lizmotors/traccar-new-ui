@@ -785,9 +785,9 @@ const DeviceDetails = (props) => {
                       sx={{
                         fontSize: 45,
                         color:
-                          deviceSingleData?.status === "offline"
-                            ? "red"
-                            : "green",
+                          deviceSingleData?.status === "online"
+                            ? "green"
+                            : "red",
                       }}
                     />
                   </div>
@@ -797,7 +797,7 @@ const DeviceDetails = (props) => {
                       className="bold"
                       sx={{ textAlign: "center", paddingTop: 2 }}
                     >
-                      {deviceSingleData?.status === "offline" ? "OFF" : "ON"}
+                      {deviceSingleData?.status === "online" ? "ON" : "OFF"}
                     </Typography>
                   </div>
                 </CardContent>
@@ -953,9 +953,9 @@ const DeviceDetails = (props) => {
                       sx={{
                         fontSize: 60,
                         color:
-                          deviceSingleData?.status === "offline"
-                            ? "red"
-                            : "green",
+                          deviceSingleData?.status === "online"
+                            ? "green"
+                            : "red",
                       }}
                     />
                   </div>
