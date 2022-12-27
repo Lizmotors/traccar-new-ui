@@ -72,6 +72,7 @@ import {
   formatTime,
   formatDistanceRewards,
   formatPercentage,
+  formatSpeedVal,
 } from "../common/util/formatter";
 import ReportFilter from "../reports/components/ReportFilter";
 import { useAttributePreference } from "../common/util/preferences";
@@ -461,6 +462,27 @@ const DeviceDetails = (props) => {
     getRewardsData();
   }, []);
 
+  const [address, setAddress] = useState("");
+
+  const showAddress = useCatch(async () => {
+    const query = new URLSearchParams({
+      latitude: itemData?.latitude,
+      longitude: itemData?.longitude,
+    });
+    const response = await fetch(`/api/server/geocode?${query.toString()}`);
+    if (response.ok) {
+      setAddress(await response.text());
+    } else {
+      throw Error(await response.text());
+    }
+  });
+
+  useEffect(() => {
+    if (itemData?.latitude && itemData?.longitude) {
+      showAddress();
+    }
+  }, [itemData]);
+
   return (
     <PageLayout menu={<MainMenu />}>
       <Header />
@@ -505,12 +527,20 @@ const DeviceDetails = (props) => {
                     <Typography>Odometer</Typography>
                     <TimelineIcon />
                   </div>
-                  <Typography variant="h5" className="bold">
+                  <Typography
+                    sx={{ paddingBottom: 6 }}
+                    variant="h4"
+                    className="bold"
+                  >
                     {itemData?.attributes?.odometer
-                      ? itemData?.attributes?.odometer
+                      ? formatDistance(
+                          itemData?.attributes?.odometer,
+                          distanceUnit,
+                          t
+                        )
                       : "0"}
                   </Typography>
-                  <AreaChart
+                  {/* <AreaChart
                     width={140}
                     height={50}
                     data={[
@@ -564,7 +594,7 @@ const DeviceDetails = (props) => {
                       stroke="#8884d8"
                       fill="#d0d0e0"
                     />
-                  </AreaChart>
+                  </AreaChart> */}
                 </CardContent>
               </Card>
             </Box>
@@ -574,18 +604,22 @@ const DeviceDetails = (props) => {
               <Card sx={{ boxShadow: 1, borderRadius: 3 }}>
                 <CardContent>
                   <div className="flex-cont">
-                    <Typography>Charge</Typography>
-                    {itemData?.attributes.hasOwnProperty("batteryLevel") && (
+                    <Typography>
+                      {itemData?.attributes?.hasOwnProperty("batteryLevel")
+                        ? "Charge"
+                        : "Fuel"}
+                    </Typography>
+                    {itemData?.attributes?.hasOwnProperty("batteryLevel") && (
                       <Tooltip
                         title={`${t(
                           "positionBatteryLevel"
                         )}: ${formatPercentage(
-                          itemData.attributes.batteryLevel
+                          itemData?.attributes?.batteryLevel
                         )}`}
                       >
                         <IconButton size="small">
-                          {itemData.attributes.batteryLevel > 70 ? (
-                            itemData.attributes.charge ? (
+                          {itemData?.attributes?.batteryLevel > 70 ? (
+                            itemData?.attributes?.charge ? (
                               <BatteryChargingFullIcon
                                 fontSize="small"
                                 className={classes.positive}
@@ -596,8 +630,8 @@ const DeviceDetails = (props) => {
                                 className={classes.positive}
                               />
                             )
-                          ) : itemData.attributes.batteryLevel > 30 ? (
-                            itemData.attributes.charge ? (
+                          ) : itemData?.attributes?.batteryLevel > 30 ? (
+                            itemData?.attributes?.charge ? (
                               <BatteryCharging60Icon
                                 fontSize="small"
                                 className={classes.medium}
@@ -608,7 +642,52 @@ const DeviceDetails = (props) => {
                                 className={classes.medium}
                               />
                             )
-                          ) : itemData.attributes.charge ? (
+                          ) : itemData?.attributes?.charge ? (
+                            <BatteryCharging20Icon
+                              fontSize="small"
+                              className={classes.negative}
+                            />
+                          ) : (
+                            <Battery20Icon
+                              fontSize="small"
+                              className={classes.negative}
+                            />
+                          )}
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                    {itemData?.attributes?.hasOwnProperty("fuel") && (
+                      <Tooltip
+                        title={`${t(
+                          "positionBatteryLevel"
+                        )}: ${formatPercentage(itemData?.attributes?.fuel)}`}
+                      >
+                        <IconButton size="small">
+                          {itemData?.attributes?.fuel > 70 ? (
+                            itemData?.attributes?.fuel ? (
+                              <BatteryChargingFullIcon
+                                fontSize="small"
+                                className={classes.positive}
+                              />
+                            ) : (
+                              <BatteryFullIcon
+                                fontSize="small"
+                                className={classes.positive}
+                              />
+                            )
+                          ) : itemData?.attributes?.fuel > 30 ? (
+                            itemData?.attributes?.fuel ? (
+                              <BatteryCharging60Icon
+                                fontSize="small"
+                                className={classes.medium}
+                              />
+                            ) : (
+                              <Battery60Icon
+                                fontSize="small"
+                                className={classes.medium}
+                              />
+                            )
+                          ) : itemData?.attributes?.fuel ? (
                             <BatteryCharging20Icon
                               fontSize="small"
                               className={classes.negative}
@@ -623,10 +702,19 @@ const DeviceDetails = (props) => {
                       </Tooltip>
                     )}
                   </div>
-                  <Typography variant="h5" className="bold">
-                    {itemData?.attributes?.batteryLevel}%
+                  <Typography
+                    sx={{ paddingBottom: 5 }}
+                    variant="h4"
+                    className="bold"
+                  >
+                    {itemData?.attributes?.batteryLevel
+                      ? itemData?.attributes?.batteryLevel
+                      : itemData?.attributes?.fuel
+                      ? itemData?.attributes?.fuel
+                      : ""}
+                    %
                   </Typography>
-                  <AreaChart
+                  {/* <AreaChart
                     width={140}
                     height={50}
                     data={[
@@ -680,7 +768,7 @@ const DeviceDetails = (props) => {
                       stroke="#8884d8"
                       fill="#d0d0e0"
                     />
-                  </AreaChart>
+                  </AreaChart> */}
                 </CardContent>
               </Card>
             </Box>
@@ -765,7 +853,7 @@ const DeviceDetails = (props) => {
                   <div style={{ display: "flex" }}>
                     <LocationOnIcon sx={{ color: "green" }} />
                     <Typography style={{ paddingLeft: 3 }}>
-                      {itemData?.address ? itemData?.address : "N/A"}
+                      {address ? address : "N/A"}
                     </Typography>
                   </div>
                   <div
@@ -823,7 +911,7 @@ const DeviceDetails = (props) => {
                   >
                     <SemiCircleProgressBar
                       diameter={140}
-                      percentage={itemData?.speed}
+                      percentage={formatSpeedVal(itemData?.speed, speedUnit, t)}
                       //showPercentValue
                     />
                   </div>
@@ -833,7 +921,7 @@ const DeviceDetails = (props) => {
                       className="bold"
                       sx={{ textAlign: "center" }}
                     >
-                      {itemData?.speed}
+                      {formatSpeed(itemData?.speed, speedUnit, t)}
                     </Typography>
                   </div>
                   <div style={{ textAlign: "center", paddingTop: 15 }}>
@@ -901,7 +989,7 @@ const DeviceDetails = (props) => {
                           ele >
                           (itemData?.attributes?.sat
                             ? itemData?.attributes?.sat
-                            : 8)
+                            : -1)
                             ? ""
                             : "active-bar"
                         }`}
@@ -964,7 +1052,11 @@ const DeviceDetails = (props) => {
                   >
                     <SemiCircleProgressBar
                       diameter={140}
-                      percentage={33}
+                      percentage={parseInt(
+                        itemData?.attributes?.coolantTemp
+                          ? itemData?.attributes?.coolantTemp
+                          : 0
+                      )}
                       showPercentValue
                     />
                   </div>
