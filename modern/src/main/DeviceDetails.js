@@ -1013,7 +1013,12 @@ const DeviceDetails = (props) => {
           <Grid item xs={2}>
             <Box sx={{ boxShadow: 1, borderRadius: 3 }}>
               <Card sx={{ boxShadow: 1, borderRadius: 3 }}>
-                <CardContent>
+                <CardContent
+                  sx={{ cursor: "pointer" }}
+                  onClick={() => {
+                    navigate(`/settings/notifications`);
+                  }}
+                >
                   <div
                     style={{
                       display: "flex",
