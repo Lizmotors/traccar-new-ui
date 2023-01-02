@@ -488,7 +488,7 @@ const DeviceDetails = (props) => {
       <Header />
       <div className="header-padding horizontal-padding">
         <Grid container spacing={2}>
-          <Grid item xs={6}>
+          <Grid item xs={12} md={6}>
             <Typography variant="h4" className="bold">
               {deviceSingleData?.name}
             </Typography>
@@ -496,7 +496,7 @@ const DeviceDetails = (props) => {
               {deviceSingleData?.uniqueId}
             </Typography>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} md={6}>
             {deviceSingleData?.attributes?.deviceImage ? (
               <CardMedia
                 className={classes.media}
@@ -519,7 +519,7 @@ const DeviceDetails = (props) => {
         </Grid>
 
         <Grid container spacing={4} sx={{ paddingBottom: 5, paddingTop: 5 }}>
-          <Grid item xs={2}>
+          <Grid item xs={6} md={2}>
             <Box sx={{ boxShadow: 1, borderRadius: 3 }}>
               <Card sx={{ boxShadow: 1, borderRadius: 3 }}>
                 <CardContent>
@@ -599,7 +599,7 @@ const DeviceDetails = (props) => {
               </Card>
             </Box>
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={6} md={2}>
             <Box sx={{ boxShadow: 1, borderRadius: 3 }}>
               <Card sx={{ boxShadow: 1, borderRadius: 3 }}>
                 <CardContent>
@@ -773,7 +773,7 @@ const DeviceDetails = (props) => {
               </Card>
             </Box>
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={6} md={2}>
             <Box sx={{ boxShadow: 1, borderRadius: 3 }}>
               <Card sx={{ boxShadow: 1, borderRadius: 3 }}>
                 <CardContent>
@@ -804,7 +804,7 @@ const DeviceDetails = (props) => {
               </Card>
             </Box>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} md={2}>
             <div>
               <div
                 style={{
@@ -871,7 +871,7 @@ const DeviceDetails = (props) => {
         </Grid>
 
         <Grid container spacing={4} sx={{ paddingBottom: 10 }}>
-          <Grid item xs={2}>
+          <Grid item xs={6} md={2}>
             <Box sx={{ boxShadow: 1, borderRadius: 3 }}>
               <Card sx={{ boxShadow: 1, borderRadius: 3 }}>
                 <CardContent>
@@ -898,7 +898,7 @@ const DeviceDetails = (props) => {
               </Card>
             </Box>
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={6} md={2}>
             <Box sx={{ boxShadow: 1, borderRadius: 3 }}>
               <Card sx={{ boxShadow: 1, borderRadius: 3 }}>
                 <CardContent>
@@ -937,7 +937,7 @@ const DeviceDetails = (props) => {
               </Card>
             </Box>
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={6} md={2}>
             <Box sx={{ boxShadow: 1, borderRadius: 3 }}>
               <Card sx={{ boxShadow: 1, borderRadius: 3 }}>
                 <CardContent>
@@ -972,7 +972,7 @@ const DeviceDetails = (props) => {
               </Card>
             </Box>
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={6} md={2}>
             <Box sx={{ boxShadow: 1, borderRadius: 3 }}>
               <Card sx={{ boxShadow: 1, borderRadius: 3 }}>
                 <CardContent>
@@ -1010,7 +1010,7 @@ const DeviceDetails = (props) => {
               </Card>
             </Box>
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={6} md={2}>
             <Box sx={{ boxShadow: 1, borderRadius: 3 }}>
               <Card sx={{ boxShadow: 1, borderRadius: 3 }}>
                 <CardContent
@@ -1044,7 +1044,7 @@ const DeviceDetails = (props) => {
               </Card>
             </Box>
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={6} md={2}>
             <Box sx={{ boxShadow: 1, borderRadius: 3 }}>
               <Card sx={{ boxShadow: 1, borderRadius: 3 }}>
                 <CardContent>
@@ -1075,186 +1075,181 @@ const DeviceDetails = (props) => {
             </Box>
           </Grid>
         </Grid>
+      </div>
 
-        <div className={classes.container}>
-          {selectedItem && (
-            <div className={classes.containerMap}>
-              <MapView>
-                <MapGeofence />
-                {route && (
-                  <>
-                    <MapRoutePath positions={route} />
-                    <MapMarkers markers={createMarkers()} />
-                    <MapCamera positions={route} />
-                  </>
-                )}
-              </MapView>
-            </div>
-          )}
-          <div className={classes.containerMain}>
-            <div className={classes.header}>
-              <ReportFilter
-                ignoreDevice={true}
-                includeFilters={true}
-                setTransLength={(val) => setTransVal(val)}
-                transLength={transVal}
-                handleSubmit={handleSubmit}
-              >
-                <ColumnSelect
-                  columns={columns}
-                  setColumns={setColumns}
-                  columnsArray={columnsArray}
-                />
-              </ReportFilter>
-            </div>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell className={classes.columnAction} />
-                  {columns.map((key) => (
-                    <TableCell key={key}>{t(columnsMap.get(key))}</TableCell>
-                  ))}
-                  <TableCell>Rewards</TableCell>
-                  <TableCell>Transaction Id</TableCell>
-                  <TableCell>Status</TableCell>
-                  <TableCell>Action</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {!loading ? (
-                  items
-                    .slice(0, transVal === 100 ? items.length : transVal)
-                    .map((item) => {
-                      const findData = rewardsData.find(
-                        (ele) =>
-                          item.deviceId == ele.deviceId &&
-                          item.startTime == ele.startdate &&
-                          item.endTime == ele.endDate
-                      );
-                      const rewards =
-                        Number(
-                          formatDistanceRewards(
-                            item["distance"],
-                            distanceUnit,
-                            t
-                          )
-                        ) / 4;
-                      return (
-                        <TableRow key={item.startPositionId}>
-                          <TableCell
-                            className={classes.columnAction}
-                            padding="none"
-                          >
-                            {selectedItem === item ? (
-                              <IconButton
-                                size="small"
-                                onClick={() => setSelectedItem(null)}
-                              >
-                                <GpsFixedIcon fontSize="small" />
-                              </IconButton>
-                            ) : (
-                              <IconButton
-                                size="small"
-                                onClick={() => setSelectedItem(item)}
-                              >
-                                <LocationSearchingIcon fontSize="small" />
-                              </IconButton>
-                            )}
-                          </TableCell>
-                          {columns.map((key) => (
-                            <TableCell key={key}>
-                              {formatValue(item, key)}
-                            </TableCell>
-                          ))}
-                          <TableCell>
-                            {findData ? findData?.rewards : rewards}
-                          </TableCell>
-                          <TableCell>
-                            {findData ? findData?.transactionId : ""}
-                          </TableCell>
-                          <TableCell>
-                            {findData ? "Already paid" : "Unpaid"}
-                          </TableCell>
-                          <TableCell>
-                            <LoadingButton
-                              loading={btnLoading}
-                              onClick={async () => {
-                                if (findData) {
-                                  window.open(
-                                    findData?.transactionLink,
-                                    "_blank",
-                                    "noopener,noreferrer"
-                                  );
-                                } else {
-                                  if (
-                                    parseFloat(Math.abs(rewards)) >
-                                    parseFloat(0)
-                                  ) {
-                                    handlePayment({
-                                      toAccount: deviceData?.phone
-                                        ? deviceData?.phone
-                                        : "0x9Cc41DA122b93E993Cb113b5E1f8d54A5d42C178",
-                                      deviceId: item.deviceId,
-                                      startdate: item.startTime,
-                                      endDate: item.endTime,
-                                      status: "true",
-                                      transactionLink: "1",
-                                      transactionId: "1",
-                                      meters: Number(
-                                        formatDistanceRewards(
-                                          item["distance"],
-                                          distanceUnit,
-                                          t
-                                        )
-                                      ),
-                                      rewards: rewards,
-                                      amount: String(
-                                        rewards * 1000000000000000000
-                                      ),
-                                    });
-                                  } else {
-                                    alert("You Trip has not been verified yet");
-                                  }
-                                }
-                              }}
-                              variant="outlined"
-                              color="secondary"
-                              className={classes.filterButton}
-                              //disabled={disabled}
-                            >
-                              <Typography variant="button" noWrap>
-                                {findData ? "Track Status" : "Pay Now"}
-                              </Typography>
-                            </LoadingButton>
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })
-                ) : (
-                  <TableShimmer columns={columns.length + 5} startAction />
-                )}
-              </TableBody>
-            </Table>
-
-            <Snackbar
-              open={!!result}
-              anchorOrigin={{ vertical: "top", horizontal: "right" }}
-              onClose={() => setResult(null)}
-              autoHideDuration={snackBarDurationLongMs}
-              message={result}
-              sx={{ width: 300 }}
-            >
-              <Alert
-                elevation={6}
-                onClose={() => setResult(null)}
-                severity="success"
-                variant="filled"
-                sx={{ minWidth: 300, padding: "15px 25px", borderRadius: 5 }}
-              >
-                {result}
-              </Alert>
-            </Snackbar>
+      <div className={classes.container}>
+        {selectedItem && (
+          <div className={classes.containerMap}>
+            <MapView>
+              <MapGeofence />
+              {route && (
+                <>
+                  <MapRoutePath positions={route} />
+                  <MapMarkers markers={createMarkers()} />
+                  <MapCamera positions={route} />
+                </>
+              )}
+            </MapView>
           </div>
+        )}
+        <div className={classes.containerMain}>
+          <div className={classes.header}>
+            <ReportFilter
+              ignoreDevice={true}
+              includeFilters={true}
+              setTransLength={(val) => setTransVal(val)}
+              transLength={transVal}
+              handleSubmit={handleSubmit}
+            >
+              <ColumnSelect
+                columns={columns}
+                setColumns={setColumns}
+                columnsArray={columnsArray}
+              />
+            </ReportFilter>
+          </div>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell className={classes.columnAction} />
+                {columns.map((key) => (
+                  <TableCell key={key}>{t(columnsMap.get(key))}</TableCell>
+                ))}
+                <TableCell>Rewards</TableCell>
+                <TableCell>Transaction Id</TableCell>
+                <TableCell>Status</TableCell>
+                <TableCell>Action</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {!loading ? (
+                items
+                  .slice(0, transVal === 100 ? items.length : transVal)
+                  .map((item) => {
+                    const findData = rewardsData.find(
+                      (ele) =>
+                        item.deviceId == ele.deviceId &&
+                        item.startTime == ele.startdate &&
+                        item.endTime == ele.endDate
+                    );
+                    const rewards =
+                      Number(
+                        formatDistanceRewards(item["distance"], distanceUnit, t)
+                      ) / 4;
+                    return (
+                      <TableRow key={item.startPositionId}>
+                        <TableCell
+                          className={classes.columnAction}
+                          padding="none"
+                        >
+                          {selectedItem === item ? (
+                            <IconButton
+                              size="small"
+                              onClick={() => setSelectedItem(null)}
+                            >
+                              <GpsFixedIcon fontSize="small" />
+                            </IconButton>
+                          ) : (
+                            <IconButton
+                              size="small"
+                              onClick={() => setSelectedItem(item)}
+                            >
+                              <LocationSearchingIcon fontSize="small" />
+                            </IconButton>
+                          )}
+                        </TableCell>
+                        {columns.map((key) => (
+                          <TableCell key={key}>
+                            {formatValue(item, key)}
+                          </TableCell>
+                        ))}
+                        <TableCell>
+                          {findData ? findData?.rewards : rewards}
+                        </TableCell>
+                        <TableCell>
+                          {findData ? findData?.transactionId : ""}
+                        </TableCell>
+                        <TableCell>
+                          {findData ? "Already paid" : "Unpaid"}
+                        </TableCell>
+                        <TableCell>
+                          <LoadingButton
+                            loading={btnLoading}
+                            onClick={async () => {
+                              if (findData) {
+                                window.open(
+                                  findData?.transactionLink,
+                                  "_blank",
+                                  "noopener,noreferrer"
+                                );
+                              } else {
+                                if (
+                                  parseFloat(Math.abs(rewards)) > parseFloat(0)
+                                ) {
+                                  handlePayment({
+                                    toAccount: deviceData?.phone
+                                      ? deviceData?.phone
+                                      : "0x9Cc41DA122b93E993Cb113b5E1f8d54A5d42C178",
+                                    deviceId: item.deviceId,
+                                    startdate: item.startTime,
+                                    endDate: item.endTime,
+                                    status: "true",
+                                    transactionLink: "1",
+                                    transactionId: "1",
+                                    meters: Number(
+                                      formatDistanceRewards(
+                                        item["distance"],
+                                        distanceUnit,
+                                        t
+                                      )
+                                    ),
+                                    rewards: rewards,
+                                    amount: String(
+                                      rewards * 1000000000000000000
+                                    ),
+                                  });
+                                } else {
+                                  alert("You Trip has not been verified yet");
+                                }
+                              }
+                            }}
+                            variant="outlined"
+                            color="secondary"
+                            className={classes.filterButton}
+                            //disabled={disabled}
+                          >
+                            <Typography variant="button" noWrap>
+                              {findData ? "Track Status" : "Pay Now"}
+                            </Typography>
+                          </LoadingButton>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })
+              ) : (
+                <TableShimmer columns={columns.length + 5} startAction />
+              )}
+            </TableBody>
+          </Table>
+
+          <Snackbar
+            open={!!result}
+            anchorOrigin={{ vertical: "top", horizontal: "right" }}
+            onClose={() => setResult(null)}
+            autoHideDuration={snackBarDurationLongMs}
+            message={result}
+            sx={{ width: 300 }}
+          >
+            <Alert
+              elevation={6}
+              onClose={() => setResult(null)}
+              severity="success"
+              variant="filled"
+              sx={{ minWidth: 300, padding: "15px 25px", borderRadius: 5 }}
+            >
+              {result}
+            </Alert>
+          </Snackbar>
         </div>
       </div>
     </PageLayout>

@@ -103,3 +103,9 @@
 .active-bar{
     background-color: green;
 }
+
+@media only screen and (max-width: 600px) {
+    .logo-image img{
+        width: 100%;
+    }
+}

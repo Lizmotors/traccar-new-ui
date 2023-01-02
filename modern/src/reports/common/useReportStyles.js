@@ -46,6 +46,9 @@ export default makeStyles((theme) => ({
     flexWrap: "wrap",
     gap: theme.spacing(2),
     padding: theme.spacing(3, 2, 2),
+    // [theme.breakpoints.up("xs")]: {
+    //   padding: 0,
+    // },
   },
   filterItem: {
     minWidth: 0,
