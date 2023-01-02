@@ -528,8 +528,10 @@ const DeviceDetails = (props) => {
                     <TimelineIcon />
                   </div>
                   <Typography
-                    sx={{ paddingBottom: 6 }}
-                    variant="h4"
+                    sx={{
+                      paddingBottom: 6,
+                      typography: { sm: "h4", xs: "h6" },
+                    }}
                     className="bold"
                   >
                     {itemData?.attributes?.odometer
@@ -703,8 +705,10 @@ const DeviceDetails = (props) => {
                     )}
                   </div>
                   <Typography
-                    sx={{ paddingBottom: 5 }}
-                    variant="h4"
+                    sx={{
+                      paddingBottom: 5,
+                      typography: { sm: "h4", xs: "h6" },
+                    }}
                     className="bold"
                   >
                     {itemData?.attributes?.batteryLevel
