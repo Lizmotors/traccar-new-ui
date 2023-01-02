@@ -787,15 +787,15 @@ const MainPage = () => {
             onClose={() => setEventsOpen(false)}
           />
         )}
-        {selectedDeviceId && (
-          <div className={classes.statusCard}>
-            <StatusCard
-              deviceId={selectedDeviceId}
-              onClose={() => dispatch(devicesActions.select(null))}
-            />
-          </div>
-        )}
       </div> */}
+      {selectedDeviceId && (
+        <div className={classes.statusCard}>
+          <StatusCard
+            deviceId={selectedDeviceId}
+            onClose={() => dispatch(devicesActions.select(null))}
+          />
+        </div>
+      )}
     </>
   );
 };
