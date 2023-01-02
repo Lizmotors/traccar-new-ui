@@ -33,3 +33,17 @@
     display: flex;
     flex-direction: row;
 }
+
+.col-space{
+    margin-bottom: 0;
+}
+
+@media only screen and (max-width: 600px) {
+    .form-div{
+        width: 100%;
+        margin-right: 0px;
+    }
+    .col-space{
+        margin-bottom: 30px;
+    }
+}

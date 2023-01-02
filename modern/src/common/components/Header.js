@@ -138,6 +138,9 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "flex-end",
     padding: "15px 50px",
     borderBottom: "1px solid #d9d2d2",
+    [theme.breakpoints.up("xs")]: {
+      padding: "15px 5px",
+    },
   },
   count: {
     display: "flex",
@@ -172,6 +175,10 @@ const useStyles = makeStyles((theme) => ({
     height: 40,
     borderRadius: "50%",
     marginRight: 10,
+    [theme.breakpoints.only("xs")]: {
+      width: 40,
+      height: 40,
+    },
   },
   root: {
     height: "100%",

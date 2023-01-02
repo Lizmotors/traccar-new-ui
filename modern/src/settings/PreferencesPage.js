@@ -59,6 +59,10 @@ const useStyles = makeStyles((theme) => ({
   container: {
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(5),
+    [theme.breakpoints.up("xs")]: {
+      marginTop: theme.spacing(10),
+      marginBottom: theme.spacing(10),
+    },
   },
   details: {
     display: "flex",
@@ -195,7 +199,7 @@ const PreferencesPage = () => {
           </Typography>
 
           <TextField
-            className="form-div"
+            className="form-div col-space"
             label={t("userExpirationTime")}
             type="date"
             value={tokenExpiration}
@@ -244,7 +248,7 @@ const PreferencesPage = () => {
             {t("mapTitle")}
           </Typography>
 
-          <FormControl className="form-div">
+          <FormControl className="form-div col-space">
             <InputLabel>{t("mapActive")}</InputLabel>
             <Select
               label={t("mapActive")}
@@ -390,7 +394,7 @@ const PreferencesPage = () => {
           </Typography>
 
           <SelectField
-            customStyle="form-div"
+            customStyle="form-div col-space"
             emptyValue={null}
             value={devicePrimary}
             onChange={(e) => setDevicePrimary(e.target.value)}
@@ -418,7 +422,7 @@ const PreferencesPage = () => {
 
           <SelectField
             multiple
-            customStyle="form-div"
+            customStyle="form-div col-space"
             value={soundEvents}
             onChange={(e) => setSoundEvents(e.target.value)}
             endpoint="/api/notifications/types"

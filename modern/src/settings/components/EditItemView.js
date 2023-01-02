@@ -17,7 +17,13 @@ import PageLayout from "../../common/components/PageLayout";
 
 const useStyles = makeStyles((theme) => ({
   container: {
+    //marginTop: theme.spacing(2),
     marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(5),
+    [theme.breakpoints.up("xs")]: {
+      marginTop: theme.spacing(10),
+      marginBottom: theme.spacing(10),
+    },
   },
   buttons: {
     marginTop: theme.spacing(2),

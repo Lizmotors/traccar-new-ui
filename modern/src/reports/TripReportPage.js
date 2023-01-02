@@ -370,7 +370,11 @@ const TripReportPage = () => {
                                     )
                                   ),
                                   rewards: rewards,
-                                  amount: String(rewards * 1000000000000000000),
+                                  amount: (
+                                    rewards * 1000000000000000000
+                                  ).toLocaleString("fullwide", {
+                                    useGrouping: false,
+                                  }),
                                 });
                               } else {
                                 alert("You Trip has not been verified yet");
