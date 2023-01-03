@@ -159,11 +159,11 @@ const DeviceDetails = (props) => {
 
   useEffectAsync(async () => {
     if (id) {
-      const response = await fetch(`/api/positions?id=${id}`);
+      const response = await fetch(`/api/positions`);
       if (response.ok) {
         const positions = await response.json();
         if (positions.length > 0) {
-          setItemData(positions[0]);
+          setItemData(positions[positions.length - 1]);
         }
       } else {
         throw Error(await response.text());
