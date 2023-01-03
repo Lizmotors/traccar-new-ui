@@ -155,21 +155,23 @@ const DeviceDetails = (props) => {
 
   const [mapLiveRoutes] = usePersistedState("mapLiveRoutes", false);
 
-  const [itemData, setItemData] = useState();
+  const itemData = useSelector((state) => state.positions.items[id]);
 
-  useEffectAsync(async () => {
-    if (id) {
-      const response = await fetch(`/api/positions?id=${id}`);
-      if (response.ok) {
-        const positions = await response.json();
-        if (positions.length > 0) {
-          setItemData(positions[0]);
-        }
-      } else {
-        throw Error(await response.text());
-      }
-    }
-  }, [id]);
+  console.log("itemData", itemData);
+
+  // useEffectAsync(async () => {
+  //   if (id) {
+  //     const response = await fetch(`/api/positions?id=34`);
+  //     if (response.ok) {
+  //       const positions = await response.json();
+  //       if (positions.length > 0) {
+  //         //setItemData(positions[0]);
+  //       }
+  //     } else {
+  //       throw Error(await response.text());
+  //     }
+  //   }
+  // }, [id]);
 
   const deviceSingleData = useSelector((state) => {
     if (itemData) {

@@ -295,7 +295,7 @@ const StatusCard = ({ deviceId, onClose }) => {
           <MenuItem
             onClick={() => {
               //navigate(`/position/${position.id}`);
-              navigate(`/device/${position.id}`);
+              navigate(`/device/${deviceId}`);
             }}
           >
             <Typography color="secondary">{t("sharedShowDetails")}</Typography>
