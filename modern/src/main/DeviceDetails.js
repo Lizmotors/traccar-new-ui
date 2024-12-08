@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from 'react'
 import {
   IconButton,
   Typography,
@@ -17,53 +17,53 @@ import {
   ListItemAvatar,
   ListItemText,
   ListItemButton,
-} from "@mui/material";
+} from '@mui/material'
 
-import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import { useDispatch, useSelector } from "react-redux";
-import moment from "moment";
-import MapView from "../map/core/MapView";
-import MapSelectedDevice from "../map/main/MapSelectedDevice";
-import MapAccuracy from "../map/main/MapAccuracy";
-import MapGeofence from "../map/MapGeofence";
-import MapCurrentLocation from "../map/MapCurrentLocation";
-import { useTranslation } from "../common/components/LocalizationProvider";
-import PoiMap from "../map/main/PoiMap";
-import MapPadding from "../map/MapPadding";
-import { devicesActions } from "../store";
-import MapDefaultCamera from "../map/main/MapDefaultCamera";
-import usePersistedState from "../common/util/usePersistedState";
-import MapLiveRoutes from "../map/main/MapLiveRoutes";
+import { useTheme } from '@mui/material/styles'
+import useMediaQuery from '@mui/material/useMediaQuery'
+import { useDispatch, useSelector } from 'react-redux'
+import moment from 'moment'
+import MapView from '../map/core/MapView'
+import MapSelectedDevice from '../map/main/MapSelectedDevice'
+import MapAccuracy from '../map/main/MapAccuracy'
+import MapGeofence from '../map/MapGeofence'
+import MapCurrentLocation from '../map/MapCurrentLocation'
+import { useTranslation } from '../common/components/LocalizationProvider'
+import PoiMap from '../map/main/PoiMap'
+import MapPadding from '../map/MapPadding'
+import { devicesActions } from '../store'
+import MapDefaultCamera from '../map/main/MapDefaultCamera'
+import usePersistedState from '../common/util/usePersistedState'
+import MapLiveRoutes from '../map/main/MapLiveRoutes'
 
-import MapPositions from "../map/MapPositions";
-import MapOverlay from "../map/overlay/MapOverlay";
-import MapGeocoder from "../map/geocoder/MapGeocoder";
-import MapScale from "../map/MapScale";
-import MapNotification from "../map/notification/MapNotification";
+import MapPositions from '../map/MapPositions'
+import MapOverlay from '../map/overlay/MapOverlay'
+import MapGeocoder from '../map/geocoder/MapGeocoder'
+import MapScale from '../map/MapScale'
+import MapNotification from '../map/notification/MapNotification'
 
-import useFeatures from "../common/util/useFeatures";
-import "./main.css";
-import MainMenu from "./components/MainMenu";
-import PageLayout from "../common/components/PageLayout";
-import Header from "../common/components/Header";
-import "react-circular-progressbar/dist/styles.css";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Grid from "@mui/material/Grid";
-import TimelineIcon from "@mui/icons-material/Timeline";
-import AdjustIcon from "@mui/icons-material/Adjust";
-import SignalCellularAltIcon from "@mui/icons-material/SignalCellularAlt";
-import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
-import { AreaChart, Area } from "recharts";
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import useFeatures from '../common/util/useFeatures'
+import './main.css'
+import MainMenu from './components/MainMenu'
+import PageLayout from '../common/components/PageLayout'
+import Header from '../common/components/Header'
+import 'react-circular-progressbar/dist/styles.css'
+import Card from '@mui/material/Card'
+import CardContent from '@mui/material/CardContent'
+import Grid from '@mui/material/Grid'
+import TimelineIcon from '@mui/icons-material/Timeline'
+import AdjustIcon from '@mui/icons-material/Adjust'
+import SignalCellularAltIcon from '@mui/icons-material/SignalCellularAlt'
+import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive'
+import { AreaChart, Area } from 'recharts'
+import AccessTimeIcon from '@mui/icons-material/AccessTime'
 
-import SemiCircleProgressBar from "react-progressbar-semicircle";
+import SemiCircleProgressBar from 'react-progressbar-semicircle'
 
-import "react-circular-progressbar/dist/styles.css";
+import 'react-circular-progressbar/dist/styles.css'
 
-import GpsFixedIcon from "@mui/icons-material/GpsFixed";
-import LocationSearchingIcon from "@mui/icons-material/LocationSearching";
+import GpsFixedIcon from '@mui/icons-material/GpsFixed'
+import LocationSearchingIcon from '@mui/icons-material/LocationSearching'
 import {
   formatDistance,
   formatSpeed,
@@ -73,91 +73,91 @@ import {
   formatDistanceRewards,
   formatPercentage,
   formatSpeedVal,
-} from "../common/util/formatter";
-import ReportFilter from "../reports/components/ReportFilter";
-import { useAttributePreference } from "../common/util/preferences";
+} from '../common/util/formatter'
+import ReportFilter from '../reports/components/ReportFilter'
+import { useAttributePreference } from '../common/util/preferences'
 
-import ColumnSelect from "../reports/components/ColumnSelect";
+import ColumnSelect from '../reports/components/ColumnSelect'
 
-import { useCatch, useEffectAsync } from "../reactHelper";
-import useReportStyles from "../reports/common/useReportStyles";
+import { useCatch, useEffectAsync } from '../reactHelper'
+import useReportStyles from '../reports/common/useReportStyles'
 
-import MapRoutePath from "../map/MapRoutePath";
-import AddressValue from "../common/components/AddressValue";
-import TableShimmer from "../common/components/TableShimmer";
-import MapMarkers from "../map/MapMarkers";
-import MapCamera from "../map/MapCamera";
-import { BASE_URL } from "../env";
-import { snackBarDurationLongMs } from "../common/util/duration";
-import LoadingButton from "@mui/lab/LoadingButton";
-import { useNavigate, useParams } from "react-router-dom";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import ViewHeadlineIcon from "@mui/icons-material/ViewHeadline";
+import MapRoutePath from '../map/MapRoutePath'
+import AddressValue from '../common/components/AddressValue'
+import TableShimmer from '../common/components/TableShimmer'
+import MapMarkers from '../map/MapMarkers'
+import MapCamera from '../map/MapCamera'
+import { BASE_URL } from '../env'
+import { snackBarDurationLongMs } from '../common/util/duration'
+import LoadingButton from '@mui/lab/LoadingButton'
+import { useNavigate, useParams } from 'react-router-dom'
+import LocationOnIcon from '@mui/icons-material/LocationOn'
+import ViewHeadlineIcon from '@mui/icons-material/ViewHeadline'
 
-import BatteryFullIcon from "@mui/icons-material/BatteryFull";
-import BatteryChargingFullIcon from "@mui/icons-material/BatteryChargingFull";
-import Battery60Icon from "@mui/icons-material/Battery60";
-import BatteryCharging60Icon from "@mui/icons-material/BatteryCharging60";
-import Battery20Icon from "@mui/icons-material/Battery20";
-import BatteryCharging20Icon from "@mui/icons-material/BatteryCharging20";
+import BatteryFullIcon from '@mui/icons-material/BatteryFull'
+import BatteryChargingFullIcon from '@mui/icons-material/BatteryChargingFull'
+import Battery60Icon from '@mui/icons-material/Battery60'
+import BatteryCharging60Icon from '@mui/icons-material/BatteryCharging60'
+import Battery20Icon from '@mui/icons-material/Battery20'
+import BatteryCharging20Icon from '@mui/icons-material/BatteryCharging20'
 
 const columnsArray = [
-  ["startTime", "reportStartTime"],
-  ["startOdometer", "reportStartOdometer"],
-  ["startAddress", "reportStartAddress"],
-  ["endTime", "reportEndTime"],
-  ["endOdometer", "reportEndOdometer"],
-  ["endAddress", "reportEndAddress"],
-  ["distance", "sharedDistance"],
-  ["averageSpeed", "reportAverageSpeed"],
-  ["maxSpeed", "reportMaximumSpeed"],
-  ["duration", "reportDuration"],
-  ["spentFuel", "reportSpentFuel"],
-  ["driverName", "sharedDriver"],
-];
-const columnsMap = new Map(columnsArray);
+  ['startTime', 'reportStartTime'],
+  ['startOdometer', 'reportStartOdometer'],
+  ['startAddress', 'reportStartAddress'],
+  ['endTime', 'reportEndTime'],
+  ['endOdometer', 'reportEndOdometer'],
+  ['endAddress', 'reportEndAddress'],
+  ['distance', 'sharedDistance'],
+  ['averageSpeed', 'reportAverageSpeed'],
+  ['maxSpeed', 'reportMaximumSpeed'],
+  ['duration', 'reportDuration'],
+  ['spentFuel', 'reportSpentFuel'],
+  ['driverName', 'sharedDriver'],
+]
+const columnsMap = new Map(columnsArray)
 
-const DeviceDetails = (props) => {
-  const navigate = useNavigate();
-  const classes = useReportStyles();
-  const t = useTranslation();
+const DeviceDetails = props => {
+  const navigate = useNavigate()
+  const classes = useReportStyles()
+  const t = useTranslation()
 
-  const dispatch = useDispatch();
-  const theme = useTheme();
+  const dispatch = useDispatch()
+  const theme = useTheme()
 
-  const desktop = useMediaQuery(theme.breakpoints.up("md"));
+  const desktop = useMediaQuery(theme.breakpoints.up('md'))
 
-  const { id } = useParams();
+  const { id } = useParams()
 
-  const distanceUnit = useAttributePreference("distanceUnit");
-  const speedUnit = useAttributePreference("speedUnit");
-  const volumeUnit = useAttributePreference("volumeUnit");
+  const distanceUnit = useAttributePreference('distanceUnit')
+  const speedUnit = useAttributePreference('speedUnit')
+  const volumeUnit = useAttributePreference('volumeUnit')
 
-  const [result, setResult] = useState();
+  const [result, setResult] = useState()
 
-  const [columns, setColumns] = usePersistedState("tripColumns", [
-    "startTime",
-    "endTime",
-    "distance",
-    "averageSpeed",
-  ]);
-  const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(null);
-  const [route, setRoute] = useState(null);
-  const [rewardsData, setRewardsData] = useState([]);
-  const [deviceData, setDeviceData] = useState({});
-  const [btnLoading, setBtnLoading] = useState(false);
+  const [columns, setColumns] = usePersistedState('tripColumns', [
+    'startTime',
+    'endTime',
+    'distance',
+    'averageSpeed',
+  ])
+  const [items, setItems] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [selectedItem, setSelectedItem] = useState(null)
+  const [route, setRoute] = useState(null)
+  const [rewardsData, setRewardsData] = useState([])
+  const [deviceData, setDeviceData] = useState({})
+  const [btnLoading, setBtnLoading] = useState(false)
 
-  const features = useFeatures();
+  const features = useFeatures()
 
-  const [mapOnSelect] = usePersistedState("mapOnSelect", false);
+  const [mapOnSelect] = usePersistedState('mapOnSelect', false)
 
-  const [mapLiveRoutes] = usePersistedState("mapLiveRoutes", false);
+  const [mapLiveRoutes] = usePersistedState('mapLiveRoutes', false)
 
-  const itemData = useSelector((state) => state.positions.items[id]);
+  const itemData = useSelector(state => state.positions.items[id])
 
-  console.log("itemData", itemData);
+  console.log('itemData', itemData)
 
   // useEffectAsync(async () => {
   //   if (id) {
@@ -173,115 +173,115 @@ const DeviceDetails = (props) => {
   //   }
   // }, [id]);
 
-  const deviceSingleData = useSelector((state) => {
+  const deviceSingleData = useSelector(state => {
     if (itemData) {
-      const device = state.devices.items[itemData.deviceId];
+      const device = state.devices.items[itemData.deviceId]
       if (device) {
-        return device;
+        return device
       }
     }
-    return null;
-  });
+    return null
+  })
 
-  const selectedDeviceId = itemData ? itemData.deviceId : "";
-  const positions = useSelector((state) => state.positions.items);
-  const [filteredPositions, setFilteredPositions] = useState([]);
+  const selectedDeviceId = itemData ? itemData.deviceId : ''
+  const positions = useSelector(state => state.positions.items)
+  const [filteredPositions, setFilteredPositions] = useState([])
   const selectedPosition = filteredPositions.find(
-    (position) => selectedDeviceId && position.deviceId === selectedDeviceId
-  );
+    position => selectedDeviceId && position.deviceId === selectedDeviceId
+  )
 
-  const groups = useSelector((state) => state.groups.items);
-  const devices = useSelector((state) => state.devices.items);
+  const groups = useSelector(state => state.groups.items)
+  const devices = useSelector(state => state.devices.items)
 
-  const [filterKeyword, setFilterKeyword] = useState("");
-  const [filterStatuses, setFilterStatuses] = useState([]);
-  const [filterGroups, setFilterGroups] = useState([]);
-  const [filterSort, setFilterSort] = usePersistedState("filterSort", "");
-  const [filterMap, setFilterMap] = usePersistedState("filterMap", false);
+  const [filterKeyword, setFilterKeyword] = useState('')
+  const [filterStatuses, setFilterStatuses] = useState([])
+  const [filterGroups, setFilterGroups] = useState([])
+  const [filterSort, setFilterSort] = usePersistedState('filterSort', '')
+  const [filterMap, setFilterMap] = usePersistedState('filterMap', false)
 
-  const [eventsOpen, setEventsOpen] = useState(false);
+  const [eventsOpen, setEventsOpen] = useState(false)
 
-  const eventsAvailable = useSelector((state) => !!state.events.items.length);
+  const eventsAvailable = useSelector(state => !!state.events.items.length)
 
-  const eventHandler = useCallback(() => setEventsOpen(true), [setEventsOpen]);
+  const eventHandler = useCallback(() => setEventsOpen(true), [setEventsOpen])
 
   const onClick = useCallback(
     (_, deviceId) => {
-      dispatch(devicesActions.select(deviceId));
+      dispatch(devicesActions.select(deviceId))
     },
     [dispatch]
-  );
+  )
 
-  const deviceGroups = (device) => {
-    const groupIds = [];
-    let { groupId } = device;
+  const deviceGroups = device => {
+    const groupIds = []
+    let { groupId } = device
     while (groupId) {
-      groupIds.push(groupId);
-      groupId = groups[groupId].groupId;
+      groupIds.push(groupId)
+      groupId = groups[groupId].groupId
     }
-    return groupIds;
-  };
+    return groupIds
+  }
 
   useEffect(() => {
     const filtered = Object.values(devices)
       .filter(
-        (device) =>
+        device =>
           !filterStatuses.length || filterStatuses.includes(device.status)
       )
       .filter(
-        (device) =>
+        device =>
           !filterGroups.length ||
-          deviceGroups(device).some((id) => filterGroups.includes(id))
+          deviceGroups(device).some(id => filterGroups.includes(id))
       )
-      .filter((device) => {
-        const keyword = filterKeyword.toLowerCase();
+      .filter(device => {
+        const keyword = filterKeyword.toLowerCase()
         return [
           device.name,
           device.uniqueId,
           device.phone,
           device.model,
           device.contact,
-        ].some((s) => s && s.toLowerCase().includes(keyword));
-      });
+        ].some(s => s && s.toLowerCase().includes(keyword))
+      })
     switch (filterSort) {
-      case "name":
+      case 'name':
         filtered.sort((device1, device2) =>
           device1.name.localeCompare(device2.name)
-        );
-        break;
-      case "lastUpdate":
+        )
+        break
+      case 'lastUpdate':
         filtered.sort((device1, device2) => {
           const time1 = device1.lastUpdate
             ? moment(device1.lastUpdate).valueOf()
-            : 0;
+            : 0
           const time2 = device2.lastUpdate
             ? moment(device2.lastUpdate).valueOf()
-            : 0;
-          return time2 - time1;
-        });
-        break;
+            : 0
+          return time2 - time1
+        })
+        break
       default:
-        break;
+        break
     }
-    if (filterSort === "lastUpdate") {
+    if (filterSort === 'lastUpdate') {
       filtered.sort((device1, device2) => {
         const time1 = device1.lastUpdate
           ? moment(device1.lastUpdate).valueOf()
-          : 0;
+          : 0
         const time2 = device2.lastUpdate
           ? moment(device2.lastUpdate).valueOf()
-          : 0;
-        return time2 - time1;
-      });
+          : 0
+        return time2 - time1
+      })
     }
 
-    let countData = { online: 0, offline: 0, expired: 0, never: 0 };
+    let countData = { online: 0, offline: 0, expired: 0, never: 0 }
 
     setFilteredPositions(
       filterMap
-        ? filtered.map((device) => positions[device.id]).filter(Boolean)
+        ? filtered.map(device => positions[device.id]).filter(Boolean)
         : Object.values(positions)
-    );
+    )
   }, [
     devices,
     positions,
@@ -290,22 +290,22 @@ const DeviceDetails = (props) => {
     filterGroups,
     filterSort,
     filterMap,
-  ]);
+  ])
 
-  const [transVal, setTransVal] = useState(3);
+  const [transVal, setTransVal] = useState(3)
 
   const createMarkers = () => [
     {
       latitude: selectedItem.startLat,
       longitude: selectedItem.startLon,
-      color: "negative",
+      color: 'negative',
     },
     {
       latitude: selectedItem.endLat,
       longitude: selectedItem.endLon,
-      color: "positive",
+      color: 'positive',
     },
-  ];
+  ]
 
   useEffectAsync(async () => {
     if (selectedItem) {
@@ -313,188 +313,188 @@ const DeviceDetails = (props) => {
         deviceId: selectedItem.deviceId,
         from: selectedItem.startTime,
         to: selectedItem.endTime,
-      });
+      })
       const response = await fetch(`/api/reports/route?${query.toString()}`, {
         headers: {
-          Accept: "application/json",
+          Accept: 'application/json',
         },
-      });
+      })
       if (response.ok) {
-        setRoute(await response.json());
+        setRoute(await response.json())
       } else {
-        throw Error(await response.text());
+        throw Error(await response.text())
       }
     } else {
-      setRoute(null);
+      setRoute(null)
     }
-  }, [selectedItem]);
+  }, [selectedItem])
 
   const handleSubmit = useCatch(async ({ deviceId, from, to, type }) => {
     const query = new URLSearchParams({
       deviceId: selectedDeviceId,
       from,
       to,
-    });
-    if (type === "export") {
-      window.location.assign(`/api/reports/trips/xlsx?${query.toString()}`);
-    } else if (type === "mail") {
+    })
+    if (type === 'export') {
+      window.location.assign(`/api/reports/trips/xlsx?${query.toString()}`)
+    } else if (type === 'mail') {
       const response = await fetch(
         `/api/reports/trips/mail?${query.toString()}`
-      );
+      )
       if (!response.ok) {
-        throw Error(await response.text());
+        throw Error(await response.text())
       }
     } else {
-      setLoading(true);
+      setLoading(true)
       try {
         const response = await fetch(`/api/devices/1`, {
-          headers: { Accept: "application/json" },
-        });
+          headers: { Accept: 'application/json' },
+        })
         if (response.ok) {
-          setDeviceData(await response.json());
+          setDeviceData(await response.json())
         } else {
-          throw Error(await response.text());
+          throw Error(await response.text())
         }
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
 
       try {
         const response = await fetch(`/api/reports/trips?${query.toString()}`, {
-          headers: { Accept: "application/json" },
-        });
+          headers: { Accept: 'application/json' },
+        })
         if (response.ok) {
-          setItems(await response.json());
+          setItems(await response.json())
         } else {
-          throw Error(await response.text());
+          throw Error(await response.text())
         }
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
     }
-  });
+  })
 
   useEffect(() => {
     if (selectedDeviceId) {
       handleSubmit({
-        from: moment().startOf("day").toISOString(),
-        to: moment().endOf("day").toISOString(),
-        type: "json",
-      });
+        from: moment().startOf('day').toISOString(),
+        to: moment().endOf('day').toISOString(),
+        type: 'json',
+      })
     }
-  }, [selectedDeviceId]);
+  }, [selectedDeviceId])
 
   const formatValue = (item, key) => {
     switch (key) {
-      case "startTime":
-      case "endTime":
-        return formatTime(item[key], "YYYY-MM-DD HH:mm");
-      case "startOdometer":
-      case "endOdometer":
-      case "distance":
-        return formatDistance(item[key], distanceUnit, t);
-      case "averageSpeed":
-      case "maxSpeed":
-        return formatSpeed(item[key], speedUnit, t);
-      case "duration":
-        return formatHours(item[key]);
-      case "spentFuel":
-        return formatVolume(item[key], volumeUnit, t);
-      case "startAddress":
+      case 'startTime':
+      case 'endTime':
+        return formatTime(item[key], 'YYYY-MM-DD HH:mm')
+      case 'startOdometer':
+      case 'endOdometer':
+      case 'distance':
+        return formatDistance(item[key], distanceUnit, t)
+      case 'averageSpeed':
+      case 'maxSpeed':
+        return formatSpeed(item[key], speedUnit, t)
+      case 'duration':
+        return formatHours(item[key])
+      case 'spentFuel':
+        return formatVolume(item[key], volumeUnit, t)
+      case 'startAddress':
         return (
           <AddressValue
             latitude={item.startLat}
             longitude={item.startLon}
             originalAddress={item[key]}
           />
-        );
-      case "endAddress":
+        )
+      case 'endAddress':
         return (
           <AddressValue
             latitude={item.endLat}
             longitude={item.endLon}
             originalAddress={item[key]}
           />
-        );
+        )
       default:
-        return item[key];
+        return item[key]
     }
-  };
+  }
 
   const getRewardsData = async () => {
     try {
       const response = await fetch(`${BASE_URL}/blockChain`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({}),
-      });
+      })
       if (response.ok) {
-        const datas = await response.json();
-        setRewardsData(datas?.result);
+        const datas = await response.json()
+        setRewardsData(datas?.result)
       } else {
-        throw Error(await response.text());
+        throw Error(await response.text())
       }
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
-  const handlePayment = async (datas) => {
-    setBtnLoading(true);
+  const handlePayment = async datas => {
+    setBtnLoading(true)
     try {
       const response = await fetch(`${BASE_URL}/blockChain/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(datas),
-      });
+      })
       if (response.ok) {
-        setBtnLoading(false);
-        const datas = await response.json();
-        setResult("Payment Done Successfully");
-        getRewardsData();
+        setBtnLoading(false)
+        const datas = await response.json()
+        setResult('Payment Done Successfully')
+        // getRewardsData();
       } else {
-        throw Error(await response.text());
+        throw Error(await response.text())
       }
     } finally {
-      setBtnLoading(false);
+      setBtnLoading(false)
     }
-  };
+  }
 
   useEffect(() => {
-    getRewardsData();
-  }, []);
+    //getRewardsData()
+  }, [])
 
-  const [address, setAddress] = useState("");
+  const [address, setAddress] = useState('')
 
   const showAddress = useCatch(async () => {
     const query = new URLSearchParams({
       latitude: itemData?.latitude,
       longitude: itemData?.longitude,
-    });
-    const response = await fetch(`/api/server/geocode?${query.toString()}`);
+    })
+    const response = await fetch(`/api/server/geocode?${query.toString()}`)
     if (response.ok) {
-      setAddress(await response.text());
+      setAddress(await response.text())
     } else {
-      throw Error(await response.text());
+      throw Error(await response.text())
     }
-  });
+  })
 
   useEffect(() => {
     if (itemData?.latitude && itemData?.longitude) {
-      showAddress();
+      showAddress()
     }
-  }, [itemData]);
+  }, [itemData])
 
   return (
     <PageLayout menu={<MainMenu />}>
       <Header />
-      <div className="header-padding horizontal-padding">
+      <div className='header-padding horizontal-padding'>
         <Grid container spacing={2}>
           <Grid item xs={12} md={6}>
-            <Typography variant="h4" className="bold">
+            <Typography variant='h4' className='bold'>
               {deviceSingleData?.name}
             </Typography>
-            <Typography variant="button">
+            <Typography variant='button'>
               {deviceSingleData?.uniqueId}
             </Typography>
           </Grid>
@@ -504,45 +504,53 @@ const DeviceDetails = (props) => {
                 className={classes.media}
                 style={{
                   height: 300,
-                  display: "flex",
+                  display: 'flex',
                   borderRadius: 15,
                 }}
-                image={`/api/media/${deviceSingleData?.uniqueId}/${deviceSingleData?.attributes?.deviceImage}`}
-              ></CardMedia>
+                image={`/api/media/${deviceSingleData?.uniqueId}/${deviceSingleData?.attributes?.deviceImage}`}></CardMedia>
             ) : (
-              <div className="logo-image">
-                <img
-                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDXPVORv9tYVdmR5AQX5Lishkts7AYTFt0hG5FCgGytyXDubUF2x0K1gxNUtmJQiFSlF4&usqp=CAU"
-                  alt="logo"
-                />
-              </div>
+              <>
+                <CardMedia
+                  className={classes.media}
+                  style={{
+                    height: 300,
+                    display: 'flex',
+                    borderRadius: 15,
+                  }}
+                  image={`https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDXPVORv9tYVdmR5AQX5Lishkts7AYTFt0hG5FCgGytyXDubUF2x0K1gxNUtmJQiFSlF4&usqp=CAU`}></CardMedia>
+                {/* <div className='logo-image'>
+                  <img
+                    src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDXPVORv9tYVdmR5AQX5Lishkts7AYTFt0hG5FCgGytyXDubUF2x0K1gxNUtmJQiFSlF4&usqp=CAU'
+                    alt='logo'
+                  />
+                </div> */}
+              </>
             )}
           </Grid>
         </Grid>
 
         <Grid container spacing={4} sx={{ paddingBottom: 5, paddingTop: 5 }}>
-          <Grid item xs={6} md={2}>
+          <Grid item xs={6} md={4}>
             <Box sx={{ boxShadow: 1, borderRadius: 3 }}>
               <Card sx={{ boxShadow: 1, borderRadius: 3 }}>
                 <CardContent>
-                  <div className="flex-cont">
+                  <div className='flex-cont'>
                     <Typography>Odometer</Typography>
                     <TimelineIcon />
                   </div>
                   <Typography
                     sx={{
                       paddingBottom: 6,
-                      typography: { sm: "h4", xs: "h6" },
+                      typography: { sm: 'h4', xs: 'h6' },
                     }}
-                    className="bold"
-                  >
+                    className='bold'>
                     {itemData?.attributes?.odometer
                       ? formatDistance(
                           itemData?.attributes?.odometer,
                           distanceUnit,
                           t
                         )
-                      : "0"}
+                      : '0'}
                   </Typography>
                   {/* <AreaChart
                     width={140}
@@ -603,102 +611,100 @@ const DeviceDetails = (props) => {
               </Card>
             </Box>
           </Grid>
-          <Grid item xs={6} md={2}>
+          <Grid item xs={6} md={4}>
             <Box sx={{ boxShadow: 1, borderRadius: 3 }}>
               <Card sx={{ boxShadow: 1, borderRadius: 3 }}>
                 <CardContent>
-                  <div className="flex-cont">
+                  <div className='flex-cont'>
                     <Typography>
-                      {itemData?.attributes?.hasOwnProperty("batteryLevel")
-                        ? "Charge"
-                        : "Fuel"}
+                      {itemData?.attributes?.hasOwnProperty('batteryLevel')
+                        ? 'Charge'
+                        : 'Fuel'}
                     </Typography>
-                    {itemData?.attributes?.hasOwnProperty("batteryLevel") && (
+                    {itemData?.attributes?.hasOwnProperty('batteryLevel') && (
                       <Tooltip
                         title={`${t(
-                          "positionBatteryLevel"
+                          'positionBatteryLevel'
                         )}: ${formatPercentage(
                           itemData?.attributes?.batteryLevel
-                        )}`}
-                      >
-                        <IconButton size="small">
+                        )}`}>
+                        <IconButton size='small'>
                           {itemData?.attributes?.batteryLevel > 70 ? (
                             itemData?.attributes?.charge ? (
                               <BatteryChargingFullIcon
-                                fontSize="small"
+                                fontSize='small'
                                 className={classes.positive}
                               />
                             ) : (
                               <BatteryFullIcon
-                                fontSize="small"
+                                fontSize='small'
                                 className={classes.positive}
                               />
                             )
                           ) : itemData?.attributes?.batteryLevel > 30 ? (
                             itemData?.attributes?.charge ? (
                               <BatteryCharging60Icon
-                                fontSize="small"
+                                fontSize='small'
                                 className={classes.medium}
                               />
                             ) : (
                               <Battery60Icon
-                                fontSize="small"
+                                fontSize='small'
                                 className={classes.medium}
                               />
                             )
                           ) : itemData?.attributes?.charge ? (
                             <BatteryCharging20Icon
-                              fontSize="small"
+                              fontSize='small'
                               className={classes.negative}
                             />
                           ) : (
                             <Battery20Icon
-                              fontSize="small"
+                              fontSize='small'
                               className={classes.negative}
                             />
                           )}
                         </IconButton>
                       </Tooltip>
                     )}
-                    {itemData?.attributes?.hasOwnProperty("fuel") && (
+                    {itemData?.attributes?.hasOwnProperty('fuel') && (
                       <Tooltip
                         title={`${t(
-                          "positionBatteryLevel"
-                        )}: ${formatPercentage(itemData?.attributes?.fuel)}`}
-                      >
-                        <IconButton size="small">
+                          'positionBatteryLevel'
+                        )}: ${formatPercentage(itemData?.attributes?.fuel)}`}>
+                        <IconButton size='small'>
                           {itemData?.attributes?.fuel > 70 ? (
                             itemData?.attributes?.fuel ? (
                               <BatteryChargingFullIcon
-                                fontSize="small"
+                                fontSize='small'
                                 className={classes.positive}
                               />
                             ) : (
                               <BatteryFullIcon
-                                fontSize="small"
+                                fontSize='small'
                                 className={classes.positive}
                               />
                             )
                           ) : itemData?.attributes?.fuel > 30 ? (
                             itemData?.attributes?.fuel ? (
                               <BatteryCharging60Icon
-                                fontSize="small"
+                                fontSize='small'
                                 className={classes.medium}
                               />
                             ) : (
                               <Battery60Icon
-                                fontSize="small"
+                                fontSize='small'
                                 className={classes.medium}
                               />
                             )
                           ) : itemData?.attributes?.fuel ? (
                             <BatteryCharging20Icon
-                              fontSize="small"
+                              fontSize='small'
                               className={classes.negative}
                             />
                           ) : (
                             <Battery20Icon
-                              fontSize="small"
+                              fontSize='small'
                               className={classes.negative}
                             />
                           )}
@@ -709,15 +715,14 @@ const DeviceDetails = (props) => {
                   <Typography
                     sx={{
                       paddingBottom: 5,
-                      typography: { sm: "h4", xs: "h6" },
+                      typography: { sm: 'h4', xs: 'h6' },
                     }}
-                    className="bold"
-                  >
+                    className='bold'>
                     {itemData?.attributes?.batteryLevel
                       ? itemData?.attributes?.batteryLevel
                       : itemData?.attributes?.fuel
                       ? itemData?.attributes?.fuel
-                      : ""}
+                      : ''}
                     %
                   </Typography>
                   {/* <AreaChart
@@ -779,52 +784,49 @@ const DeviceDetails = (props) => {
               </Card>
             </Box>
           </Grid>
-          <Grid item xs={6} md={2}>
+          <Grid item xs={6} md={4}>
             <Box sx={{ boxShadow: 1, borderRadius: 3 }}>
               <Card sx={{ boxShadow: 1, borderRadius: 3 }}>
                 <CardContent>
-                  <div className="flex-cont">
+                  <div className='flex-cont'>
                     <Typography>Status</Typography>
                   </div>
-                  <div style={{ display: "flex", justifyContent: "center" }}>
+                  <div style={{ display: 'flex', justifyContent: 'center' }}>
                     <AdjustIcon
                       sx={{
                         fontSize: 45,
                         color:
-                          deviceSingleData?.status === "online"
-                            ? "green"
-                            : "red",
+                          deviceSingleData?.status === 'online'
+                            ? 'green'
+                            : 'red',
                       }}
                     />
                   </div>
-                  <div style={{ display: "flex", justifyContent: "center" }}>
+                  <div style={{ display: 'flex', justifyContent: 'center' }}>
                     <Typography
-                      variant="subtitle"
-                      className="bold"
-                      sx={{ textAlign: "center", paddingTop: 2 }}
-                    >
-                      {deviceSingleData?.status === "online" ? "ON" : "OFF"}
+                      variant='subtitle'
+                      className='bold'
+                      sx={{ textAlign: 'center', paddingTop: 2 }}>
+                      {deviceSingleData?.status === 'online' ? 'ON' : 'OFF'}
                     </Typography>
                   </div>
                 </CardContent>
               </Card>
             </Box>
           </Grid>
-          <Grid item xs={12} md={2}>
+          <Grid item xs={12} md={12}>
             <div>
               <div
                 style={{
                   borderRadius: 10,
-                }}
-              >
+                }}>
                 <div
                   style={{
-                    height: 170,
-                    width: "100%",
-                    maxWidth: "100%",
+                    height: 250,
+                    width: '100%',
+                    maxWidth: '100%',
                     borderRadius: 10,
-                  }}
-                >
+                  }}>
                   <MapView>
                     <MapOverlay />
                     <MapGeofence />
@@ -855,19 +857,18 @@ const DeviceDetails = (props) => {
                     />
                   )}
                 </div>
-                <div style={{ paddingTop: 4 }} className="flex-cont">
-                  <div style={{ display: "flex" }}>
-                    <LocationOnIcon sx={{ color: "green" }} />
+                <div style={{ paddingTop: 4 }} className='flex-cont'>
+                  <div style={{ display: 'flex' }}>
+                    <LocationOnIcon sx={{ color: 'green' }} />
                     <Typography style={{ paddingLeft: 3 }}>
-                      {address ? address : "N/A"}
+                      {address ? address : 'N/A'}
                     </Typography>
                   </div>
                   <div
-                    style={{ cursor: "pointer" }}
+                    style={{ cursor: 'pointer' }}
                     onClick={() => {
-                      navigate(`/position/${id}`);
-                    }}
-                  >
+                      navigate(`/position/${id}`)
+                    }}>
                     <ViewHeadlineIcon />
                   </div>
                 </div>
@@ -877,65 +878,62 @@ const DeviceDetails = (props) => {
         </Grid>
 
         <Grid container spacing={4} sx={{ paddingBottom: 10 }}>
-          <Grid item xs={6} md={2}>
+          <Grid item xs={6} md={4}>
             <Box sx={{ boxShadow: 1, borderRadius: 3 }}>
               <Card sx={{ boxShadow: 1, borderRadius: 3 }}>
                 <CardContent>
-                  <div className="flex-cont">
+                  <div className='flex-cont'>
                     <Typography>Last Updated</Typography>
                   </div>
-                  <div style={{ display: "flex", justifyContent: "center" }}>
+                  <div style={{ display: 'flex', justifyContent: 'center' }}>
                     <AccessTimeIcon sx={{ fontSize: 45 }} />
                   </div>
 
-                  <div style={{ textAlign: "center", paddingTop: 10 }}>
+                  <div style={{ textAlign: 'center', paddingTop: 10 }}>
                     <div>
-                      <Typography variant="subtitle" className="bold">
+                      <Typography variant='subtitle' className='bold'>
                         {moment(deviceSingleData?.lastUpdate).format(
-                          "DD-MM-YYYY"
+                          'DD-MM-YYYY hh:mm a'
                         )}
                       </Typography>
                     </div>
-                    <Typography variant="subtitle" className="bold">
-                      {moment(deviceSingleData?.lastUpdate).format("hh:mm a")}
-                    </Typography>
+                    {/* <Typography variant='subtitle' className='bold'>
+                      {moment(deviceSingleData?.lastUpdate).format('hh:mm a')}
+                    </Typography> */}
                   </div>
                 </CardContent>
               </Card>
             </Box>
           </Grid>
-          <Grid item xs={6} md={2}>
+          <Grid item xs={6} md={4}>
             <Box sx={{ boxShadow: 1, borderRadius: 3 }}>
               <Card sx={{ boxShadow: 1, borderRadius: 3 }}>
                 <CardContent>
                   <div
                     style={{
-                      display: "flex",
-                      justifyContent: "center",
+                      display: 'flex',
+                      justifyContent: 'center',
                       paddingTop: 0,
-                    }}
-                  >
+                    }}>
                     <SemiCircleProgressBar
                       diameter={140}
                       percentage={formatSpeedVal(itemData?.speed, speedUnit, t)}
                       //showPercentValue
                     />
                   </div>
-                  <div style={{ textAlign: "center", paddingTop: 0 }}>
+                  <div style={{ textAlign: 'center', paddingTop: 0 }}>
                     <Typography
-                      variant="subtitle"
-                      className="bold"
-                      sx={{ textAlign: "center" }}
-                    >
+                      variant='subtitle'
+                      className='bold'
+                      sx={{ textAlign: 'center' }}>
                       {formatSpeed(itemData?.speed, speedUnit, t)}
                     </Typography>
                   </div>
-                  <div style={{ textAlign: "center", paddingTop: 15 }}>
+                  <div style={{ textAlign: 'center', paddingTop: 15 }}>
                     <Typography
-                      variant="subtitle"
-                      className="bold"
-                      sx={{ textAlign: "center" }}
-                    >
+                      variant='subtitle'
+                      className='bold'
+                      sx={{ textAlign: 'center' }}>
                       Speed
                     </Typography>
                   </div>
@@ -943,34 +941,32 @@ const DeviceDetails = (props) => {
               </Card>
             </Box>
           </Grid>
-          <Grid item xs={6} md={2}>
+          <Grid item xs={6} md={4}>
             <Box sx={{ boxShadow: 1, borderRadius: 3 }}>
               <Card sx={{ boxShadow: 1, borderRadius: 3 }}>
                 <CardContent>
                   <div
                     style={{
-                      display: "flex",
-                      justifyContent: "center",
+                      display: 'flex',
+                      justifyContent: 'center',
                       paddingTop: 15,
                       paddingBottom: 15,
-                    }}
-                  >
+                    }}>
                     <SignalCellularAltIcon
                       sx={{
                         fontSize: 60,
                         color:
-                          deviceSingleData?.status === "online"
-                            ? "green"
-                            : "red",
+                          deviceSingleData?.status === 'online'
+                            ? 'green'
+                            : 'red',
                       }}
                     />
                   </div>
-                  <div style={{ display: "flex", justifyContent: "center" }}>
+                  <div style={{ display: 'flex', justifyContent: 'center' }}>
                     <Typography
-                      variant="subtitle"
-                      className="bold"
-                      sx={{ textAlign: "center", paddingTop: 3 }}
-                    >
+                      variant='subtitle'
+                      className='bold'
+                      sx={{ textAlign: 'center', paddingTop: 3 }}>
                       Connectivity
                     </Typography>
                   </div>
@@ -978,37 +974,35 @@ const DeviceDetails = (props) => {
               </Card>
             </Box>
           </Grid>
-          <Grid item xs={6} md={2}>
+          <Grid item xs={6} md={4}>
             <Box sx={{ boxShadow: 1, borderRadius: 3 }}>
               <Card sx={{ boxShadow: 1, borderRadius: 3 }}>
                 <CardContent>
-                  <div className="bar-cont">
+                  <div className='bar-cont'>
                     {[
                       ...Array(
                         itemData?.attributes?.sat
                           ? itemData?.attributes?.sat
                           : 15
                       ).keys(),
-                    ].map((ele) => (
+                    ].map(ele => (
                       <div
                         className={`bars ${
                           ele >
                           (itemData?.attributes?.sat
                             ? itemData?.attributes?.sat
                             : -1)
-                            ? ""
-                            : "active-bar"
-                        }`}
-                      ></div>
+                            ? ''
+                            : 'active-bar'
+                        }`}></div>
                     ))}
                   </div>
 
-                  <div style={{ display: "flex", justifyContent: "center" }}>
+                  <div style={{ display: 'flex', justifyContent: 'center' }}>
                     <Typography
-                      variant="subtitle"
-                      className="bold"
-                      sx={{ textAlign: "center", paddingTop: 3 }}
-                    >
+                      variant='subtitle'
+                      className='bold'
+                      sx={{ textAlign: 'center', paddingTop: 3 }}>
                       ON
                     </Typography>
                   </div>
@@ -1016,33 +1010,30 @@ const DeviceDetails = (props) => {
               </Card>
             </Box>
           </Grid>
-          <Grid item xs={6} md={2}>
+          <Grid item xs={6} md={4}>
             <Box sx={{ boxShadow: 1, borderRadius: 3 }}>
               <Card sx={{ boxShadow: 1, borderRadius: 3 }}>
                 <CardContent
-                  sx={{ cursor: "pointer" }}
+                  sx={{ cursor: 'pointer' }}
                   onClick={() => {
-                    navigate(`/settings/notifications`);
-                  }}
-                >
+                    navigate(`/settings/notifications`)
+                  }}>
                   <div
                     style={{
-                      display: "flex",
-                      justifyContent: "center",
+                      display: 'flex',
+                      justifyContent: 'center',
                       paddingTop: 15,
                       paddingBottom: 15,
-                    }}
-                  >
+                    }}>
                     <NotificationsActiveIcon
-                      sx={{ fontSize: 60, color: "#ffa600" }}
+                      sx={{ fontSize: 60, color: '#ffa600' }}
                     />
                   </div>
-                  <div style={{ display: "flex", justifyContent: "center" }}>
+                  <div style={{ display: 'flex', justifyContent: 'center' }}>
                     <Typography
-                      variant="subtitle"
-                      className="bold"
-                      sx={{ textAlign: "center", paddingTop: 3 }}
-                    >
+                      variant='subtitle'
+                      className='bold'
+                      sx={{ textAlign: 'center', paddingTop: 3 }}>
                       Alerts
                     </Typography>
                   </div>
@@ -1050,17 +1041,16 @@ const DeviceDetails = (props) => {
               </Card>
             </Box>
           </Grid>
-          <Grid item xs={6} md={2}>
+          <Grid item xs={6} md={4}>
             <Box sx={{ boxShadow: 1, borderRadius: 3 }}>
               <Card sx={{ boxShadow: 1, borderRadius: 3 }}>
                 <CardContent>
                   <div
                     style={{
-                      display: "flex",
-                      justifyContent: "center",
+                      display: 'flex',
+                      justifyContent: 'center',
                       paddingTop: 20,
-                    }}
-                  >
+                    }}>
                     <SemiCircleProgressBar
                       diameter={140}
                       percentage={parseInt(
@@ -1071,8 +1061,8 @@ const DeviceDetails = (props) => {
                       showPercentValue
                     />
                   </div>
-                  <div style={{ textAlign: "center", paddingTop: 20 }}>
-                    <Typography variant="subtitle" className="bold">
+                  <div style={{ textAlign: 'center', paddingTop: 20 }}>
+                    <Typography variant='subtitle' className='bold'>
                       Coolent
                     </Typography>
                   </div>
@@ -1103,10 +1093,9 @@ const DeviceDetails = (props) => {
             <ReportFilter
               ignoreDevice={true}
               includeFilters={true}
-              setTransLength={(val) => setTransVal(val)}
+              setTransLength={val => setTransVal(val)}
               transLength={transVal}
-              handleSubmit={handleSubmit}
-            >
+              handleSubmit={handleSubmit}>
               <ColumnSelect
                 columns={columns}
                 setColumns={setColumns}
@@ -1118,65 +1107,62 @@ const DeviceDetails = (props) => {
             <TableHead>
               <TableRow>
                 <TableCell className={classes.columnAction} />
-                {columns.map((key) => (
+                {columns.map(key => (
                   <TableCell key={key}>{t(columnsMap.get(key))}</TableCell>
                 ))}
-                <TableCell>Rewards</TableCell>
+                {/* <TableCell>Rewards</TableCell>
                 <TableCell>Transaction Id</TableCell>
                 <TableCell>Status</TableCell>
-                <TableCell>Action</TableCell>
+                <TableCell>Action</TableCell> */}
               </TableRow>
             </TableHead>
             <TableBody>
               {!loading ? (
                 items
                   .slice(0, transVal === 100 ? items.length : transVal)
-                  .map((item) => {
+                  .map(item => {
                     const findData = rewardsData.find(
-                      (ele) =>
+                      ele =>
                         item.deviceId == ele.deviceId &&
                         item.startTime == ele.startdate &&
                         item.endTime == ele.endDate
-                    );
+                    )
                     const rewards =
                       Number(
-                        formatDistanceRewards(item["distance"], distanceUnit, t)
-                      ) / 4;
+                        formatDistanceRewards(item['distance'], distanceUnit, t)
+                      ) / 4
                     return (
                       <TableRow key={item.startPositionId}>
                         <TableCell
                           className={classes.columnAction}
-                          padding="none"
-                        >
+                          padding='none'>
                           {selectedItem === item ? (
                             <IconButton
-                              size="small"
-                              onClick={() => setSelectedItem(null)}
-                            >
-                              <GpsFixedIcon fontSize="small" />
+                              size='small'
+                              onClick={() => setSelectedItem(null)}>
+                              <GpsFixedIcon fontSize='small' />
                             </IconButton>
                           ) : (
                             <IconButton
-                              size="small"
-                              onClick={() => setSelectedItem(item)}
-                            >
-                              <LocationSearchingIcon fontSize="small" />
+                              size='small'
+                              onClick={() => setSelectedItem(item)}>
+                              <LocationSearchingIcon fontSize='small' />
                             </IconButton>
                           )}
                         </TableCell>
-                        {columns.map((key) => (
+                        {columns.map(key => (
                           <TableCell key={key}>
                             {formatValue(item, key)}
                           </TableCell>
                         ))}
-                        <TableCell>
+                        {/* <TableCell>
                           {findData ? findData?.rewards : rewards}
                         </TableCell>
                         <TableCell>
-                          {findData ? findData?.transactionId : ""}
+                          {findData ? findData?.transactionId : ''}
                         </TableCell>
                         <TableCell>
-                          {findData ? "Already paid" : "Unpaid"}
+                          {findData ? 'Already paid' : 'Unpaid'}
                         </TableCell>
                         <TableCell>
                           <LoadingButton
@@ -1185,9 +1171,9 @@ const DeviceDetails = (props) => {
                               if (findData) {
                                 window.open(
                                   findData?.transactionLink,
-                                  "_blank",
-                                  "noopener,noreferrer"
-                                );
+                                  '_blank',
+                                  'noopener,noreferrer'
+                                )
                               } else {
                                 if (
                                   parseFloat(Math.abs(rewards)) > parseFloat(0)
@@ -1195,16 +1181,16 @@ const DeviceDetails = (props) => {
                                   handlePayment({
                                     toAccount: deviceData?.phone
                                       ? deviceData?.phone
-                                      : "0x9Cc41DA122b93E993Cb113b5E1f8d54A5d42C178",
+                                      : '0x9Cc41DA122b93E993Cb113b5E1f8d54A5d42C178',
                                     deviceId: item.deviceId,
                                     startdate: item.startTime,
                                     endDate: item.endTime,
-                                    status: "true",
-                                    transactionLink: "1",
-                                    transactionId: "1",
+                                    status: 'true',
+                                    transactionLink: '1',
+                                    transactionId: '1',
                                     meters: Number(
                                       formatDistanceRewards(
-                                        item["distance"],
+                                        item['distance'],
                                         distanceUnit,
                                         t
                                       )
@@ -1213,24 +1199,24 @@ const DeviceDetails = (props) => {
                                     amount: String(
                                       rewards * 1000000000000000000
                                     ),
-                                  });
+                                  })
                                 } else {
-                                  alert("You Trip has not been verified yet");
+                                  alert('You Trip has not been verified yet')
                                 }
                               }
                             }}
-                            variant="outlined"
-                            color="secondary"
+                            variant='outlined'
+                            color='secondary'
                             className={classes.filterButton}
                             //disabled={disabled}
                           >
-                            <Typography variant="button" noWrap>
-                              {findData ? "Track Status" : "Pay Now"}
+                            <Typography variant='button' noWrap>
+                              {findData ? 'Track Status' : 'Pay Now'}
                             </Typography>
                           </LoadingButton>
-                        </TableCell>
+                        </TableCell> */}
                       </TableRow>
-                    );
+                    )
                   })
               ) : (
                 <TableShimmer columns={columns.length + 5} startAction />
@@ -1240,25 +1226,23 @@ const DeviceDetails = (props) => {
 
           <Snackbar
             open={!!result}
-            anchorOrigin={{ vertical: "top", horizontal: "right" }}
+            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
             onClose={() => setResult(null)}
             autoHideDuration={snackBarDurationLongMs}
             message={result}
-            sx={{ width: 300 }}
-          >
+            sx={{ width: 300 }}>
             <Alert
               elevation={6}
               onClose={() => setResult(null)}
-              severity="success"
-              variant="filled"
-              sx={{ minWidth: 300, padding: "15px 25px", borderRadius: 5 }}
-            >
+              severity='success'
+              variant='filled'
+              sx={{ minWidth: 300, padding: '15px 25px', borderRadius: 5 }}>
               {result}
             </Alert>
           </Snackbar>
         </div>
       </div>
     </PageLayout>
-  );
-};
-export default DeviceDetails;
+  )
+}
+export default DeviceDetails
