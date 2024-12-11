@@ -57,6 +57,8 @@ import SignalCellularAltIcon from '@mui/icons-material/SignalCellularAlt'
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive'
 import { AreaChart, Area } from 'recharts'
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
+import SpeedIcon from '@mui/icons-material/Speed'
+import WifiIcon from '@mui/icons-material/Wifi'
 
 import SemiCircleProgressBar from 'react-progressbar-semicircle'
 
@@ -488,674 +490,709 @@ const DeviceDetails = props => {
   return (
     <PageLayout menu={<MainMenu />}>
       <Header />
-      <div className='header-padding horizontal-padding'>
+      <div className='header-padding horizontal-padding main-div'>
         <Grid container spacing={2}>
-          <Grid item xs={12} md={6}>
-            <Typography variant='h4' className='bold'>
-              {deviceSingleData?.name}
-            </Typography>
-            <Typography variant='button'>
-              {deviceSingleData?.uniqueId}
-            </Typography>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            {deviceSingleData?.attributes?.deviceImage ? (
-              <CardMedia
-                className={classes.media}
-                style={{
-                  height: 300,
-                  display: 'flex',
-                  borderRadius: 15,
-                }}
-                image={`/api/media/${deviceSingleData?.uniqueId}/${deviceSingleData?.attributes?.deviceImage}`}></CardMedia>
-            ) : (
-              <>
-                <CardMedia
-                  className={classes.media}
-                  style={{
-                    height: 300,
-                    display: 'flex',
-                    borderRadius: 15,
-                  }}
-                  image={`https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDXPVORv9tYVdmR5AQX5Lishkts7AYTFt0hG5FCgGytyXDubUF2x0K1gxNUtmJQiFSlF4&usqp=CAU`}></CardMedia>
-                {/* <div className='logo-image'>
-                  <img
-                    src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDXPVORv9tYVdmR5AQX5Lishkts7AYTFt0hG5FCgGytyXDubUF2x0K1gxNUtmJQiFSlF4&usqp=CAU'
-                    alt='logo'
-                  />
-                </div> */}
-              </>
-            )}
-          </Grid>
-        </Grid>
-
-        <Grid container spacing={4} sx={{ paddingBottom: 5, paddingTop: 5 }}>
-          <Grid item xs={6} md={4}>
-            <Box sx={{ boxShadow: 1, borderRadius: 3 }}>
-              <Card sx={{ boxShadow: 1, borderRadius: 3 }}>
+          <Grid item xs={12} md={3}>
+            <Box sx={{ boxShadow: 0, borderRadius: 4 }}>
+              <Card sx={{ boxShadow: 0, borderRadius: 4 }}>
                 <CardContent>
-                  <div className='flex-cont'>
-                    <Typography>Odometer</Typography>
-                    <TimelineIcon />
-                  </div>
-                  <Typography
-                    sx={{
-                      paddingBottom: 6,
-                      typography: { sm: 'h4', xs: 'h6' },
-                    }}
-                    className='bold'>
-                    {itemData?.attributes?.odometer
-                      ? formatDistance(
-                          itemData?.attributes?.odometer,
-                          distanceUnit,
-                          t
-                        )
-                      : '0'}
-                  </Typography>
-                  {/* <AreaChart
-                    width={140}
-                    height={50}
-                    data={[
-                      {
-                        name: "Page A",
-                        uv: 1890,
-                        pv: 4800,
-                        amt: 2400,
-                      },
-                      {
-                        name: "Page B",
-                        uv: 3000,
-                        pv: 1398,
-                        amt: 2210,
-                      },
-                      {
-                        name: "Page C",
-                        uv: 2000,
-                        pv: 9800,
-                        amt: 2290,
-                      },
-                      {
-                        name: "Page D",
-                        uv: 2780,
-                        pv: 3908,
-                        amt: 2000,
-                      },
-                      {
-                        name: "Page E",
-                        uv: 2390,
-                        pv: 3800,
-                        amt: 2181,
-                      },
-                      {
-                        name: "Page F",
-                        uv: 3490,
-                        pv: 4300,
-                        amt: 2500,
-                      },
-                      {
-                        name: "Page G",
-                        uv: 4000,
-                        pv: 2400,
-                        amt: 2100,
-                      },
-                    ]}
-                  >
-                    <Area
-                      type="monotone"
-                      dataKey="uv"
-                      stroke="#8884d8"
-                      fill="#d0d0e0"
-                    />
-                  </AreaChart> */}
-                </CardContent>
-              </Card>
-            </Box>
-          </Grid>
-          <Grid item xs={6} md={4}>
-            <Box sx={{ boxShadow: 1, borderRadius: 3 }}>
-              <Card sx={{ boxShadow: 1, borderRadius: 3 }}>
-                <CardContent>
-                  <div className='flex-cont'>
-                    <Typography>
-                      {itemData?.attributes?.hasOwnProperty('batteryLevel')
-                        ? 'Charge'
-                        : 'Fuel'}
-                    </Typography>
-                    {itemData?.attributes?.hasOwnProperty('batteryLevel') && (
-                      <Tooltip
-                        title={`${t(
-                          'positionBatteryLevel'
-                        )}: ${formatPercentage(
-                          itemData?.attributes?.batteryLevel
-                        )}`}>
-                        <IconButton size='small'>
-                          {itemData?.attributes?.batteryLevel > 70 ? (
-                            itemData?.attributes?.charge ? (
-                              <BatteryChargingFullIcon
-                                fontSize='small'
-                                className={classes.positive}
-                              />
-                            ) : (
-                              <BatteryFullIcon
-                                fontSize='small'
-                                className={classes.positive}
-                              />
-                            )
-                          ) : itemData?.attributes?.batteryLevel > 30 ? (
-                            itemData?.attributes?.charge ? (
-                              <BatteryCharging60Icon
-                                fontSize='small'
-                                className={classes.medium}
-                              />
-                            ) : (
-                              <Battery60Icon
-                                fontSize='small'
-                                className={classes.medium}
-                              />
-                            )
-                          ) : itemData?.attributes?.charge ? (
-                            <BatteryCharging20Icon
-                              fontSize='small'
-                              className={classes.negative}
-                            />
-                          ) : (
-                            <Battery20Icon
-                              fontSize='small'
-                              className={classes.negative}
-                            />
-                          )}
-                        </IconButton>
-                      </Tooltip>
-                    )}
-                    {itemData?.attributes?.hasOwnProperty('fuel') && (
-                      <Tooltip
-                        title={`${t(
-                          'positionBatteryLevel'
-                        )}: ${formatPercentage(itemData?.attributes?.fuel)}`}>
-                        <IconButton size='small'>
-                          {itemData?.attributes?.fuel > 70 ? (
-                            itemData?.attributes?.fuel ? (
-                              <BatteryChargingFullIcon
-                                fontSize='small'
-                                className={classes.positive}
-                              />
-                            ) : (
-                              <BatteryFullIcon
-                                fontSize='small'
-                                className={classes.positive}
-                              />
-                            )
-                          ) : itemData?.attributes?.fuel > 30 ? (
-                            itemData?.attributes?.fuel ? (
-                              <BatteryCharging60Icon
-                                fontSize='small'
-                                className={classes.medium}
-                              />
-                            ) : (
-                              <Battery60Icon
-                                fontSize='small'
-                                className={classes.medium}
-                              />
-                            )
-                          ) : itemData?.attributes?.fuel ? (
-                            <BatteryCharging20Icon
-                              fontSize='small'
-                              className={classes.negative}
-                            />
-                          ) : (
-                            <Battery20Icon
-                              fontSize='small'
-                              className={classes.negative}
-                            />
-                          )}
-                        </IconButton>
-                      </Tooltip>
+                  <div>
+                    {deviceSingleData?.attributes?.deviceImage ? (
+                      <CardMedia
+                        className={classes.media}
+                        style={{
+                          height: 200,
+                          display: 'flex',
+                          borderRadius: 10,
+                        }}
+                        image={`/api/media/${deviceSingleData?.uniqueId}/${deviceSingleData?.attributes?.deviceImage}`}></CardMedia>
+                    ) : (
+                      <>
+                        <CardMedia
+                          className={classes.media}
+                          style={{
+                            height: 200,
+                            display: 'flex',
+                            borderRadius: 10,
+                          }}
+                          image={`https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDXPVORv9tYVdmR5AQX5Lishkts7AYTFt0hG5FCgGytyXDubUF2x0K1gxNUtmJQiFSlF4&usqp=CAU`}></CardMedia>
+                      </>
                     )}
                   </div>
                   <Typography
-                    sx={{
-                      paddingBottom: 5,
-                      typography: { sm: 'h4', xs: 'h6' },
-                    }}
-                    className='bold'>
-                    {itemData?.attributes?.batteryLevel
-                      ? itemData?.attributes?.batteryLevel
-                      : itemData?.attributes?.fuel
-                      ? itemData?.attributes?.fuel
-                      : ''}
-                    %
+                    variant='h5'
+                    className='bold'
+                    style={{ paddingTop: 2 }}>
+                    {deviceSingleData?.name}
                   </Typography>
-                  {/* <AreaChart
-                    width={140}
-                    height={50}
-                    data={[
-                      {
-                        name: "Page A",
-                        uv: 1890,
-                        pv: 4800,
-                        amt: 2400,
-                      },
-                      {
-                        name: "Page B",
-                        uv: 3000,
-                        pv: 1398,
-                        amt: 2210,
-                      },
-                      {
-                        name: "Page C",
-                        uv: 2000,
-                        pv: 9800,
-                        amt: 2290,
-                      },
-                      {
-                        name: "Page D",
-                        uv: 2780,
-                        pv: 3908,
-                        amt: 2000,
-                      },
-                      {
-                        name: "Page E",
-                        uv: 2390,
-                        pv: 3800,
-                        amt: 2181,
-                      },
-                      {
-                        name: "Page F",
-                        uv: 3490,
-                        pv: 4300,
-                        amt: 2500,
-                      },
-                      {
-                        name: "Page G",
-                        uv: 4000,
-                        pv: 2400,
-                        amt: 2100,
-                      },
-                    ]}
-                  >
-                    <Area
-                      type="monotone"
-                      dataKey="uv"
-                      stroke="#8884d8"
-                      fill="#d0d0e0"
-                    />
-                  </AreaChart> */}
+                  <Typography variant='button'>
+                    {deviceSingleData?.uniqueId}
+                  </Typography>
                 </CardContent>
               </Card>
             </Box>
           </Grid>
-          <Grid item xs={6} md={4}>
-            <Box sx={{ boxShadow: 1, borderRadius: 3 }}>
-              <Card sx={{ boxShadow: 1, borderRadius: 3 }}>
-                <CardContent>
-                  <div className='flex-cont'>
-                    <Typography>Status</Typography>
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'center' }}>
-                    <AdjustIcon
-                      sx={{
-                        fontSize: 45,
-                        color:
-                          deviceSingleData?.status === 'online'
-                            ? 'green'
-                            : 'red',
-                      }}
-                    />
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'center' }}>
-                    <Typography
-                      variant='subtitle'
-                      className='bold'
-                      sx={{ textAlign: 'center', paddingTop: 2 }}>
-                      {deviceSingleData?.status === 'online' ? 'ON' : 'OFF'}
-                    </Typography>
-                  </div>
-                </CardContent>
-              </Card>
-            </Box>
-          </Grid>
-          <Grid item xs={12} md={12}>
-            <div>
-              <div
-                style={{
-                  borderRadius: 10,
-                }}>
-                <div
-                  style={{
-                    height: 250,
-                    width: '100%',
-                    maxWidth: '100%',
-                    borderRadius: 10,
-                  }}>
-                  <MapView>
-                    <MapOverlay />
-                    <MapGeofence />
-                    <MapAccuracy positions={filteredPositions} />
-                    {mapLiveRoutes && <MapLiveRoutes />}
-                    <MapPositions
-                      positions={filteredPositions}
-                      onClick={onClick}
-                      selectedPosition={selectedPosition}
-                      showStatus
-                    />
-                    <MapDefaultCamera />
-                    <MapSelectedDevice />
-                    <PoiMap />
-                  </MapView>
-                  <MapScale />
-                  <MapCurrentLocation />
-                  <MapGeocoder />
-                  {!features.disableEvents && (
-                    <MapNotification
-                      enabled={eventsAvailable}
-                      onClick={eventHandler}
-                    />
-                  )}
-                  {desktop && (
-                    <MapPadding
-                      left={parseInt(theme.dimensions.drawerWidthDesktop, 10)}
-                    />
-                  )}
-                </div>
-                <div style={{ paddingTop: 4 }} className='flex-cont'>
-                  <div style={{ display: 'flex' }}>
-                    <LocationOnIcon sx={{ color: 'green' }} />
-                    <Typography style={{ paddingLeft: 3 }}>
-                      {address ? address : 'N/A'}
-                    </Typography>
-                  </div>
-                  <div
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => {
-                      navigate(`/position/${id}`)
-                    }}>
-                    <ViewHeadlineIcon />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </Grid>
-        </Grid>
-
-        <Grid container spacing={4} sx={{ paddingBottom: 10 }}>
-          <Grid item xs={6} md={4}>
-            <Box sx={{ boxShadow: 1, borderRadius: 3 }}>
-              <Card sx={{ boxShadow: 1, borderRadius: 3 }}>
-                <CardContent>
-                  <div className='flex-cont'>
-                    <Typography>Last Updated</Typography>
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'center' }}>
-                    <AccessTimeIcon sx={{ fontSize: 45 }} />
-                  </div>
-
-                  <div style={{ textAlign: 'center', paddingTop: 10 }}>
-                    <div>
-                      <Typography variant='subtitle' className='bold'>
-                        {moment(deviceSingleData?.lastUpdate).format(
-                          'DD-MM-YYYY hh:mm a'
-                        )}
+          <Grid item xs={12} md={9}>
+            <Grid container spacing={2} sx={{ paddingBottom: 10 }}>
+              <Grid item xs={6} md={4}>
+                <Box sx={{ boxShadow: 0, borderRadius: 4 }}>
+                  <Card sx={{ boxShadow: 0, borderRadius: 4 }}>
+                    <CardContent>
+                      <div className='flex-cont'>
+                        <Typography>Odometer</Typography>
+                        <TimelineIcon />
+                      </div>
+                      <Typography
+                        sx={{
+                          color: '#2A42CB',
+                          paddingBottom: 0,
+                          typography: { sm: 'h4', xs: 'h6' },
+                        }}
+                        className='bold'>
+                        {itemData?.attributes?.odometer
+                          ? formatDistance(
+                              itemData?.attributes?.odometer,
+                              distanceUnit,
+                              t
+                            )
+                          : '0'}
                       </Typography>
-                    </div>
-                    {/* <Typography variant='subtitle' className='bold'>
-                      {moment(deviceSingleData?.lastUpdate).format('hh:mm a')}
-                    </Typography> */}
-                  </div>
-                </CardContent>
-              </Card>
-            </Box>
-          </Grid>
-          <Grid item xs={6} md={4}>
-            <Box sx={{ boxShadow: 1, borderRadius: 3 }}>
-              <Card sx={{ boxShadow: 1, borderRadius: 3 }}>
-                <CardContent>
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      paddingTop: 0,
-                    }}>
-                    <SemiCircleProgressBar
-                      diameter={140}
-                      percentage={formatSpeedVal(itemData?.speed, speedUnit, t)}
-                      //showPercentValue
+                      {/* <AreaChart
+                    width={140}
+                    height={50}
+                    data={[
+                      {
+                        name: "Page A",
+                        uv: 1890,
+                        pv: 4800,
+                        amt: 2400,
+                      },
+                      {
+                        name: "Page B",
+                        uv: 3000,
+                        pv: 1398,
+                        amt: 2210,
+                      },
+                      {
+                        name: "Page C",
+                        uv: 2000,
+                        pv: 9800,
+                        amt: 2290,
+                      },
+                      {
+                        name: "Page D",
+                        uv: 2780,
+                        pv: 3908,
+                        amt: 2000,
+                      },
+                      {
+                        name: "Page E",
+                        uv: 2390,
+                        pv: 3800,
+                        amt: 2181,
+                      },
+                      {
+                        name: "Page F",
+                        uv: 3490,
+                        pv: 4300,
+                        amt: 2500,
+                      },
+                      {
+                        name: "Page G",
+                        uv: 4000,
+                        pv: 2400,
+                        amt: 2100,
+                      },
+                    ]}
+                  >
+                    <Area
+                      type="monotone"
+                      dataKey="uv"
+                      stroke="#8884d8"
+                      fill="#d0d0e0"
                     />
-                  </div>
-                  <div style={{ textAlign: 'center', paddingTop: 0 }}>
-                    <Typography
-                      variant='subtitle'
-                      className='bold'
-                      sx={{ textAlign: 'center' }}>
-                      {formatSpeed(itemData?.speed, speedUnit, t)}
-                    </Typography>
-                  </div>
-                  <div style={{ textAlign: 'center', paddingTop: 15 }}>
-                    <Typography
-                      variant='subtitle'
-                      className='bold'
-                      sx={{ textAlign: 'center' }}>
-                      Speed
-                    </Typography>
-                  </div>
-                </CardContent>
-              </Card>
-            </Box>
-          </Grid>
-          <Grid item xs={6} md={4}>
-            <Box sx={{ boxShadow: 1, borderRadius: 3 }}>
-              <Card sx={{ boxShadow: 1, borderRadius: 3 }}>
-                <CardContent>
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      paddingTop: 15,
-                      paddingBottom: 15,
-                    }}>
-                    <SignalCellularAltIcon
-                      sx={{
-                        fontSize: 60,
-                        color:
-                          deviceSingleData?.status === 'online'
-                            ? 'green'
-                            : 'red',
-                      }}
+                  </AreaChart> */}
+                    </CardContent>
+                  </Card>
+                </Box>
+              </Grid>
+              <Grid item xs={6} md={4}>
+                <Box sx={{ boxShadow: 0, borderRadius: 4 }}>
+                  <Card sx={{ boxShadow: 0, borderRadius: 4 }}>
+                    <CardContent>
+                      <div className='flex-cont'>
+                        <Typography>
+                          {itemData?.attributes?.hasOwnProperty('batteryLevel')
+                            ? 'Charge'
+                            : 'Fuel'}
+                        </Typography>
+                        {itemData?.attributes?.hasOwnProperty(
+                          'batteryLevel'
+                        ) && (
+                          <Tooltip
+                            title={`${t(
+                              'positionBatteryLevel'
+                            )}: ${formatPercentage(
+                              itemData?.attributes?.batteryLevel
+                            )}`}>
+                            {itemData?.attributes?.batteryLevel > 70 ? (
+                              itemData?.attributes?.charge ? (
+                                <BatteryChargingFullIcon
+                                  fontSize='small'
+                                  className={classes.positive}
+                                />
+                              ) : (
+                                <BatteryFullIcon
+                                  fontSize='small'
+                                  className={classes.positive}
+                                />
+                              )
+                            ) : itemData?.attributes?.batteryLevel > 30 ? (
+                              itemData?.attributes?.charge ? (
+                                <BatteryCharging60Icon
+                                  fontSize='small'
+                                  className={classes.medium}
+                                />
+                              ) : (
+                                <Battery60Icon
+                                  fontSize='small'
+                                  className={classes.medium}
+                                />
+                              )
+                            ) : itemData?.attributes?.charge ? (
+                              <BatteryCharging20Icon
+                                fontSize='small'
+                                className={classes.negative}
+                              />
+                            ) : (
+                              <Battery20Icon
+                                fontSize='small'
+                                className={classes.negative}
+                              />
+                            )}
+                          </Tooltip>
+                        )}
+                        {itemData?.attributes?.hasOwnProperty('fuel') && (
+                          <Tooltip
+                            title={`${t(
+                              'positionBatteryLevel'
+                            )}: ${formatPercentage(
+                              itemData?.attributes?.fuel
+                            )}`}>
+                            <IconButton size='small'>
+                              {itemData?.attributes?.fuel > 70 ? (
+                                itemData?.attributes?.fuel ? (
+                                  <BatteryChargingFullIcon
+                                    fontSize='small'
+                                    className={classes.positive}
+                                  />
+                                ) : (
+                                  <BatteryFullIcon
+                                    fontSize='small'
+                                    className={classes.positive}
+                                  />
+                                )
+                              ) : itemData?.attributes?.fuel > 30 ? (
+                                itemData?.attributes?.fuel ? (
+                                  <BatteryCharging60Icon
+                                    fontSize='small'
+                                    className={classes.medium}
+                                  />
+                                ) : (
+                                  <Battery60Icon
+                                    fontSize='small'
+                                    className={classes.medium}
+                                  />
+                                )
+                              ) : itemData?.attributes?.fuel ? (
+                                <BatteryCharging20Icon
+                                  fontSize='small'
+                                  className={classes.negative}
+                                />
+                              ) : (
+                                <Battery20Icon
+                                  fontSize='small'
+                                  className={classes.negative}
+                                />
+                              )}
+                            </IconButton>
+                          </Tooltip>
+                        )}
+                      </div>
+                      <Typography
+                        sx={{
+                          color: '#08D320',
+                          paddingBottom: 0,
+                          typography: { sm: 'h4', xs: 'h6' },
+                        }}
+                        className='bold'>
+                        {itemData?.attributes?.batteryLevel
+                          ? itemData?.attributes?.batteryLevel
+                          : itemData?.attributes?.fuel
+                          ? itemData?.attributes?.fuel
+                          : ''}
+                        %
+                      </Typography>
+                      {/* <AreaChart
+                    width={140}
+                    height={50}
+                    data={[
+                      {
+                        name: "Page A",
+                        uv: 1890,
+                        pv: 4800,
+                        amt: 2400,
+                      },
+                      {
+                        name: "Page B",
+                        uv: 3000,
+                        pv: 1398,
+                        amt: 2210,
+                      },
+                      {
+                        name: "Page C",
+                        uv: 2000,
+                        pv: 9800,
+                        amt: 2290,
+                      },
+                      {
+                        name: "Page D",
+                        uv: 2780,
+                        pv: 3908,
+                        amt: 2000,
+                      },
+                      {
+                        name: "Page E",
+                        uv: 2390,
+                        pv: 3800,
+                        amt: 2181,
+                      },
+                      {
+                        name: "Page F",
+                        uv: 3490,
+                        pv: 4300,
+                        amt: 2500,
+                      },
+                      {
+                        name: "Page G",
+                        uv: 4000,
+                        pv: 2400,
+                        amt: 2100,
+                      },
+                    ]}
+                  >
+                    <Area
+                      type="monotone"
+                      dataKey="uv"
+                      stroke="#8884d8"
+                      fill="#d0d0e0"
                     />
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'center' }}>
-                    <Typography
-                      variant='subtitle'
-                      className='bold'
-                      sx={{ textAlign: 'center', paddingTop: 3 }}>
-                      Connectivity
-                    </Typography>
-                  </div>
-                </CardContent>
-              </Card>
-            </Box>
-          </Grid>
-          <Grid item xs={6} md={4}>
-            <Box sx={{ boxShadow: 1, borderRadius: 3 }}>
-              <Card sx={{ boxShadow: 1, borderRadius: 3 }}>
-                <CardContent>
-                  <div className='bar-cont'>
-                    {[
-                      ...Array(
-                        itemData?.attributes?.sat
-                          ? itemData?.attributes?.sat
-                          : 15
-                      ).keys(),
-                    ].map(ele => (
+                  </AreaChart> */}
+                    </CardContent>
+                  </Card>
+                </Box>
+              </Grid>
+              <Grid item xs={6} md={4}>
+                <Box sx={{ boxShadow: 0, borderRadius: 4 }}>
+                  <Card sx={{ boxShadow: 0, borderRadius: 4 }}>
+                    <CardContent>
+                      <div className='flex-cont'>
+                        <Typography>Status</Typography>
+                        <div
+                          style={{ display: 'flex', justifyContent: 'center' }}>
+                          <AdjustIcon
+                            sx={{
+                              fontSize: 24,
+                              color:
+                                deviceSingleData?.status === 'online'
+                                  ? 'green'
+                                  : 'red',
+                            }}
+                          />
+                        </div>
+                      </div>
+
+                      <Typography
+                        sx={{
+                          paddingTop: 0,
+                          color:
+                            deviceSingleData?.status === 'online'
+                              ? '#089518'
+                              : '#FF0000',
+                          typography: { sm: 'h4', xs: 'h6' },
+                        }}
+                        className='bold'>
+                        {deviceSingleData?.status === 'online' ? 'ON' : 'OFF'}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Box>
+              </Grid>
+              <Grid item xs={12} md={12}>
+                <Card sx={{ boxShadow: 0, borderRadius: 4 }}>
+                  <CardContent>
+                    <div
+                      style={{
+                        borderRadius: 10,
+                      }}>
                       <div
-                        className={`bars ${
-                          ele >
-                          (itemData?.attributes?.sat
-                            ? itemData?.attributes?.sat
-                            : -1)
-                            ? ''
-                            : 'active-bar'
-                        }`}></div>
-                    ))}
-                  </div>
+                        style={{
+                          height: 250,
+                          width: '100%',
+                          maxWidth: '100%',
+                          borderRadius: 10,
+                        }}>
+                        <MapView>
+                          <MapOverlay />
+                          <MapGeofence />
+                          <MapAccuracy positions={filteredPositions} />
+                          {mapLiveRoutes && <MapLiveRoutes />}
+                          <MapPositions
+                            positions={filteredPositions}
+                            onClick={onClick}
+                            selectedPosition={selectedPosition}
+                            showStatus
+                          />
+                          <MapDefaultCamera />
+                          <MapSelectedDevice />
+                          <PoiMap />
+                        </MapView>
+                        <MapScale />
+                        <MapCurrentLocation />
+                        <MapGeocoder />
+                        {!features.disableEvents && (
+                          <MapNotification
+                            enabled={eventsAvailable}
+                            onClick={eventHandler}
+                          />
+                        )}
+                        {desktop && (
+                          <MapPadding
+                            left={parseInt(
+                              theme.dimensions.drawerWidthDesktop,
+                              10
+                            )}
+                          />
+                        )}
+                      </div>
+                      <div style={{ paddingTop: 4 }} className='flex-cont'>
+                        <div style={{ display: 'flex' }}>
+                          <LocationOnIcon sx={{ color: '#144BFF' }} />
+                          <Typography style={{ paddingLeft: 3 }}>
+                            {address ? address : 'N/A'}
+                          </Typography>
+                        </div>
+                        <div
+                          style={{ cursor: 'pointer' }}
+                          onClick={() => {
+                            navigate(`/position/${id}`)
+                          }}>
+                          <ViewHeadlineIcon />
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Grid>
+              <Grid item xs={6} md={4}>
+                <Box sx={{ boxShadow: 0, borderRadius: 4 }}>
+                  <Card sx={{ boxShadow: 0, borderRadius: 4 }}>
+                    <CardContent>
+                      <div className='flex-cont'>
+                        <Typography>Last Updated</Typography>
+                      </div>
+                      <div>
+                        <AccessTimeIcon
+                          sx={{ fontSize: 24, color: '#144BFF' }}
+                        />
+                      </div>
 
-                  <div style={{ display: 'flex', justifyContent: 'center' }}>
-                    <Typography
-                      variant='subtitle'
-                      className='bold'
-                      sx={{ textAlign: 'center', paddingTop: 3 }}>
-                      ON
-                    </Typography>
-                  </div>
-                </CardContent>
-              </Card>
-            </Box>
-          </Grid>
-          <Grid item xs={6} md={4}>
-            <Box sx={{ boxShadow: 1, borderRadius: 3 }}>
-              <Card sx={{ boxShadow: 1, borderRadius: 3 }}>
-                <CardContent
-                  sx={{ cursor: 'pointer' }}
-                  onClick={() => {
-                    navigate(`/settings/notifications`)
-                  }}>
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      paddingTop: 15,
-                      paddingBottom: 15,
-                    }}>
-                    <NotificationsActiveIcon
-                      sx={{ fontSize: 60, color: '#ffa600' }}
-                    />
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'center' }}>
-                    <Typography
-                      variant='subtitle'
-                      className='bold'
-                      sx={{ textAlign: 'center', paddingTop: 3 }}>
-                      Alerts
-                    </Typography>
-                  </div>
-                </CardContent>
-              </Card>
-            </Box>
-          </Grid>
-          <Grid item xs={6} md={4}>
-            <Box sx={{ boxShadow: 1, borderRadius: 3 }}>
-              <Card sx={{ boxShadow: 1, borderRadius: 3 }}>
-                <CardContent>
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      paddingTop: 20,
-                    }}>
-                    <SemiCircleProgressBar
-                      diameter={140}
-                      percentage={parseInt(
-                        itemData?.attributes?.coolantTemp
-                          ? itemData?.attributes?.coolantTemp
-                          : 0
-                      )}
-                      showPercentValue
-                    />
-                  </div>
-                  <div style={{ textAlign: 'center', paddingTop: 20 }}>
-                    <Typography variant='subtitle' className='bold'>
-                      Coolent
-                    </Typography>
-                  </div>
-                </CardContent>
-              </Card>
-            </Box>
-          </Grid>
-        </Grid>
-      </div>
+                      <div style={{ paddingTop: 0 }}>
+                        <Typography variant='subtitle2' className='bold'>
+                          {moment(deviceSingleData?.lastUpdate).format(
+                            'DD-MM-YYYY hh:mm a'
+                          )}
+                        </Typography>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Box>
+              </Grid>
+              <Grid item xs={6} md={4}>
+                <Box sx={{ boxShadow: 0, borderRadius: 4 }}>
+                  <Card sx={{ boxShadow: 0, borderRadius: 4 }}>
+                    <CardContent>
+                      <div className='flex-cont'>
+                        <Typography>Speed</Typography>
+                      </div>
+                      <div>
+                        <SpeedIcon sx={{ fontSize: 24, color: '#F2590D' }} />
+                      </div>
 
-      <div className={classes.container}>
-        {selectedItem && (
-          <div className={classes.containerMap}>
-            <MapView>
-              <MapGeofence />
-              {route && (
-                <>
-                  <MapRoutePath positions={route} />
-                  <MapMarkers markers={createMarkers()} />
-                  <MapCamera positions={route} />
-                </>
-              )}
-            </MapView>
-          </div>
-        )}
-        <div className={classes.containerMain}>
-          <div className={classes.header}>
-            <ReportFilter
-              ignoreDevice={true}
-              includeFilters={true}
-              setTransLength={val => setTransVal(val)}
-              transLength={transVal}
-              handleSubmit={handleSubmit}>
-              <ColumnSelect
-                columns={columns}
-                setColumns={setColumns}
-                columnsArray={columnsArray}
-              />
-            </ReportFilter>
-          </div>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell className={classes.columnAction} />
-                {columns.map(key => (
-                  <TableCell key={key}>{t(columnsMap.get(key))}</TableCell>
-                ))}
-                {/* <TableCell>Rewards</TableCell>
+                      <div style={{ paddingTop: 0 }}>
+                        <Typography
+                          variant='subtitle2'
+                          className='bold'
+                          color=' #F2590D'>
+                          {formatSpeed(itemData?.speed, speedUnit, t)}
+                        </Typography>
+                      </div>
+                      {/* <div
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'center',
+                          paddingTop: 0,
+                        }}>
+                        <SemiCircleProgressBar
+                          diameter={140}
+                          percentage={formatSpeedVal(
+                            itemData?.speed,
+                            speedUnit,
+                            t
+                          )}
+                          //showPercentValue
+                        />
+                      </div> */}
+                    </CardContent>
+                  </Card>
+                </Box>
+              </Grid>
+              <Grid item xs={6} md={4}>
+                <Box sx={{ boxShadow: 0, borderRadius: 4 }}>
+                  <Card sx={{ boxShadow: 0, borderRadius: 4 }}>
+                    <CardContent>
+                      <div className='flex-cont'>
+                        <Typography>Connectivity</Typography>
+                      </div>
+                      <div>
+                        <WifiIcon
+                          sx={{
+                            fontSize: 24,
+                            color:
+                              deviceSingleData?.status === 'online'
+                                ? 'green'
+                                : 'red',
+                          }}
+                        />
+                      </div>
+
+                      <div style={{ paddingTop: 0 }}>
+                        <Typography
+                          variant='subtitle2'
+                          className='bold'
+                          color=' #F2590D'
+                          style={{ visibility: 'hidden' }}>
+                          aaaaa
+                        </Typography>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Box>
+              </Grid>
+              <Grid item xs={6} md={4}>
+                <Box sx={{ boxShadow: 0, borderRadius: 4 }}>
+                  <Card sx={{ boxShadow: 0, borderRadius: 4 }}>
+                    <CardContent>
+                      <div className='flex-cont'>
+                        <Typography>Connection</Typography>
+                      </div>
+                      <div>
+                        <div className='bar-cont'>
+                          {[
+                            ...Array(
+                              itemData?.attributes?.sat
+                                ? itemData?.attributes?.sat
+                                : 15
+                            ).keys(),
+                          ].map(ele => (
+                            <div
+                              className={`bars ${
+                                ele >
+                                (itemData?.attributes?.sat
+                                  ? itemData?.attributes?.sat
+                                  : -1)
+                                  ? ''
+                                  : 'active-bar'
+                              }`}></div>
+                          ))}
+                        </div>
+                      </div>
+                      <div style={{ paddingTop: 0 }}>
+                        <Typography
+                          variant='subtitle2'
+                          className='bold'
+                          color=' #F2590D'>
+                          ON
+                        </Typography>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Box>
+              </Grid>
+              <Grid item xs={6} md={4}>
+                <Box sx={{ boxShadow: 0, borderRadius: 4 }}>
+                  <Card sx={{ boxShadow: 0, borderRadius: 4 }}>
+                    <CardContent
+                      sx={{ cursor: 'pointer' }}
+                      onClick={() => {
+                        navigate(`/settings/notifications`)
+                      }}>
+                      <div className='flex-cont'>
+                        <Typography>Alerts</Typography>
+                      </div>
+                      <div>
+                        <NotificationsActiveIcon
+                          sx={{
+                            fontSize: 24,
+                            color: '#F6B500',
+                          }}
+                        />
+                      </div>
+                      <div style={{ paddingTop: 0 }}>
+                        <Typography
+                          variant='subtitle2'
+                          className='bold'
+                          color=' #F2590D'
+                          style={{ visibility: 'hidden' }}>
+                          aaaaa
+                        </Typography>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Box>
+              </Grid>
+              <Grid item xs={6} md={4}>
+                <Box sx={{ boxShadow: 0, borderRadius: 4 }}>
+                  <Card sx={{ boxShadow: 0, borderRadius: 4 }}>
+                    <CardContent>
+                      <div className='flex-cont'>
+                        <Typography>Coolent</Typography>
+                      </div>
+                      <div>
+                        <SemiCircleProgressBar
+                          diameter={70}
+                          percentage={parseInt(
+                            itemData?.attributes?.coolantTemp
+                              ? itemData?.attributes?.coolantTemp
+                              : 0
+                          )}
+                        />
+                      </div>
+                      <div style={{ paddingTop: 0 }}>
+                        <Typography
+                          variant='subtitle2'
+                          className='bold'
+                          color=' #F2590D'>
+                          {itemData?.attributes?.coolantTemp
+                            ? itemData?.attributes?.coolantTemp
+                            : 0}
+                        </Typography>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Box>
+              </Grid>
+
+              <Grid item xs={6} md={12}>
+                <Box sx={{ boxShadow: 0, borderRadius: 4 }}>
+                  <Card sx={{ boxShadow: 0, borderRadius: 4 }}>
+                    <CardContent>
+                      <div className={classes.container}>
+                        {selectedItem && (
+                          <div className={classes.containerMap}>
+                            <MapView>
+                              <MapGeofence />
+                              {route && (
+                                <>
+                                  <MapRoutePath positions={route} />
+                                  <MapMarkers markers={createMarkers()} />
+                                  <MapCamera positions={route} />
+                                </>
+                              )}
+                            </MapView>
+                          </div>
+                        )}
+                        <div className={classes.containerMain}>
+                          <div className={classes.header}>
+                            <ReportFilter
+                              ignoreDevice={true}
+                              includeFilters={true}
+                              setTransLength={val => setTransVal(val)}
+                              transLength={transVal}
+                              handleSubmit={handleSubmit}>
+                              <ColumnSelect
+                                columns={columns}
+                                setColumns={setColumns}
+                                columnsArray={columnsArray}
+                              />
+                            </ReportFilter>
+                          </div>
+                          <Table>
+                            <TableHead>
+                              <TableRow>
+                                <TableCell className={classes.columnAction} />
+                                {columns.map(key => (
+                                  <TableCell key={key}>
+                                    {t(columnsMap.get(key))}
+                                  </TableCell>
+                                ))}
+                                {/* <TableCell>Rewards</TableCell>
                 <TableCell>Transaction Id</TableCell>
                 <TableCell>Status</TableCell>
                 <TableCell>Action</TableCell> */}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {!loading ? (
-                items
-                  .slice(0, transVal === 100 ? items.length : transVal)
-                  .map(item => {
-                    const findData = rewardsData.find(
-                      ele =>
-                        item.deviceId == ele.deviceId &&
-                        item.startTime == ele.startdate &&
-                        item.endTime == ele.endDate
-                    )
-                    const rewards =
-                      Number(
-                        formatDistanceRewards(item['distance'], distanceUnit, t)
-                      ) / 4
-                    return (
-                      <TableRow key={item.startPositionId}>
-                        <TableCell
-                          className={classes.columnAction}
-                          padding='none'>
-                          {selectedItem === item ? (
-                            <IconButton
-                              size='small'
-                              onClick={() => setSelectedItem(null)}>
-                              <GpsFixedIcon fontSize='small' />
-                            </IconButton>
-                          ) : (
-                            <IconButton
-                              size='small'
-                              onClick={() => setSelectedItem(item)}>
-                              <LocationSearchingIcon fontSize='small' />
-                            </IconButton>
-                          )}
-                        </TableCell>
-                        {columns.map(key => (
-                          <TableCell key={key}>
-                            {formatValue(item, key)}
-                          </TableCell>
-                        ))}
-                        {/* <TableCell>
+                              </TableRow>
+                            </TableHead>
+                            <TableBody>
+                              {!loading ? (
+                                items
+                                  .slice(
+                                    0,
+                                    transVal === 100 ? items.length : transVal
+                                  )
+                                  .map(item => {
+                                    const findData = rewardsData.find(
+                                      ele =>
+                                        item.deviceId == ele.deviceId &&
+                                        item.startTime == ele.startdate &&
+                                        item.endTime == ele.endDate
+                                    )
+                                    const rewards =
+                                      Number(
+                                        formatDistanceRewards(
+                                          item['distance'],
+                                          distanceUnit,
+                                          t
+                                        )
+                                      ) / 4
+                                    return (
+                                      <TableRow key={item.startPositionId}>
+                                        <TableCell
+                                          className={classes.columnAction}
+                                          padding='none'>
+                                          {selectedItem === item ? (
+                                            <IconButton
+                                              size='small'
+                                              onClick={() =>
+                                                setSelectedItem(null)
+                                              }>
+                                              <GpsFixedIcon fontSize='small' />
+                                            </IconButton>
+                                          ) : (
+                                            <IconButton
+                                              size='small'
+                                              onClick={() =>
+                                                setSelectedItem(item)
+                                              }>
+                                              <LocationSearchingIcon fontSize='small' />
+                                            </IconButton>
+                                          )}
+                                        </TableCell>
+                                        {columns.map(key => (
+                                          <TableCell key={key}>
+                                            {formatValue(item, key)}
+                                          </TableCell>
+                                        ))}
+                                        {/* <TableCell>
                           {findData ? findData?.rewards : rewards}
                         </TableCell>
                         <TableCell>
@@ -1215,32 +1252,55 @@ const DeviceDetails = props => {
                             </Typography>
                           </LoadingButton>
                         </TableCell> */}
-                      </TableRow>
-                    )
-                  })
-              ) : (
-                <TableShimmer columns={columns.length + 5} startAction />
-              )}
-            </TableBody>
-          </Table>
+                                      </TableRow>
+                                    )
+                                  })
+                              ) : (
+                                <TableShimmer
+                                  columns={columns.length + 5}
+                                  startAction
+                                />
+                              )}
+                            </TableBody>
+                          </Table>
 
-          <Snackbar
-            open={!!result}
-            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-            onClose={() => setResult(null)}
-            autoHideDuration={snackBarDurationLongMs}
-            message={result}
-            sx={{ width: 300 }}>
-            <Alert
-              elevation={6}
-              onClose={() => setResult(null)}
-              severity='success'
-              variant='filled'
-              sx={{ minWidth: 300, padding: '15px 25px', borderRadius: 5 }}>
-              {result}
-            </Alert>
-          </Snackbar>
-        </div>
+                          <Snackbar
+                            open={!!result}
+                            anchorOrigin={{
+                              vertical: 'top',
+                              horizontal: 'right',
+                            }}
+                            onClose={() => setResult(null)}
+                            autoHideDuration={snackBarDurationLongMs}
+                            message={result}
+                            sx={{ width: 300 }}>
+                            <Alert
+                              elevation={6}
+                              onClose={() => setResult(null)}
+                              severity='success'
+                              variant='filled'
+                              sx={{
+                                minWidth: 300,
+                                padding: '15px 25px',
+                                borderRadius: 5,
+                              }}>
+                              {result}
+                            </Alert>
+                          </Snackbar>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Box>
+              </Grid>
+            </Grid>
+
+            {/* <Grid container spacing={2} sx={{ paddingBottom: 10 }}> */}
+            {/* <Grid item xs={6} md={9}> */}
+            {/* </Grid> */}
+            {/* </Grid> */}
+          </Grid>
+        </Grid>
       </div>
     </PageLayout>
   )

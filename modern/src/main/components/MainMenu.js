@@ -88,7 +88,7 @@ const MenuItems = ({ title, link, icon, selected }) => {
 
   return (
     <ListItemButton
-      sx={{ color: '#1875d8' }}
+      sx={{ color: '#0E1726' }}
       key={link}
       component={Link}
       to={link}
@@ -98,13 +98,13 @@ const MenuItems = ({ title, link, icon, selected }) => {
           dispatch(devicesActions.toggleDevice(false))
         }
       }}>
-      <ListItemIcon sx={{ color: '#1875d8' }}>{icon}</ListItemIcon>
+      <ListItemIcon sx={{ color: '#0E1726' }}>{icon}</ListItemIcon>
       <ListItemText
         primaryTypographyProps={{
           fontWeight: 'bold',
           variant: 'body1',
         }}
-        style={{ fontWeight: 'bold' }}
+        style={{ fontWeight: 'bold', fontSize: 18 }}
         primary={title}
       />
     </ListItemButton>
@@ -499,7 +499,7 @@ const SettingsMenu = () => {
           style={{ border: 'none', boxShadow: 'none', padding: 0 }}
           className='popper-main'>
           <AccordionSummary
-            expandIcon={<ExpandMoreIcon sx={{ color: '#1875d8' }} />}
+            expandIcon={<ExpandMoreIcon sx={{ color: '#0E1726' }} />}
             style={{
               border: 'none',
               boxShadow: 'none',
@@ -508,11 +508,11 @@ const SettingsMenu = () => {
               margin: 0,
             }}>
             <ListItemButton
-              sx={{ color: '#1875d8' }}
+              sx={{ color: '#0E1726' }}
               //component={Link}
               //selected={selected}
             >
-              <ListItemIcon sx={{ color: '#1875d8' }}>
+              <ListItemIcon sx={{ color: '#0E1726' }}>
                 <AddLocationAltIcon />
               </ListItemIcon>
               <ListItemText

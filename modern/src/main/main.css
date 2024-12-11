@@ -1,111 +1,115 @@
 .css-o4b71y-MuiAccordionSummary-content.Mui-expanded {
-    margin: 0 !important;
+  margin: 0 !important;
 }
 .css-1elwnq4-MuiPaper-root-MuiAccordion-root.Mui-expanded {
-    margin: 0 !important;
+  margin: 0 !important;
 }
 
 .css-1elwnq4-MuiPaper-root-MuiAccordion-root:before {
-    height: 0 !important;
+  height: 0 !important;
 }
 
 .css-x2j3s5-MuiPaper-root-MuiAccordion-root:before {
-    height: 0 !important;
+  height: 0 !important;
 }
 
 .css-1cn9m0w-MuiPaper-root {
-    box-shadow: 0px 3px 3px -2px rgb(0 0 0 / 0%), 0px 3px 4px 0px rgb(0 0 0 / 7%), 0px 1px 8px 0px rgb(0 0 0 / 5%) !important;
+  box-shadow: 0px 3px 3px -2px rgb(0 0 0 / 0%), 0px 3px 4px 0px rgb(0 0 0 / 7%),
+    0px 1px 8px 0px rgb(0 0 0 / 5%) !important;
 }
 
 .css-1d3z3hw-MuiOutlinedInput-notchedOutline {
-    border-color: rgba(0, 0, 0, 0.1) !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
 }
 
 .css-11gqack-MuiInputBase-root-MuiOutlinedInput-root {
-    border-radius: 10px !important;
-    background-color: #ffffff !important;
+  border-radius: 10px !important;
+  background-color: #ffffff !important;
 }
 
 .popper .makeStyles-toolbar-40 {
-    padding: 0px 0px !important;
+  padding: 0px 0px !important;
 }
 
 .popper .makeStyles-toolbar-40 > * {
-    margin: 0px 0px !important;
-    padding-top: 10px !important;
-    padding-bottom: 5px !important;
+  margin: 0px 0px !important;
+  padding-top: 10px !important;
+  padding-bottom: 5px !important;
 }
 
 .popper .css-1d3z3hw-MuiOutlinedInput-notchedOutline {
-    border: none !important;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.23) !important;
-    padding: 0px 0 !important;
+  border: none !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.23) !important;
+  padding: 0px 0 !important;
 }
 
 .popper .css-19qh8xo-MuiInputBase-input-MuiOutlinedInput-input {
-    padding: 8.5px 8px !important;
-    font-size: 14px !important;
-    padding-right: 0 !important;
+  padding: 8.5px 8px !important;
+  font-size: 14px !important;
+  padding-right: 0 !important;
 }
 
 .makeStyles-listInner-59 {
-    margin: 5px 0px !important;
+  margin: 5px 0px !important;
 }
 
 .popper-main .css-15v22id-MuiAccordionDetails-root {
-    padding: 8px 8px 16px !important;
+  padding: 8px 8px 16px !important;
 }
 
-.horizontal-padding{
-    padding: 0px 20px;
-    margin-top: 30px;
+.horizontal-padding {
+  padding: 0px 20px;
+  margin-top: 30px;
 }
 
-.logo-image{
-    text-align: right;
+.logo-image {
+  text-align: right;
 }
 
-.logo-image img{
-    width: 400px;
-    border-radius: 30px;
-
+.logo-image img {
+  width: 400px;
+  border-radius: 30px;
 }
 
-.bold{
-    font-weight: 500;
+.bold {
+  font-weight: 500;
 }
 
-.flex-cont{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: 15px;
+.flex-cont {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 15px;
 }
 
 .css-46bh2p-MuiCardContent-root:last-child {
-    padding-bottom: 16px !important;
+  padding-bottom: 16px !important;
 }
 
-.bar-cont{
-    padding: 30px 0px;
-    display: flex;
-    justify-content: space-between;
+.bar-cont {
+  padding: 0px 0px 10px 0;
+  display: flex;
+  justify-content: space-between;
 }
 
-.bars{
-    width: 14px;
-    height: 30px;
-    border-radius: 10px;
-    background-color: grey;
-    margin-right: 5px;
+.bars {
+  width: 14px;
+  height: 30px;
+  border-radius: 10px;
+  background-color: grey;
+  margin-right: 5px;
 }
 
-.active-bar{
-    background-color: green;
+.active-bar {
+  background-color: green;
+}
+
+.main-div {
+  background-color: #f5f5f7;
 }
 
 @media only screen and (max-width: 600px) {
-    .logo-image img{
-        width: 100%;
-    }
+  .logo-image img {
+    width: 100%;
+  }
 }
