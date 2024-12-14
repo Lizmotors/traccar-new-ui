@@ -102,6 +102,9 @@ import Battery60Icon from '@mui/icons-material/Battery60'
 import BatteryCharging60Icon from '@mui/icons-material/BatteryCharging60'
 import Battery20Icon from '@mui/icons-material/Battery20'
 import BatteryCharging20Icon from '@mui/icons-material/BatteryCharging20'
+import usePositionAttributes from '../common/attributes/usePositionAttributes'
+import PositionValue from '../common/components/PositionValue'
+import makeStyles from '@mui/styles/makeStyles'
 
 const columnsArray = [
   ['startTime', 'reportStartTime'],
@@ -118,6 +121,73 @@ const columnsArray = [
   ['driverName', 'sharedDriver'],
 ]
 const columnsMap = new Map(columnsArray)
+
+const useStyles = makeStyles(theme => ({
+  card: {
+    width: theme.dimensions.statusCard,
+    padding: 3,
+    borderRadius: 20,
+  },
+  media: {
+    height: theme.dimensions.popupImageHeight,
+    display: 'flex',
+
+    //justifyContent: "flex-end",
+    //alignItems: "flex-start",
+  },
+  mediaButton: {
+    color: theme.palette.colors.white,
+    mixBlendMode: 'difference',
+  },
+  header: {
+    display: 'flex',
+    alignItems: 'center',
+    padding: theme.spacing(1, 1, 0, 2),
+    justifyContent: 'space-between',
+  },
+  content: {
+    paddingTop: 0,
+    paddingBottom: 0,
+  },
+  negative: {
+    color: theme.palette.colors.negative,
+  },
+  icon: {
+    width: '25px',
+    height: '25px',
+    filter: 'brightness(0) invert(1)',
+  },
+  table: {
+    '& .MuiTableCell-sizeSmall': {
+      paddingLeft: 0,
+      paddingRight: 0,
+    },
+  },
+  cell: {
+    borderBottom: 'none',
+    padding: 1,
+  },
+  actions: {
+    justifyContent: 'space-between',
+  },
+}))
+
+const StatusRow = ({ name, content }) => {
+  const classes = useStyles()
+
+  return (
+    <TableRow sx={{ marginBottom: 0 }}>
+      <TableCell className={classes.cell}>
+        <Typography variant='subtitle2'>{name}</Typography>
+      </TableCell>
+      <TableCell className={classes.cell}>
+        <Typography variant='body2' color=''>
+          {content}
+        </Typography>
+      </TableCell>
+    </TableRow>
+  )
+}
 
 const DeviceDetails = props => {
   const navigate = useNavigate()
@@ -481,6 +551,14 @@ const DeviceDetails = props => {
     }
   })
 
+  const [positionItems] = usePersistedState('positionItems', [
+    'speed',
+    'address',
+    'totalDistance',
+    'course',
+  ])
+  const positionAttributes = usePositionAttributes(t)
+
   useEffect(() => {
     if (itemData?.latitude && itemData?.longitude) {
       showAddress()
@@ -498,20 +576,37 @@ const DeviceDetails = props => {
                 <CardContent>
                   <div>
                     {deviceSingleData?.attributes?.deviceImage ? (
-                      <CardMedia
-                        className={classes.media}
-                        style={{
-                          height: 200,
-                          display: 'flex',
-                          borderRadius: 10,
-                        }}
-                        image={`/api/media/${deviceSingleData?.uniqueId}/${deviceSingleData?.attributes?.deviceImage}`}></CardMedia>
+                      <div style={{ width: '100%', maxHeight: '200px' }}>
+                        <img
+                          style={{
+                            width: '100%',
+                            maxHeight: '200px',
+                            objectFit: 'cover',
+                          }}
+                          src={`/api/media/${deviceSingleData?.uniqueId}/${deviceSingleData?.attributes?.deviceImage}`}
+                          //src='data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxAQEQ8QEBIQEBUQEBUWFRUVDxUQFRYQFRYWFxUVFRUYHSggGholHRUVITEhJSkrLi4uFx8zODMtNygtLisBCgoKDg0OFw8QFSsaFRkrKy0rLSsrKysrLS0rNzcrLTc3Ky0rNzcrKy0rLS0rLSstKysrKysrKysrKysrKysrK//AABEIALcBEwMBIgACEQEDEQH/xAAcAAEAAQUBAQAAAAAAAAAAAAAABAECAwUGBwj/xABFEAABAwIDBAcEBQgKAwAAAAABAAIDBBEFEiEGEzFBByJRYXGBkRQyobEjQkPB0RVEUlNicpLwFhczc4KDk6Ky4SRUwv/EABYBAQEBAAAAAAAAAAAAAAAAAAABAv/EABsRAQEBAAMBAQAAAAAAAAAAAAARARIhUUEC/9oADAMBAAIRAxEAPwD3FERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERARUKIKosb5mjiWjxICwHEoBpvov8AUb+KCWi1smPUjeNRAP8AMasR2loRxqYB/mBBt0WoG09CfzqD/UCktxenIzCVjgeYNx8EE5FrxjNP+tas8VdE73XtPmgkorQbq5AREQEREBERAREQEREBERAREQEREBERAREQERWveGgkkAAXJJsABxJKC5c7tFtbBRhzdZpWj+zYRcfvu4N+fcub2j21dMXRUTssfB0/N/aIewft+nauUDdLDQepJPEknie9BlxDpBxOckxhkDP0Y2ku83u5eAC0lVtPWuOpuT+nM91/IOF/RbbRoJ0AFyfDmuRjnEr31L72fIGR6Xs29h4KCkm0tY5xa1sZPdT5jobcdVYMcrCS18jIrDXMzL5cFtYNmIgMxkmBIubPA7zra9lpZqdgLskmZoOma5J8Sm6kH4zOftWlYzicx0L2eJP/AGoWHRE578nag97iFfPuy4gPs1gOa44Ae9Y/zqnL4kSo6iV7o4wQ50ruqGmwyj3nE8AO/wAVtn7QiMCOImTLpmLi1h/daOtbvJ17BwWhgc5sL5QLSVXUaP0KRuhA/ecLeDT2rYYW2kiaN+0yyX61xdo7gPvV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'
+                        />
+                        {/* <CardMedia
+                          className={classes.media}
+                          sx={{
+                            // maxWidth: 200,
+                            // maxHeight: 200,
+                            // display: 'flex',
+                            height: 200,
+                            borderRadius: 10,
+                          }}
+                          //image={`/api/media/${deviceSingleData?.uniqueId}/${deviceSingleData?.attributes?.deviceImage}`}
+                          image={
+                            '/api/media/00000868105047454085/device.png'
+                          }></CardMedia> */}
+                      </div>
                     ) : (
                       <>
                         <CardMedia
                           className={classes.media}
                           style={{
-                            height: 200,
+                            width: '100%',
+                            maxHeight: 200,
                             display: 'flex',
                             borderRadius: 10,
                           }}
@@ -528,6 +623,38 @@ const DeviceDetails = props => {
                   <Typography variant='button'>
                     {deviceSingleData?.uniqueId}
                   </Typography>
+
+                  {itemData && (
+                    <Table size='small' classes={{ root: classes.table }}>
+                      <TableBody>
+                        <div style={{ maxHeight: 500, overflow: 'auto' }}>
+                          {positionItems
+                            .filter(
+                              key =>
+                                itemData.hasOwnProperty(key) ||
+                                itemData.attributes.hasOwnProperty(key)
+                            )
+                            .map(key => (
+                              <StatusRow
+                                key={key}
+                                name={positionAttributes[key].name}
+                                content={
+                                  <PositionValue
+                                    position={itemData}
+                                    property={
+                                      itemData.hasOwnProperty(key) ? key : null
+                                    }
+                                    attribute={
+                                      itemData.hasOwnProperty(key) ? null : key
+                                    }
+                                  />
+                                }
+                              />
+                            ))}
+                        </div>
+                      </TableBody>
+                    </Table>
+                  )}
                 </CardContent>
               </Card>
             </Box>
@@ -621,6 +748,25 @@ const DeviceDetails = props => {
                   <Card sx={{ boxShadow: 0, borderRadius: 4 }}>
                     <CardContent>
                       <div className='flex-cont'>
+                        <Typography>Total Distance</Typography>
+                        <TimelineIcon />
+                      </div>
+                      <Typography
+                        sx={{
+                          color: '#2A42CB',
+                          paddingBottom: 0,
+                          typography: { sm: 'h4', xs: 'h6' },
+                        }}
+                        className='bold'>
+                        {itemData?.attributes?.totalDistance
+                          ? formatDistance(
+                              itemData?.attributes?.totalDistance,
+                              distanceUnit,
+                              t
+                            )
+                          : '0'}
+                      </Typography>
+                      {/* <div className='flex-cont'>
                         <Typography>
                           {itemData?.attributes?.hasOwnProperty('batteryLevel')
                             ? 'Charge'
@@ -732,7 +878,7 @@ const DeviceDetails = props => {
                           ? itemData?.attributes?.fuel
                           : ''}
                         %
-                      </Typography>
+                      </Typography> */}
                       {/* <AreaChart
                     width={140}
                     height={50}
@@ -796,7 +942,7 @@ const DeviceDetails = props => {
                 <Box sx={{ boxShadow: 0, borderRadius: 4 }}>
                   <Card sx={{ boxShadow: 0, borderRadius: 4 }}>
                     <CardContent>
-                      <div className='flex-cont'>
+                      {/* <div className='flex-cont'>
                         <Typography>Status</Typography>
                         <div
                           style={{ display: 'flex', justifyContent: 'center' }}>
@@ -823,6 +969,32 @@ const DeviceDetails = props => {
                         }}
                         className='bold'>
                         {deviceSingleData?.status === 'online' ? 'ON' : 'OFF'}
+                      </Typography> */}
+                      <div className='flex-cont'>
+                        <Typography>Ignition</Typography>
+                        <AdjustIcon
+                          sx={{
+                            fontSize: 24,
+                            color:
+                              itemData?.attributes?.ignition === 'true'
+                                ? 'green'
+                                : 'red',
+                          }}
+                        />
+                      </div>
+                      <Typography
+                        sx={{
+                          color:
+                            itemData?.attributes?.ignition === 'true'
+                              ? '#089518'
+                              : '#FF0000',
+                          typography: { sm: 'h4', xs: 'h6' },
+                          paddingBottom: 0,
+                        }}
+                        className='bold'>
+                        {itemData?.attributes?.ignition === 'true'
+                          ? 'ON'
+                          : 'OFF'}
                       </Typography>
                     </CardContent>
                   </Card>
@@ -898,7 +1070,7 @@ const DeviceDetails = props => {
                 <Box sx={{ boxShadow: 0, borderRadius: 4 }}>
                   <Card sx={{ boxShadow: 0, borderRadius: 4 }}>
                     <CardContent>
-                      <div className='flex-cont'>
+                      {/* <div className='flex-cont'>
                         <Typography>Last Updated</Typography>
                       </div>
                       <div>
@@ -913,7 +1085,31 @@ const DeviceDetails = props => {
                             'DD-MM-YYYY hh:mm a'
                           )}
                         </Typography>
+                      </div> */}
+                      <div className='flex-cont'>
+                        <Typography>Motion</Typography>
+                        <AdjustIcon
+                          sx={{
+                            fontSize: 24,
+                            color:
+                              itemData?.attributes?.motion === 'true'
+                                ? 'green'
+                                : 'red',
+                          }}
+                        />
                       </div>
+                      <Typography
+                        sx={{
+                          color:
+                            itemData?.attributes?.motion === 'true'
+                              ? '#089518'
+                              : '#FF0000',
+                          typography: { sm: 'h4', xs: 'h6' },
+                          paddingBottom: 0,
+                        }}
+                        className='bold'>
+                        {itemData?.attributes?.motion === 'true' ? 'ON' : 'OFF'}
+                      </Typography>
                     </CardContent>
                   </Card>
                 </Box>
@@ -925,13 +1121,13 @@ const DeviceDetails = props => {
                       <div className='flex-cont'>
                         <Typography>Speed</Typography>
                       </div>
-                      <div>
+                      {/* <div>
                         <SpeedIcon sx={{ fontSize: 24, color: '#F2590D' }} />
-                      </div>
+                      </div> */}
 
                       <div style={{ paddingTop: 0 }}>
                         <Typography
-                          variant='subtitle2'
+                          sx={{ typography: { sm: 'h4', xs: 'h6' } }}
                           className='bold'
                           color=' #F2590D'>
                           {formatSpeed(itemData?.speed, speedUnit, t)}
@@ -957,7 +1153,7 @@ const DeviceDetails = props => {
                   </Card>
                 </Box>
               </Grid>
-              <Grid item xs={6} md={4}>
+              {/* <Grid item xs={6} md={4}>
                 <Box sx={{ boxShadow: 0, borderRadius: 4 }}>
                   <Card sx={{ boxShadow: 0, borderRadius: 4 }}>
                     <CardContent>
@@ -988,15 +1184,15 @@ const DeviceDetails = props => {
                     </CardContent>
                   </Card>
                 </Box>
-              </Grid>
+              </Grid> */}
               <Grid item xs={6} md={4}>
                 <Box sx={{ boxShadow: 0, borderRadius: 4 }}>
                   <Card sx={{ boxShadow: 0, borderRadius: 4 }}>
                     <CardContent>
                       <div className='flex-cont'>
-                        <Typography>Connection</Typography>
+                        <Typography>Satellites</Typography>
                       </div>
-                      <div>
+                      {/* <div>
                         <div className='bar-cont'>
                           {[
                             ...Array(
@@ -1016,13 +1212,18 @@ const DeviceDetails = props => {
                               }`}></div>
                           ))}
                         </div>
-                      </div>
+                      </div> */}
                       <div style={{ paddingTop: 0 }}>
                         <Typography
-                          variant='subtitle2'
+                          sx={{
+                            typography: { sm: 'h4', xs: 'h6' },
+                          }}
+                          // variant='subtitle2'
                           className='bold'
                           color=' #F2590D'>
-                          ON
+                          {itemData?.attributes?.sat
+                            ? itemData?.attributes?.sat
+                            : 0}
                         </Typography>
                       </div>
                     </CardContent>
@@ -1066,9 +1267,9 @@ const DeviceDetails = props => {
                   <Card sx={{ boxShadow: 0, borderRadius: 4 }}>
                     <CardContent>
                       <div className='flex-cont'>
-                        <Typography>Coolent</Typography>
+                        <Typography>Last Trip</Typography>
                       </div>
-                      <div>
+                      {/* <div>
                         <SemiCircleProgressBar
                           diameter={70}
                           percentage={parseInt(
@@ -1077,14 +1278,17 @@ const DeviceDetails = props => {
                               : 0
                           )}
                         />
-                      </div>
+                      </div> */}
                       <div style={{ paddingTop: 0 }}>
                         <Typography
+                          sx={{
+                            typography: { sm: 'h4', xs: 'h6' },
+                          }}
                           variant='subtitle2'
                           className='bold'
                           color=' #F2590D'>
-                          {itemData?.attributes?.coolantTemp
-                            ? itemData?.attributes?.coolantTemp
+                          {itemData?.attributes?.tripOdometer
+                            ? itemData?.attributes?.tripOdometer
                             : 0}
                         </Typography>
                       </div>
@@ -1093,106 +1297,137 @@ const DeviceDetails = props => {
                 </Box>
               </Grid>
 
-              <Grid item xs={6} md={12}>
+              <Grid item xs={6} md={4}>
                 <Box sx={{ boxShadow: 0, borderRadius: 4 }}>
                   <Card sx={{ boxShadow: 0, borderRadius: 4 }}>
                     <CardContent>
-                      <div className={classes.container}>
-                        {selectedItem && (
-                          <div className={classes.containerMap}>
-                            <MapView>
-                              <MapGeofence />
-                              {route && (
-                                <>
-                                  <MapRoutePath positions={route} />
-                                  <MapMarkers markers={createMarkers()} />
-                                  <MapCamera positions={route} />
-                                </>
-                              )}
-                            </MapView>
-                          </div>
+                      <div className='flex-cont'>
+                        <Typography>Last Updated</Typography>
+                      </div>
+
+                      <div style={{ paddingTop: 0 }}>
+                        <Typography
+                          sx={{
+                            // color: '#2A42CB',
+                            // paddingBottom: 0,
+                            typography: { sm: 'h5', xs: 'h6' },
+                          }}
+                          className='bold'>
+                          {moment(deviceSingleData?.lastUpdate).format(
+                            'DD-MM-YYYY hh:mm a'
+                          )}
+                        </Typography>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Box>
+              </Grid>
+            </Grid>
+
+            {/* <Grid container spacing={2} sx={{ paddingBottom: 10 }}> */}
+            {/* <Grid item xs={6} md={9}> */}
+            {/* </Grid> */}
+            {/* </Grid> */}
+          </Grid>
+        </Grid>
+
+        {/* <Grid container spacing={2}> */}
+        <Grid item xs={12} md={12}>
+          <Box sx={{ boxShadow: 0, borderRadius: 4 }}>
+            <Card sx={{ boxShadow: 0, borderRadius: 4 }}>
+              <CardContent>
+                <div className={classes.container}>
+                  {selectedItem && (
+                    <div className={classes.containerMap}>
+                      <MapView>
+                        <MapGeofence />
+                        {route && (
+                          <>
+                            <MapRoutePath positions={route} />
+                            <MapMarkers markers={createMarkers()} />
+                            <MapCamera positions={route} />
+                          </>
                         )}
-                        <div className={classes.containerMain}>
-                          <div className={classes.header}>
-                            <ReportFilter
-                              ignoreDevice={true}
-                              includeFilters={true}
-                              setTransLength={val => setTransVal(val)}
-                              transLength={transVal}
-                              handleSubmit={handleSubmit}>
-                              <ColumnSelect
-                                columns={columns}
-                                setColumns={setColumns}
-                                columnsArray={columnsArray}
-                              />
-                            </ReportFilter>
-                          </div>
-                          <Table>
-                            <TableHead>
-                              <TableRow>
-                                <TableCell className={classes.columnAction} />
-                                {columns.map(key => (
-                                  <TableCell key={key}>
-                                    {t(columnsMap.get(key))}
-                                  </TableCell>
-                                ))}
-                                {/* <TableCell>Rewards</TableCell>
+                      </MapView>
+                    </div>
+                  )}
+                  <div className={classes.containerMain}>
+                    <div className={classes.header}>
+                      <ReportFilter
+                        ignoreDevice={true}
+                        includeFilters={true}
+                        setTransLength={val => setTransVal(val)}
+                        transLength={transVal}
+                        handleSubmit={handleSubmit}>
+                        <ColumnSelect
+                          columns={columns}
+                          setColumns={setColumns}
+                          columnsArray={columnsArray}
+                        />
+                      </ReportFilter>
+                    </div>
+                    <Table>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell className={classes.columnAction} />
+                          {columns.map(key => (
+                            <TableCell key={key}>
+                              {t(columnsMap.get(key))}
+                            </TableCell>
+                          ))}
+                          {/* <TableCell>Rewards</TableCell>
                 <TableCell>Transaction Id</TableCell>
                 <TableCell>Status</TableCell>
                 <TableCell>Action</TableCell> */}
-                              </TableRow>
-                            </TableHead>
-                            <TableBody>
-                              {!loading ? (
-                                items
-                                  .slice(
-                                    0,
-                                    transVal === 100 ? items.length : transVal
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {!loading ? (
+                          items
+                            .slice(
+                              0,
+                              transVal === 100 ? items.length : transVal
+                            )
+                            .map(item => {
+                              const findData = rewardsData.find(
+                                ele =>
+                                  item.deviceId == ele.deviceId &&
+                                  item.startTime == ele.startdate &&
+                                  item.endTime == ele.endDate
+                              )
+                              const rewards =
+                                Number(
+                                  formatDistanceRewards(
+                                    item['distance'],
+                                    distanceUnit,
+                                    t
                                   )
-                                  .map(item => {
-                                    const findData = rewardsData.find(
-                                      ele =>
-                                        item.deviceId == ele.deviceId &&
-                                        item.startTime == ele.startdate &&
-                                        item.endTime == ele.endDate
-                                    )
-                                    const rewards =
-                                      Number(
-                                        formatDistanceRewards(
-                                          item['distance'],
-                                          distanceUnit,
-                                          t
-                                        )
-                                      ) / 4
-                                    return (
-                                      <TableRow key={item.startPositionId}>
-                                        <TableCell
-                                          className={classes.columnAction}
-                                          padding='none'>
-                                          {selectedItem === item ? (
-                                            <IconButton
-                                              size='small'
-                                              onClick={() =>
-                                                setSelectedItem(null)
-                                              }>
-                                              <GpsFixedIcon fontSize='small' />
-                                            </IconButton>
-                                          ) : (
-                                            <IconButton
-                                              size='small'
-                                              onClick={() =>
-                                                setSelectedItem(item)
-                                              }>
-                                              <LocationSearchingIcon fontSize='small' />
-                                            </IconButton>
-                                          )}
-                                        </TableCell>
-                                        {columns.map(key => (
-                                          <TableCell key={key}>
-                                            {formatValue(item, key)}
-                                          </TableCell>
-                                        ))}
-                                        {/* <TableCell>
+                                ) / 4
+                              return (
+                                <TableRow key={item.startPositionId}>
+                                  <TableCell
+                                    className={classes.columnAction}
+                                    padding='none'>
+                                    {selectedItem === item ? (
+                                      <IconButton
+                                        size='small'
+                                        onClick={() => setSelectedItem(null)}>
+                                        <GpsFixedIcon fontSize='small' />
+                                      </IconButton>
+                                    ) : (
+                                      <IconButton
+                                        size='small'
+                                        onClick={() => setSelectedItem(item)}>
+                                        <LocationSearchingIcon fontSize='small' />
+                                      </IconButton>
+                                    )}
+                                  </TableCell>
+                                  {columns.map(key => (
+                                    <TableCell key={key}>
+                                      {formatValue(item, key)}
+                                    </TableCell>
+                                  ))}
+                                  {/* <TableCell>
                           {findData ? findData?.rewards : rewards}
                         </TableCell>
                         <TableCell>
@@ -1252,55 +1487,48 @@ const DeviceDetails = props => {
                             </Typography>
                           </LoadingButton>
                         </TableCell> */}
-                                      </TableRow>
-                                    )
-                                  })
-                              ) : (
-                                <TableShimmer
-                                  columns={columns.length + 5}
-                                  startAction
-                                />
-                              )}
-                            </TableBody>
-                          </Table>
+                                </TableRow>
+                              )
+                            })
+                        ) : (
+                          <TableShimmer
+                            columns={columns.length + 5}
+                            startAction
+                          />
+                        )}
+                      </TableBody>
+                    </Table>
 
-                          <Snackbar
-                            open={!!result}
-                            anchorOrigin={{
-                              vertical: 'top',
-                              horizontal: 'right',
-                            }}
-                            onClose={() => setResult(null)}
-                            autoHideDuration={snackBarDurationLongMs}
-                            message={result}
-                            sx={{ width: 300 }}>
-                            <Alert
-                              elevation={6}
-                              onClose={() => setResult(null)}
-                              severity='success'
-                              variant='filled'
-                              sx={{
-                                minWidth: 300,
-                                padding: '15px 25px',
-                                borderRadius: 5,
-                              }}>
-                              {result}
-                            </Alert>
-                          </Snackbar>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </Box>
-              </Grid>
-            </Grid>
-
-            {/* <Grid container spacing={2} sx={{ paddingBottom: 10 }}> */}
-            {/* <Grid item xs={6} md={9}> */}
-            {/* </Grid> */}
-            {/* </Grid> */}
-          </Grid>
+                    <Snackbar
+                      open={!!result}
+                      anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                      }}
+                      onClose={() => setResult(null)}
+                      autoHideDuration={snackBarDurationLongMs}
+                      message={result}
+                      sx={{ width: 300 }}>
+                      <Alert
+                        elevation={6}
+                        onClose={() => setResult(null)}
+                        severity='success'
+                        variant='filled'
+                        sx={{
+                          minWidth: 300,
+                          padding: '15px 25px',
+                          borderRadius: 5,
+                        }}>
+                        {result}
+                      </Alert>
+                    </Snackbar>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </Box>
         </Grid>
+        {/* </Grid> */}
       </div>
     </PageLayout>
   )

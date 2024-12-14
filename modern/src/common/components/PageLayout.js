@@ -10,12 +10,15 @@ import {
   Typography,
   useMediaQuery,
   useTheme,
+  ListItemIcon,
 } from '@mui/material'
+import { useSelector, useDispatch } from 'react-redux'
 import makeStyles from '@mui/styles/makeStyles'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import MenuIcon from '@mui/icons-material/Menu'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from './LocalizationProvider'
+import { sessionActions } from '../../store'
 
 const useStyles = makeStyles(theme => ({
   desktopRoot: {
@@ -30,6 +33,7 @@ const useStyles = makeStyles(theme => ({
   desktopDrawer: {
     width: theme.dimensions.drawerWidthDesktop,
   },
+  desktopDrawerIcons: { width: 70 },
   mobileDrawer: {
     width: theme.dimensions.drawerWidthTablet,
   },
@@ -75,9 +79,14 @@ const PageTitle = ({ breadcrumbs }) => {
 
 const PageLayout = ({ menu, breadcrumbs = [], children }) => {
   const classes = useStyles()
+  const dispatch = useDispatch()
   const navigate = useNavigate()
 
   const [openDrawer, setOpenDrawer] = useState(false)
+
+  const openMenu = useSelector(state => state.session.openMenu)
+
+  const handleOpenMenu = () => dispatch(sessionActions.updateMenu(!openMenu))
 
   return (
     <>
@@ -85,8 +94,14 @@ const PageLayout = ({ menu, breadcrumbs = [], children }) => {
         <div className={classes.desktopRoot}>
           <Drawer
             variant='permanent'
-            className={classes.desktopDrawer}
-            classes={{ paper: classes.desktopDrawer }}>
+            className={`${
+              openMenu ? classes.desktopDrawer : classes.desktopDrawerIcons
+            }`}
+            classes={{
+              paper: openMenu
+                ? classes.desktopDrawer
+                : classes.desktopDrawerIcons,
+            }}>
             {breadcrumbs.length > 0 && (
               <>
                 <div className={classes.toolbar}>
@@ -104,6 +119,23 @@ const PageLayout = ({ menu, breadcrumbs = [], children }) => {
                 <Divider />
               </>
             )}
+
+            <ListItemIcon
+              sx={{
+                color: '#0E1726',
+                padding: '8px 16px 8px 16px',
+                cursor: 'pointer',
+              }}
+              onClick={handleOpenMenu}>
+              {/* <IconButton
+                color='inherit'
+                edge='start'
+                sx={{ mr: 2 }}
+                onClick={handleOpenMenu}>
+                </IconButton> */}
+              <MenuIcon />
+            </ListItemIcon>
+
             {menu}
           </Drawer>
           <div className={classes.content}>{children}</div>
