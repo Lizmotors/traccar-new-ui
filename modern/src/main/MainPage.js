@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useCallback, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   Paper,
   Toolbar,
@@ -18,88 +18,88 @@ import {
   Badge,
   Container,
   Typography,
-} from "@mui/material";
-import { makeStyles } from "@mui/styles";
-import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import AddIcon from "@mui/icons-material/Add";
-import CloseIcon from "@mui/icons-material/Close";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import ListIcon from "@mui/icons-material/ViewList";
-import TuneIcon from "@mui/icons-material/Tune";
-import { useDispatch, useSelector } from "react-redux";
-import moment from "moment";
-import DevicesList from "./DevicesList";
-import MapView from "../map/core/MapView";
-import MapSelectedDevice from "../map/main/MapSelectedDevice";
-import MapAccuracy from "../map/main/MapAccuracy";
-import MapGeofence from "../map/MapGeofence";
-import MapCurrentLocation from "../map/MapCurrentLocation";
-import BottomMenu from "../common/components/BottomMenu";
-import { useTranslation } from "../common/components/LocalizationProvider";
-import PoiMap from "../map/main/PoiMap";
-import MapPadding from "../map/MapPadding";
-import StatusCard from "./StatusCard";
-import { devicesActions } from "../store";
-import MapDefaultCamera from "../map/main/MapDefaultCamera";
-import usePersistedState from "../common/util/usePersistedState";
-import MapLiveRoutes from "../map/main/MapLiveRoutes";
-import { useDeviceReadonly } from "../common/util/permissions";
-import MapPositions from "../map/MapPositions";
-import MapOverlay from "../map/overlay/MapOverlay";
-import MapGeocoder from "../map/geocoder/MapGeocoder";
-import MapScale from "../map/MapScale";
-import MapNotification from "../map/notification/MapNotification";
-import EventsDrawer from "./EventsDrawer";
-import useFeatures from "../common/util/useFeatures";
-import "./main.css";
-import MainMenu from "./components/MainMenu";
-import PageLayout from "../common/components/PageLayout";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import Header from "../common/components/Header";
+} from '@mui/material'
+import { makeStyles } from '@mui/styles'
+import { useTheme } from '@mui/material/styles'
+import useMediaQuery from '@mui/material/useMediaQuery'
+import AddIcon from '@mui/icons-material/Add'
+import CloseIcon from '@mui/icons-material/Close'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import ListIcon from '@mui/icons-material/ViewList'
+import TuneIcon from '@mui/icons-material/Tune'
+import { useDispatch, useSelector } from 'react-redux'
+import moment from 'moment'
+import DevicesList from './DevicesList'
+import MapView from '../map/core/MapView'
+import MapSelectedDevice from '../map/main/MapSelectedDevice'
+import MapAccuracy from '../map/main/MapAccuracy'
+import MapGeofence from '../map/MapGeofence'
+import MapCurrentLocation from '../map/MapCurrentLocation'
+import BottomMenu from '../common/components/BottomMenu'
+import { useTranslation } from '../common/components/LocalizationProvider'
+import PoiMap from '../map/main/PoiMap'
+import MapPadding from '../map/MapPadding'
+import StatusCard from './StatusCard'
+import { devicesActions } from '../store'
+import MapDefaultCamera from '../map/main/MapDefaultCamera'
+import usePersistedState from '../common/util/usePersistedState'
+import MapLiveRoutes from '../map/main/MapLiveRoutes'
+import { useDeviceReadonly } from '../common/util/permissions'
+import MapPositions from '../map/MapPositions'
+import MapOverlay from '../map/overlay/MapOverlay'
+import MapGeocoder from '../map/geocoder/MapGeocoder'
+import MapScale from '../map/MapScale'
+import MapNotification from '../map/notification/MapNotification'
+import EventsDrawer from './EventsDrawer'
+import useFeatures from '../common/util/useFeatures'
+import './main.css'
+import MainMenu from './components/MainMenu'
+import PageLayout from '../common/components/PageLayout'
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
+import Header from '../common/components/Header'
 import {
   CircularProgressbar,
   CircularProgressbarWithChildren,
   buildStyles,
-} from "react-circular-progressbar";
-import "react-circular-progressbar/dist/styles.css";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import MenuIcon from "@mui/icons-material/Menu";
-import Grid from "@mui/material/Grid";
+} from 'react-circular-progressbar'
+import 'react-circular-progressbar/dist/styles.css'
+import Card from '@mui/material/Card'
+import CardContent from '@mui/material/CardContent'
+import MenuIcon from '@mui/icons-material/Menu'
+import Grid from '@mui/material/Grid'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   sidebar: {
-    display: "flex",
-    flexDirection: "column",
-    position: "fixed",
+    display: 'flex',
+    flexDirection: 'column',
+    position: 'fixed',
     left: 0,
     top: 0,
     zIndex: 3,
     margin: theme.spacing(1.5),
     width: theme.dimensions.drawerWidthDesktop,
     bottom: theme.dimensions.bottomBarHeight,
-    transition: "transform .5s ease",
+    transition: 'transform .5s ease',
     //backgroundColor: "white",
-    [theme.breakpoints.down("md")]: {
-      width: "100%",
+    [theme.breakpoints.down('md')]: {
+      width: '100%',
       margin: 0,
     },
   },
   sidebarCollapsed: {
     transform: `translateX(-${theme.dimensions.drawerWidthDesktop})`,
     marginLeft: 0,
-    [theme.breakpoints.down("md")]: {
-      transform: "translateX(-100vw)",
+    [theme.breakpoints.down('md')]: {
+      transform: 'translateX(-100vw)',
     },
   },
   toolbarContainer: {
     zIndex: 4,
   },
   toolbar: {
-    display: "flex",
-    padding: theme.spacing(0, 1),
-    "& > *": {
+    'display': 'flex',
+    'padding': theme.spacing(0, 1),
+    '& > *': {
       margin: theme.spacing(0, 1),
     },
   },
@@ -107,105 +107,105 @@ const useStyles = makeStyles((theme) => ({
     flex: 1,
   },
   statusCard: {
-    position: "fixed",
+    position: 'fixed',
     zIndex: 5,
-    [theme.breakpoints.up("md")]: {
+    [theme.breakpoints.up('md')]: {
       left: `calc(50% + ${theme.dimensions.drawerWidthDesktop} / 2)`,
       bottom: theme.spacing(3),
     },
-    [theme.breakpoints.down("md")]: {
-      left: "50%",
+    [theme.breakpoints.down('md')]: {
+      left: '50%',
       bottom: `calc(${theme.spacing(3)} + ${
         theme.dimensions.bottomBarHeight
       }px)`,
     },
-    transform: "translateX(-50%)",
+    transform: 'translateX(-50%)',
   },
   sidebarToggle: {
-    position: "fixed",
+    position: 'fixed',
     left: theme.spacing(1.5),
     top: theme.spacing(3),
-    borderRadius: "0px",
+    borderRadius: '0px',
     minWidth: 0,
-    [theme.breakpoints.down("md")]: {
+    [theme.breakpoints.down('md')]: {
       left: 0,
     },
   },
   sidebarToggleText: {
     marginLeft: theme.spacing(1),
-    [theme.breakpoints.only("xs")]: {
-      display: "none",
+    [theme.breakpoints.only('xs')]: {
+      display: 'none',
     },
   },
   sidebarToggleBg: {
     //backgroundColor: "white",
-    color: "rgba(0, 0, 0, 0.6)",
-    "&:hover": {
-      backgroundColor: "white",
+    'color': 'rgba(0, 0, 0, 0.6)',
+    '&:hover': {
+      backgroundColor: 'white',
     },
   },
   bottomMenu: {
-    position: "fixed",
+    position: 'fixed',
     left: theme.spacing(1.5),
     bottom: theme.spacing(1.5),
     zIndex: 4,
     width: theme.dimensions.drawerWidthDesktop,
   },
   filterPanel: {
-    display: "flex",
-    flexDirection: "column",
+    display: 'flex',
+    flexDirection: 'column',
     padding: theme.spacing(2),
     gap: theme.spacing(2),
     width: theme.dimensions.drawerWidthTablet,
   },
   appbar: {
     //background: "white",
-    display: "flex",
-    justifyContent: "space-between",
-    padding: "30px 50px",
+    display: 'flex',
+    justifyContent: 'space-between',
+    padding: '30px 50px',
   },
   count: {
-    display: "flex",
-    width: "30%",
-    justifyContent: "space-between",
+    display: 'flex',
+    width: '30%',
+    justifyContent: 'space-between',
   },
   circleCount: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   circle: {
     width: 20,
     height: 20,
-    borderRadius: "50%",
-    backgroundColor: "red",
+    borderRadius: '50%',
+    backgroundColor: 'red',
     marginBottom: 10,
   },
   green: {
-    backgroundColor: "green",
+    backgroundColor: 'green',
   },
   yellow: {
-    backgroundColor: "yellow",
+    backgroundColor: 'yellow',
   },
   profile: {
-    display: "flex",
-    alignItems: "center",
+    display: 'flex',
+    alignItems: 'center',
   },
   profileImg: {
     width: 40,
     height: 40,
-    borderRadius: "50%",
+    borderRadius: '50%',
     marginRight: 10,
   },
   root: {
-    height: "100%",
+    height: '100%',
   },
   container: {
     margin: 0,
     padding: 10,
-    width: "100%",
-    height: "100%",
+    width: '100%',
+    height: '100%',
   },
   bottomText: {
     paddingBottom: 6,
@@ -214,28 +214,28 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: 20,
   },
   headerCont: {
-    display: "flex",
-    justifyContent: "space-between",
-    padding: "10px 20px",
-    height: "100%",
-    alignItems: "center",
-    flexWrap: "wrap",
+    display: 'flex',
+    justifyContent: 'space-between',
+    padding: '10px 20px',
+    height: '100%',
+    alignItems: 'center',
+    flexWrap: 'wrap',
   },
   titleCont: {
-    display: "flex",
-    justifyContent: "space-between",
+    display: 'flex',
+    justifyContent: 'space-between',
     paddingBottom: 20,
   },
   subTitleCont: {
-    display: "flex",
+    display: 'flex',
   },
   subTitleWidth: {
     width: 150,
   },
   cardCircle: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
     width: 150,
     height: 200,
   },
@@ -245,170 +245,170 @@ const useStyles = makeStyles((theme) => ({
   flexBottom: {
     paddingBottom: 20,
   },
-}));
+}))
 
 const CountList = ({ title, count }) => {
-  const classes = useStyles();
+  const classes = useStyles()
   return (
     <div className={classes.subTitleCont}>
-      <Typography className={classes.subTitleWidth} variant="subtitle2">
+      <Typography className={classes.subTitleWidth} variant='subtitle2'>
         {title}
       </Typography>
-      <Typography variant="subtitle2">{count}</Typography>
+      <Typography variant='subtitle2'>{count}</Typography>
     </div>
-  );
-};
+  )
+}
 
 const MainPage = () => {
-  const classes = useStyles();
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const theme = useTheme();
-  const t = useTranslation();
+  const classes = useStyles()
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const theme = useTheme()
+  const t = useTranslation()
 
-  const deviceReadonly = useDeviceReadonly();
-  const desktop = useMediaQuery(theme.breakpoints.up("md"));
-  const phone = useMediaQuery(theme.breakpoints.down("sm"));
+  const deviceReadonly = useDeviceReadonly()
+  const desktop = useMediaQuery(theme.breakpoints.up('md'))
+  const phone = useMediaQuery(theme.breakpoints.down('sm'))
 
-  const features = useFeatures();
+  const features = useFeatures()
 
-  const [mapOnSelect] = usePersistedState("mapOnSelect", false);
+  const [mapOnSelect] = usePersistedState('mapOnSelect', false)
 
-  const [mapLiveRoutes] = usePersistedState("mapLiveRoutes", false);
+  const [mapLiveRoutes] = usePersistedState('mapLiveRoutes', false)
 
-  const selectedDeviceId = useSelector((state) => state.devices.selectedId);
-  const positions = useSelector((state) => state.positions.items);
-  const [filteredPositions, setFilteredPositions] = useState([]);
+  const selectedDeviceId = useSelector(state => state.devices.selectedId)
+  const positions = useSelector(state => state.positions.items)
+  const [filteredPositions, setFilteredPositions] = useState([])
   const selectedPosition = filteredPositions.find(
-    (position) => selectedDeviceId && position.deviceId === selectedDeviceId
-  );
+    position => selectedDeviceId && position.deviceId === selectedDeviceId
+  )
 
-  const groups = useSelector((state) => state.groups.items);
-  const devices = useSelector((state) => state.devices.items);
-  const [filteredDevices, setFilteredDevices] = useState([]);
+  const groups = useSelector(state => state.groups.items)
+  const devices = useSelector(state => state.devices.items)
+  const [filteredDevices, setFilteredDevices] = useState([])
 
-  const [filterKeyword, setFilterKeyword] = useState("");
-  const [filterStatuses, setFilterStatuses] = useState([]);
-  const [filterGroups, setFilterGroups] = useState([]);
-  const [filterSort, setFilterSort] = usePersistedState("filterSort", "");
-  const [filterMap, setFilterMap] = usePersistedState("filterMap", false);
+  const [filterKeyword, setFilterKeyword] = useState('')
+  const [filterStatuses, setFilterStatuses] = useState([])
+  const [filterGroups, setFilterGroups] = useState([])
+  const [filterSort, setFilterSort] = usePersistedState('filterSort', '')
+  const [filterMap, setFilterMap] = usePersistedState('filterMap', false)
   const [count, setCount] = useState({
     online: 0,
     offline: 0,
     expired: 0,
     never: 0,
-  });
+  })
 
-  const filterRef = useRef();
-  const [filterAnchorEl, setFilterAnchorEl] = useState(null);
+  const filterRef = useRef()
+  const [filterAnchorEl, setFilterAnchorEl] = useState(null)
 
-  const [devicesOpen, setDevicesOpen] = useState(false);
-  const [eventsOpen, setEventsOpen] = useState(false);
+  const [devicesOpen, setDevicesOpen] = useState(false)
+  const [eventsOpen, setEventsOpen] = useState(false)
 
-  const eventHandler = useCallback(() => setEventsOpen(true), [setEventsOpen]);
-  const eventsAvailable = useSelector((state) => !!state.events.items.length);
+  const eventHandler = useCallback(() => setEventsOpen(true), [setEventsOpen])
+  const eventsAvailable = useSelector(state => !!state.events.items.length)
 
   const handleClose = () => {
-    setDevicesOpen(!devicesOpen);
-  };
+    setDevicesOpen(!devicesOpen)
+  }
 
-  const deviceStatusCount = (status) =>
-    Object.values(devices).filter((d) => d.status === status).length;
+  const deviceStatusCount = status =>
+    Object.values(devices).filter(d => d.status === status).length
 
-  useEffect(() => setDevicesOpen(desktop), [desktop]);
+  useEffect(() => setDevicesOpen(desktop), [desktop])
 
   useEffect(() => {
     if (!desktop && mapOnSelect && selectedDeviceId) {
-      setDevicesOpen(false);
+      setDevicesOpen(false)
     }
-  }, [desktop, mapOnSelect, selectedDeviceId]);
+  }, [desktop, mapOnSelect, selectedDeviceId])
 
   const onClick = useCallback(
     (_, deviceId) => {
-      dispatch(devicesActions.select(deviceId));
+      dispatch(devicesActions.select(deviceId))
     },
     [dispatch]
-  );
+  )
 
-  const deviceGroups = (device) => {
-    const groupIds = [];
-    let { groupId } = device;
+  const deviceGroups = device => {
+    const groupIds = []
+    let { groupId } = device
     while (groupId) {
-      groupIds.push(groupId);
-      groupId = groups[groupId].groupId;
+      groupIds.push(groupId)
+      groupId = groups[groupId].groupId
     }
-    return groupIds;
-  };
+    return groupIds
+  }
 
   useEffect(() => {
     const filtered = Object.values(devices)
       .filter(
-        (device) =>
+        device =>
           !filterStatuses.length || filterStatuses.includes(device.status)
       )
       .filter(
-        (device) =>
+        device =>
           !filterGroups.length ||
-          deviceGroups(device).some((id) => filterGroups.includes(id))
+          deviceGroups(device).some(id => filterGroups.includes(id))
       )
-      .filter((device) => {
-        const keyword = filterKeyword.toLowerCase();
+      .filter(device => {
+        const keyword = filterKeyword.toLowerCase()
         return [
           device.name,
           device.uniqueId,
           device.phone,
           device.model,
           device.contact,
-        ].some((s) => s && s.toLowerCase().includes(keyword));
-      });
+        ].some(s => s && s.toLowerCase().includes(keyword))
+      })
     switch (filterSort) {
-      case "name":
+      case 'name':
         filtered.sort((device1, device2) =>
           device1.name.localeCompare(device2.name)
-        );
-        break;
-      case "lastUpdate":
+        )
+        break
+      case 'lastUpdate':
         filtered.sort((device1, device2) => {
           const time1 = device1.lastUpdate
             ? moment(device1.lastUpdate).valueOf()
-            : 0;
+            : 0
           const time2 = device2.lastUpdate
             ? moment(device2.lastUpdate).valueOf()
-            : 0;
-          return time2 - time1;
-        });
-        break;
+            : 0
+          return time2 - time1
+        })
+        break
       default:
-        break;
+        break
     }
-    if (filterSort === "lastUpdate") {
+    if (filterSort === 'lastUpdate') {
       filtered.sort((device1, device2) => {
         const time1 = device1.lastUpdate
           ? moment(device1.lastUpdate).valueOf()
-          : 0;
+          : 0
         const time2 = device2.lastUpdate
           ? moment(device2.lastUpdate).valueOf()
-          : 0;
-        return time2 - time1;
-      });
+          : 0
+        return time2 - time1
+      })
     }
-    setFilteredDevices(filtered);
-    let countData = { online: 0, offline: 0, expired: 0, never: 0 };
-    let format = filtered.map((ele) => {
-      if (ele.status === "offline") {
-        countData.offline += 1;
-      } else if (ele.status === "online") {
-        countData.online += 1;
+    setFilteredDevices(filtered)
+    let countData = { online: 0, offline: 0, expired: 0, never: 0 }
+    let format = filtered.map(ele => {
+      if (ele.status === 'offline') {
+        countData.offline += 1
+      } else if (ele.status === 'online') {
+        countData.online += 1
       } else if (ele.disabled) {
-        countData.expired += 1;
+        countData.expired += 1
       }
-    });
-    setCount({ ...countData });
+    })
+    setCount({ ...countData })
     setFilteredPositions(
       filterMap
-        ? filtered.map((device) => positions[device.id]).filter(Boolean)
+        ? filtered.map(device => positions[device.id]).filter(Boolean)
         : Object.values(positions)
-    );
+    )
   }, [
     devices,
     positions,
@@ -417,13 +417,13 @@ const MainPage = () => {
     filterGroups,
     filterSort,
     filterMap,
-  ]);
+  ])
 
   return (
     <>
       <PageLayout menu={<MainMenu />}>
         <Header />
-        <div className="header-padding"></div>
+        <div className='header-padding'></div>
         {/* <div className={classes.headerCont}>
           <div className={classes.flexBottom}>
             <Card className={classes.cardCircle}>
@@ -568,41 +568,39 @@ const MainPage = () => {
           </div>
         </div> */}
 
-        <div className={classes.container}>
-          <Container
-            style={{ height: 800, width: "100%", maxWidth: "100%" }}
-            className={classes.container}
-          >
-            <MapView>
-              <MapOverlay />
-              <MapGeofence />
-              <MapAccuracy positions={filteredPositions} />
-              {mapLiveRoutes && <MapLiveRoutes />}
-              <MapPositions
-                positions={filteredPositions}
-                onClick={onClick}
-                selectedPosition={selectedPosition}
-                showStatus
-              />
-              <MapDefaultCamera />
-              <MapSelectedDevice />
-              <PoiMap />
-            </MapView>
-            <MapScale />
-            <MapCurrentLocation />
-            <MapGeocoder />
-            {!features.disableEvents && (
-              <MapNotification
-                enabled={eventsAvailable}
-                onClick={eventHandler}
-              />
-            )}
-            {desktop && (
-              <MapPadding
-                left={parseInt(theme.dimensions.drawerWidthDesktop, 10)}
-              />
-            )}
-          </Container>
+        <div
+          className={classes.container}
+          style={{ display: 'flex', height: '90vh' }}>
+          {/* <Container
+            style={{ height: '85vh', width: '100%', maxWidth: '100%' }}
+            className={classes.container}> */}
+          <MapView>
+            <MapOverlay />
+            <MapGeofence />
+            <MapAccuracy positions={filteredPositions} />
+            {mapLiveRoutes && <MapLiveRoutes />}
+            <MapPositions
+              positions={filteredPositions}
+              onClick={onClick}
+              selectedPosition={selectedPosition}
+              showStatus
+            />
+            <MapDefaultCamera />
+            <MapSelectedDevice />
+            <PoiMap />
+          </MapView>
+          <MapScale />
+          <MapCurrentLocation />
+          <MapGeocoder />
+          {!features.disableEvents && (
+            <MapNotification enabled={eventsAvailable} onClick={eventHandler} />
+          )}
+          {desktop && (
+            <MapPadding
+              left={parseInt(theme.dimensions.drawerWidthDesktop, 10)}
+            />
+          )}
+          {/* </Container> */}
         </div>
       </PageLayout>
       {/* <div className={classes.root}>
@@ -797,7 +795,7 @@ const MainPage = () => {
         </div>
       )}
     </>
-  );
-};
+  )
+}
 
-export default MainPage;
+export default MainPage

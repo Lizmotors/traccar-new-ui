@@ -101,10 +101,10 @@ const MenuItems = ({ title, link, icon, selected }) => {
       <ListItemIcon sx={{ color: '#0E1726' }}>{icon}</ListItemIcon>
       <ListItemText
         primaryTypographyProps={{
-          fontWeight: 'bold',
           variant: 'body1',
+          fontWeight: selected ? 'bold' : 400,
         }}
-        style={{ fontWeight: 'bold', fontSize: 18 }}
+        style={{ fontWeight: selected ? 'bold' : 400, fontSize: 18 }}
         primary={title}
       />
     </ListItemButton>
@@ -517,10 +517,8 @@ const SettingsMenu = () => {
               </ListItemIcon>
               <ListItemText
                 primaryTypographyProps={{
-                  fontWeight: 'bold',
                   variant: 'body1',
                 }}
-                style={{ fontWeight: 'bold' }}
                 primary={'Devices'}
               />
             </ListItemButton>

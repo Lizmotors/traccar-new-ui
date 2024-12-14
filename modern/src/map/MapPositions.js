@@ -1,68 +1,79 @@
-import { useId, useCallback, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { map } from './core/MapView';
-import { getStatusColor } from '../common/util/formatter';
-import usePersistedState from '../common/util/usePersistedState';
-import { mapIconKey } from './core/preloadImages';
-import { findFonts } from './core/mapUtil';
-import { useAttributePreference } from '../common/util/preferences';
+import { useId, useCallback, useEffect } from 'react'
+import { useSelector } from 'react-redux'
+import { map } from './core/MapView'
+import { getStatusColor } from '../common/util/formatter'
+import usePersistedState from '../common/util/usePersistedState'
+import { mapIconKey } from './core/preloadImages'
+import { findFonts } from './core/mapUtil'
+import { useAttributePreference } from '../common/util/preferences'
 
 const MapPositions = ({ positions, onClick, showStatus, selectedPosition }) => {
-  const id = useId();
-  const clusters = `${id}-clusters`;
-  const direction = `${id}-direction`;
+  const id = useId()
+  const clusters = `${id}-clusters`
+  const direction = `${id}-direction`
 
-  const devices = useSelector((state) => state.devices.items);
+  const devices = useSelector(state => state.devices.items)
 
-  const iconScale = useAttributePreference('iconScale', 1);
+  const iconScale = useAttributePreference('iconScale', 1)
 
-  const [mapCluster] = usePersistedState('mapCluster', true);
+  const [mapCluster] = usePersistedState('mapCluster', true)
 
   const createFeature = (devices, position, selectedPositionId) => {
-    const device = devices[position.deviceId];
+    const device = devices[position.deviceId]
     return {
       id: position.id,
       deviceId: position.deviceId,
       name: device.name,
       category: mapIconKey(device.category),
-      color: showStatus ? position.attributes.color || getStatusColor(device.status) : 'neutral',
+      color: showStatus
+        ? position.attributes.color || getStatusColor(device.status)
+        : 'neutral',
       rotation: position.course,
       direction: selectedPositionId === position.id,
-    };
-  };
-
-  const onMouseEnter = () => map.getCanvas().style.cursor = 'pointer';
-  const onMouseLeave = () => map.getCanvas().style.cursor = '';
-
-  const onMapClick = useCallback((event) => {
-    if (!event.defaultPrevented) {
-      onClick();
     }
-  }, [onClick]);
+  }
 
-  const onMarkerClick = useCallback((event) => {
-    event.preventDefault();
-    const feature = event.features[0];
-    if (onClick) {
-      onClick(feature.properties.id, feature.properties.deviceId);
-    }
-  }, [onClick]);
+  const onMouseEnter = () => (map.getCanvas().style.cursor = 'pointer')
+  const onMouseLeave = () => (map.getCanvas().style.cursor = '')
 
-  const onClusterClick = useCallback((event) => {
-    event.preventDefault();
-    const features = map.queryRenderedFeatures(event.point, {
-      layers: [clusters],
-    });
-    const clusterId = features[0].properties.cluster_id;
-    map.getSource(id).getClusterExpansionZoom(clusterId, (error, zoom) => {
-      if (!error) {
-        map.easeTo({
-          center: features[0].geometry.coordinates,
-          zoom,
-        });
+  const onMapClick = useCallback(
+    event => {
+      if (!event.defaultPrevented) {
+        onClick()
       }
-    });
-  }, [clusters]);
+    },
+    [onClick]
+  )
+
+  const onMarkerClick = useCallback(
+    event => {
+      event.preventDefault()
+      const feature = event.features[0]
+      if (onClick) {
+        onClick(feature.properties.id, feature.properties.deviceId)
+      }
+    },
+    [onClick]
+  )
+
+  const onClusterClick = useCallback(
+    event => {
+      event.preventDefault()
+      const features = map.queryRenderedFeatures(event.point, {
+        layers: [clusters],
+      })
+      const clusterId = features[0].properties.cluster_id
+      map.getSource(id).getClusterExpansionZoom(clusterId, (error, zoom) => {
+        if (!error) {
+          map.easeTo({
+            center: features[0].geometry.coordinates,
+            zoom,
+          })
+        }
+      })
+    },
+    [clusters]
+  )
 
   useEffect(() => {
     map.addSource(id, {
@@ -74,7 +85,7 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition }) => {
       cluster: mapCluster,
       clusterMaxZoom: 14,
       clusterRadius: 50,
-    });
+    })
     map.addLayer({
       id,
       type: 'symbol',
@@ -95,7 +106,7 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition }) => {
         'text-halo-color': 'white',
         'text-halo-width': 1,
       },
-    });
+    })
     map.addLayer({
       id: clusters,
       type: 'symbol',
@@ -108,16 +119,12 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition }) => {
         'text-font': findFonts(map),
         'text-size': 14,
       },
-    });
+    })
     map.addLayer({
       id: direction,
       type: 'symbol',
       source: id,
-      filter: [
-        'all',
-        ['!has', 'point_count'],
-        ['==', 'direction', true],
-      ],
+      filter: ['all', ['!has', 'point_count'], ['==', 'direction', true]],
       layout: {
         'icon-image': 'direction',
         'icon-size': iconScale,
@@ -125,55 +132,61 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition }) => {
         'icon-rotate': ['get', 'rotation'],
         'icon-rotation-alignment': 'map',
       },
-    });
+    })
 
-    map.on('mouseenter', id, onMouseEnter);
-    map.on('mouseleave', id, onMouseLeave);
-    map.on('mouseenter', clusters, onMouseEnter);
-    map.on('mouseleave', clusters, onMouseLeave);
-    map.on('click', id, onMarkerClick);
-    map.on('click', clusters, onClusterClick);
-    map.on('click', onMapClick);
+    map.on('mouseenter', id, onMouseEnter)
+    map.on('mouseleave', id, onMouseLeave)
+    map.on('mouseenter', clusters, onMouseEnter)
+    map.on('mouseleave', clusters, onMouseLeave)
+    map.on('click', id, onMarkerClick)
+    map.on('click', clusters, onClusterClick)
+    map.on('click', onMapClick)
 
     return () => {
-      map.off('mouseenter', id, onMouseEnter);
-      map.off('mouseleave', id, onMouseLeave);
-      map.off('mouseenter', clusters, onMouseEnter);
-      map.off('mouseleave', clusters, onMouseLeave);
-      map.off('click', id, onMarkerClick);
-      map.off('click', clusters, onClusterClick);
-      map.off('click', onMapClick);
+      map.off('mouseenter', id, onMouseEnter)
+      map.off('mouseleave', id, onMouseLeave)
+      map.off('mouseenter', clusters, onMouseEnter)
+      map.off('mouseleave', clusters, onMouseLeave)
+      map.off('click', id, onMarkerClick)
+      map.off('click', clusters, onClusterClick)
+      map.off('click', onMapClick)
 
       if (map.getLayer(id)) {
-        map.removeLayer(id);
+        map.removeLayer(id)
       }
       if (map.getLayer(clusters)) {
-        map.removeLayer(clusters);
+        map.removeLayer(clusters)
       }
       if (map.getLayer(direction)) {
-        map.removeLayer(direction);
+        map.removeLayer(direction)
       }
       if (map.getSource(id)) {
-        map.removeSource(id);
+        map.removeSource(id)
       }
-    };
-  }, [mapCluster, clusters, direction, onMarkerClick, onClusterClick]);
+    }
+  }, [mapCluster, clusters, direction, onMarkerClick, onClusterClick])
 
   useEffect(() => {
     map.getSource(id).setData({
       type: 'FeatureCollection',
-      features: positions.filter((it) => devices.hasOwnProperty(it.deviceId)).map((position) => ({
-        type: 'Feature',
-        geometry: {
-          type: 'Point',
-          coordinates: [position.longitude, position.latitude],
-        },
-        properties: createFeature(devices, position, selectedPosition && selectedPosition.id),
-      })),
-    });
-  }, [devices, positions, selectedPosition]);
+      features: positions
+        .filter(it => devices.hasOwnProperty(it.deviceId))
+        .map(position => ({
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [position.longitude, position.latitude],
+          },
+          properties: createFeature(
+            devices,
+            position,
+            selectedPosition && selectedPosition.id
+          ),
+        })),
+    })
+  }, [devices, positions, selectedPosition])
 
-  return null;
-};
+  return null
+}
 
-export default MapPositions;
+export default MapPositions
