@@ -61,6 +61,7 @@ import SpeedIcon from '@mui/icons-material/Speed'
 import WifiIcon from '@mui/icons-material/Wifi'
 
 import SemiCircleProgressBar from 'react-progressbar-semicircle'
+import EventsDrawer from './EventsDrawer'
 
 import 'react-circular-progressbar/dist/styles.css'
 
@@ -199,7 +200,7 @@ const DeviceDetails = props => {
 
   const desktop = useMediaQuery(theme.breakpoints.up('md'))
 
-  const { id } = useParams()
+  const { id, positionId } = useParams()
 
   const distanceUnit = useAttributePreference('distanceUnit')
   const speedUnit = useAttributePreference('speedUnit')
@@ -660,7 +661,7 @@ const DeviceDetails = props => {
             </Box>
           </Grid>
           <Grid item xs={12} md={9}>
-            <Grid container spacing={2} sx={{ paddingBottom: 10 }}>
+            <Grid container spacing={2} sx={{ paddingBottom: 0 }}>
               <Grid item xs={6} md={4}>
                 <Box sx={{ boxShadow: 0, borderRadius: 4 }}>
                   <Card sx={{ boxShadow: 0, borderRadius: 4 }}>
@@ -1009,7 +1010,7 @@ const DeviceDetails = props => {
                       }}>
                       <div
                         style={{
-                          height: 250,
+                          height: 280,
                           width: '100%',
                           maxWidth: '100%',
                           borderRadius: 10,
@@ -1047,7 +1048,9 @@ const DeviceDetails = props => {
                           />
                         )}
                       </div>
-                      <div style={{ paddingTop: 4 }} className='flex-cont'>
+                      <div
+                        style={{ paddingTop: 4, paddingBottom: 0 }}
+                        className='flex-cont'>
                         <div style={{ display: 'flex' }}>
                           <LocationOnIcon sx={{ color: '#144BFF' }} />
                           <Typography style={{ paddingLeft: 3 }}>
@@ -1057,7 +1060,7 @@ const DeviceDetails = props => {
                         <div
                           style={{ cursor: 'pointer' }}
                           onClick={() => {
-                            navigate(`/position/${id}`)
+                            navigate(`/position/${positionId}`)
                           }}>
                           <ViewHeadlineIcon />
                         </div>
@@ -1241,7 +1244,7 @@ const DeviceDetails = props => {
                       <div className='flex-cont'>
                         <Typography>Alerts</Typography>
                       </div>
-                      <div>
+                      <div style={{ paddingBottom: 3 }}>
                         <NotificationsActiveIcon
                           sx={{
                             fontSize: 24,
@@ -1249,7 +1252,7 @@ const DeviceDetails = props => {
                           }}
                         />
                       </div>
-                      <div style={{ paddingTop: 0 }}>
+                      {/* <div style={{ paddingTop: 0 }}>
                         <Typography
                           variant='subtitle2'
                           className='bold'
@@ -1257,7 +1260,7 @@ const DeviceDetails = props => {
                           style={{ visibility: 'hidden' }}>
                           aaaaa
                         </Typography>
-                      </div>
+                      </div> */}
                     </CardContent>
                   </Card>
                 </Box>
@@ -1305,7 +1308,7 @@ const DeviceDetails = props => {
                         <Typography>Last Updated</Typography>
                       </div>
 
-                      <div style={{ paddingTop: 0 }}>
+                      <div style={{ paddingBottom: 8 }}>
                         <Typography
                           sx={{
                             // color: '#2A42CB',
@@ -1332,102 +1335,103 @@ const DeviceDetails = props => {
         </Grid>
 
         {/* <Grid container spacing={2}> */}
-        <Grid item xs={12} md={12}>
-          <Box sx={{ boxShadow: 0, borderRadius: 4 }}>
-            <Card sx={{ boxShadow: 0, borderRadius: 4 }}>
-              <CardContent>
-                <div className={classes.container}>
-                  {selectedItem && (
-                    <div className={classes.containerMap}>
-                      <MapView>
-                        <MapGeofence />
-                        {route && (
-                          <>
-                            <MapRoutePath positions={route} />
-                            <MapMarkers markers={createMarkers()} />
-                            <MapCamera positions={route} />
-                          </>
-                        )}
-                      </MapView>
-                    </div>
-                  )}
-                  <div className={classes.containerMain}>
-                    <div className={classes.header}>
-                      <ReportFilter
-                        ignoreDevice={true}
-                        includeFilters={true}
-                        setTransLength={val => setTransVal(val)}
-                        transLength={transVal}
-                        handleSubmit={handleSubmit}>
-                        <ColumnSelect
-                          columns={columns}
-                          setColumns={setColumns}
-                          columnsArray={columnsArray}
-                        />
-                      </ReportFilter>
-                    </div>
-                    <Table>
-                      <TableHead>
-                        <TableRow>
-                          <TableCell className={classes.columnAction} />
-                          {columns.map(key => (
-                            <TableCell key={key}>
-                              {t(columnsMap.get(key))}
-                            </TableCell>
-                          ))}
-                          {/* <TableCell>Rewards</TableCell>
+        <Grid container spacing={2} sx={{ paddingTop: 3 }}>
+          <Grid item xs={12} md={12}>
+            <Box sx={{ boxShadow: 0, borderRadius: 4 }}>
+              <Card sx={{ boxShadow: 0, borderRadius: 4 }}>
+                <CardContent>
+                  <div className={classes.container}>
+                    {selectedItem && (
+                      <div className={classes.containerMap}>
+                        <MapView>
+                          <MapGeofence />
+                          {route && (
+                            <>
+                              <MapRoutePath positions={route} />
+                              <MapMarkers markers={createMarkers()} />
+                              <MapCamera positions={route} />
+                            </>
+                          )}
+                        </MapView>
+                      </div>
+                    )}
+                    <div className={classes.containerMain}>
+                      <div className={classes.header}>
+                        <ReportFilter
+                          ignoreDevice={true}
+                          includeFilters={true}
+                          setTransLength={val => setTransVal(val)}
+                          transLength={transVal}
+                          handleSubmit={handleSubmit}>
+                          <ColumnSelect
+                            columns={columns}
+                            setColumns={setColumns}
+                            columnsArray={columnsArray}
+                          />
+                        </ReportFilter>
+                      </div>
+                      <Table>
+                        <TableHead>
+                          <TableRow>
+                            <TableCell className={classes.columnAction} />
+                            {columns.map(key => (
+                              <TableCell key={key}>
+                                {t(columnsMap.get(key))}
+                              </TableCell>
+                            ))}
+                            {/* <TableCell>Rewards</TableCell>
                 <TableCell>Transaction Id</TableCell>
                 <TableCell>Status</TableCell>
                 <TableCell>Action</TableCell> */}
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {!loading ? (
-                          items
-                            .slice(
-                              0,
-                              transVal === 100 ? items.length : transVal
-                            )
-                            .map(item => {
-                              const findData = rewardsData.find(
-                                ele =>
-                                  item.deviceId == ele.deviceId &&
-                                  item.startTime == ele.startdate &&
-                                  item.endTime == ele.endDate
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {!loading ? (
+                            items
+                              .slice(
+                                0,
+                                transVal === 100 ? items.length : transVal
                               )
-                              const rewards =
-                                Number(
-                                  formatDistanceRewards(
-                                    item['distance'],
-                                    distanceUnit,
-                                    t
-                                  )
-                                ) / 4
-                              return (
-                                <TableRow key={item.startPositionId}>
-                                  <TableCell
-                                    className={classes.columnAction}
-                                    padding='none'>
-                                    {selectedItem === item ? (
-                                      <IconButton
-                                        size='small'
-                                        onClick={() => setSelectedItem(null)}>
-                                        <GpsFixedIcon fontSize='small' />
-                                      </IconButton>
-                                    ) : (
-                                      <IconButton
-                                        size='small'
-                                        onClick={() => setSelectedItem(item)}>
-                                        <LocationSearchingIcon fontSize='small' />
-                                      </IconButton>
-                                    )}
-                                  </TableCell>
-                                  {columns.map(key => (
-                                    <TableCell key={key}>
-                                      {formatValue(item, key)}
+                              .map(item => {
+                                const findData = rewardsData.find(
+                                  ele =>
+                                    item.deviceId == ele.deviceId &&
+                                    item.startTime == ele.startdate &&
+                                    item.endTime == ele.endDate
+                                )
+                                const rewards =
+                                  Number(
+                                    formatDistanceRewards(
+                                      item['distance'],
+                                      distanceUnit,
+                                      t
+                                    )
+                                  ) / 4
+                                return (
+                                  <TableRow key={item.startPositionId}>
+                                    <TableCell
+                                      className={classes.columnAction}
+                                      padding='none'>
+                                      {selectedItem === item ? (
+                                        <IconButton
+                                          size='small'
+                                          onClick={() => setSelectedItem(null)}>
+                                          <GpsFixedIcon fontSize='small' />
+                                        </IconButton>
+                                      ) : (
+                                        <IconButton
+                                          size='small'
+                                          onClick={() => setSelectedItem(item)}>
+                                          <LocationSearchingIcon fontSize='small' />
+                                        </IconButton>
+                                      )}
                                     </TableCell>
-                                  ))}
-                                  {/* <TableCell>
+                                    {columns.map(key => (
+                                      <TableCell key={key}>
+                                        {formatValue(item, key)}
+                                      </TableCell>
+                                    ))}
+                                    {/* <TableCell>
                           {findData ? findData?.rewards : rewards}
                         </TableCell>
                         <TableCell>
@@ -1487,47 +1491,54 @@ const DeviceDetails = props => {
                             </Typography>
                           </LoadingButton>
                         </TableCell> */}
-                                </TableRow>
-                              )
-                            })
-                        ) : (
-                          <TableShimmer
-                            columns={columns.length + 5}
-                            startAction
-                          />
-                        )}
-                      </TableBody>
-                    </Table>
+                                  </TableRow>
+                                )
+                              })
+                          ) : (
+                            <TableShimmer
+                              columns={columns.length + 5}
+                              startAction
+                            />
+                          )}
+                        </TableBody>
+                      </Table>
 
-                    <Snackbar
-                      open={!!result}
-                      anchorOrigin={{
-                        vertical: 'top',
-                        horizontal: 'right',
-                      }}
-                      onClose={() => setResult(null)}
-                      autoHideDuration={snackBarDurationLongMs}
-                      message={result}
-                      sx={{ width: 300 }}>
-                      <Alert
-                        elevation={6}
+                      <Snackbar
+                        open={!!result}
+                        anchorOrigin={{
+                          vertical: 'top',
+                          horizontal: 'right',
+                        }}
                         onClose={() => setResult(null)}
-                        severity='success'
-                        variant='filled'
-                        sx={{
-                          minWidth: 300,
-                          padding: '15px 25px',
-                          borderRadius: 5,
-                        }}>
-                        {result}
-                      </Alert>
-                    </Snackbar>
+                        autoHideDuration={snackBarDurationLongMs}
+                        message={result}
+                        sx={{ width: 300 }}>
+                        <Alert
+                          elevation={6}
+                          onClose={() => setResult(null)}
+                          severity='success'
+                          variant='filled'
+                          sx={{
+                            minWidth: 300,
+                            padding: '15px 25px',
+                            borderRadius: 5,
+                          }}>
+                          {result}
+                        </Alert>
+                      </Snackbar>
+                    </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-          </Box>
+                </CardContent>
+              </Card>
+            </Box>
+          </Grid>
         </Grid>
+        {!features.disableEvents && (
+          <EventsDrawer
+            open={eventsOpen}
+            onClose={() => setEventsOpen(false)}
+          />
+        )}
         {/* </Grid> */}
       </div>
     </PageLayout>

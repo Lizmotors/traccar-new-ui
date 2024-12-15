@@ -222,34 +222,41 @@ const StatusCard = ({ deviceId, onClose }) => {
               <CardContent className={classes.content}>
                 <Table size='small' classes={{ root: classes.table }}>
                   <TableBody>
-                    {positionItems
-                      .filter(
-                        key =>
-                          position.hasOwnProperty(key) ||
-                          position.attributes.hasOwnProperty(key)
-                      )
-                      .map(key => (
-                        <StatusRow
-                          key={key}
-                          name={positionAttributes[key].name}
-                          content={
-                            <PositionValue
-                              position={position}
-                              property={
-                                position.hasOwnProperty(key) ? key : null
-                              }
-                              attribute={
-                                position.hasOwnProperty(key) ? null : key
-                              }
-                            />
-                          }
-                        />
-                      ))}
-                    <StatusRow
-                      key={'key'}
-                      name={'Identifier'}
-                      content={device.uniqueId}
-                    />
+                    <div
+                      style={{
+                        maxHeight: 200,
+                        overflow: 'auto',
+                        width: '100%',
+                      }}>
+                      {positionItems
+                        .filter(
+                          key =>
+                            position.hasOwnProperty(key) ||
+                            position.attributes.hasOwnProperty(key)
+                        )
+                        .map(key => (
+                          <StatusRow
+                            key={key}
+                            name={positionAttributes[key].name}
+                            content={
+                              <PositionValue
+                                position={position}
+                                property={
+                                  position.hasOwnProperty(key) ? key : null
+                                }
+                                attribute={
+                                  position.hasOwnProperty(key) ? null : key
+                                }
+                              />
+                            }
+                          />
+                        ))}
+                      <StatusRow
+                        key={'key'}
+                        name={'Identifier'}
+                        content={device.uniqueId}
+                      />
+                    </div>
                   </TableBody>
                 </Table>
               </CardContent>
@@ -300,7 +307,7 @@ const StatusCard = ({ deviceId, onClose }) => {
           <MenuItem
             onClick={() => {
               //navigate(`/position/${position.id}`);
-              navigate(`/device/${deviceId}`)
+              navigate(`/device/${deviceId}/${position.id}`)
             }}>
             <Typography color='secondary'>{t('sharedShowDetails')}</Typography>
           </MenuItem>

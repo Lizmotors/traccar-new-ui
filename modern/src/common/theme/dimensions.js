@@ -10,5 +10,5 @@ export default {
   popupMapOffset: 300,
   popupMaxWidth: 308,
   popupImageHeight: 144,
-  statusCard: 250,
+  statusCard: 300,
 }

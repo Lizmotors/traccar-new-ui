@@ -6,7 +6,9 @@ const { reducer, actions } = createSlice({
     server: null,
     user: null,
     socket: null,
-    openMenu: false,
+    openMenu: localStorage.getItem('openMenu')
+      ? JSON.parse(localStorage.getItem('openMenu'))
+      : false,
   },
   reducers: {
     updateServer(state, action) {

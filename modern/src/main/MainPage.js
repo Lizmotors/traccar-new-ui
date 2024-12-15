@@ -786,6 +786,9 @@ const MainPage = () => {
           />
         )}
       </div> */}
+      {!features.disableEvents && (
+        <EventsDrawer open={eventsOpen} onClose={() => setEventsOpen(false)} />
+      )}
       {selectedDeviceId && (
         <div className={classes.statusCard}>
           <StatusCard

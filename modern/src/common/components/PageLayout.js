@@ -86,7 +86,10 @@ const PageLayout = ({ menu, breadcrumbs = [], children }) => {
 
   const openMenu = useSelector(state => state.session.openMenu)
 
-  const handleOpenMenu = () => dispatch(sessionActions.updateMenu(!openMenu))
+  const handleOpenMenu = () => {
+    localStorage.setItem('openMenu', !openMenu)
+    dispatch(sessionActions.updateMenu(!openMenu))
+  }
 
   return (
     <>
