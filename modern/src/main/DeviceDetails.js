@@ -179,10 +179,12 @@ const StatusRow = ({ name, content }) => {
   return (
     <TableRow sx={{ marginBottom: 0 }}>
       <TableCell className={classes.cell}>
-        <Typography variant='subtitle2'>{name}</Typography>
+        <Typography variant='subtitle1' sx={{ fontWeight: 'bold' }}>
+          {name}
+        </Typography>
       </TableCell>
       <TableCell className={classes.cell}>
-        <Typography variant='body2' color=''>
+        <Typography variant='body1' color=''>
           {content}
         </Typography>
       </TableCell>
@@ -630,7 +632,13 @@ const DeviceDetails = props => {
                   {itemData && (
                     <Table size='small' classes={{ root: classes.table }}>
                       <TableBody>
-                        <div style={{ maxHeight: 500, overflow: 'auto' }}>
+                        <div
+                          style={{
+                            maxHeight: 350,
+                            minHeight: 320,
+                            //height: 350,
+                            overflow: 'auto',
+                          }}>
                           {positionItems
                             .filter(
                               key =>
@@ -658,6 +666,29 @@ const DeviceDetails = props => {
                       </TableBody>
                     </Table>
                   )}
+                </CardContent>
+              </Card>
+            </Box>
+            <Box sx={{ boxShadow: 0, borderRadius: 4, marginTop: 2 }}>
+              <Card
+                sx={{
+                  boxShadow: 0,
+                  borderRadius: 4,
+                  height: 112,
+                  maxHeight: 112,
+                }}>
+                <CardContent>
+                  <Typography variant='subtitle1' sx={{}}>
+                    Driver
+                  </Typography>
+                  <Typography
+                    variant='h5'
+                    className='bold'
+                    style={{ paddingTop: 2 }}>
+                    {itemData?.attributes?.driverName
+                      ? itemData?.attributes?.driverName
+                      : ''}
+                  </Typography>
                 </CardContent>
               </Card>
             </Box>
@@ -1243,38 +1274,7 @@ const DeviceDetails = props => {
                   </Card>
                 </Box>
               </Grid>
-              <Grid item xs={6} md={4}>
-                <Box sx={{ boxShadow: 0, borderRadius: 4 }}>
-                  <Card sx={{ boxShadow: 0, borderRadius: 4 }}>
-                    <CardContent
-                      sx={{ cursor: 'pointer' }}
-                      onClick={() => {
-                        navigate(`/settings/notifications`)
-                      }}>
-                      <div className='flex-cont'>
-                        <Typography>Alerts</Typography>
-                      </div>
-                      <div style={{ paddingBottom: 3 }}>
-                        <NotificationsActiveIcon
-                          sx={{
-                            fontSize: 24,
-                            color: '#F6B500',
-                          }}
-                        />
-                      </div>
-                      {/* <div style={{ paddingTop: 0 }}>
-                        <Typography
-                          variant='subtitle2'
-                          className='bold'
-                          color=' #F2590D'
-                          style={{ visibility: 'hidden' }}>
-                          aaaaa
-                        </Typography>
-                      </div> */}
-                    </CardContent>
-                  </Card>
-                </Box>
-              </Grid>
+
               <Grid item xs={6} md={4}>
                 <Box sx={{ boxShadow: 0, borderRadius: 4 }}>
                   <Card sx={{ boxShadow: 0, borderRadius: 4 }}>
@@ -1309,6 +1309,38 @@ const DeviceDetails = props => {
                   </Card>
                 </Box>
               </Grid>
+              <Grid item xs={6} md={4}>
+                <Box sx={{ boxShadow: 0, borderRadius: 4 }}>
+                  <Card sx={{ boxShadow: 0, borderRadius: 4 }}>
+                    <CardContent
+                      sx={{ cursor: 'pointer' }}
+                      onClick={() => {
+                        navigate(`/settings/notifications`)
+                      }}>
+                      <div className='flex-cont'>
+                        <Typography>Alerts</Typography>
+                      </div>
+                      <div style={{ paddingBottom: 3 }}>
+                        <NotificationsActiveIcon
+                          sx={{
+                            fontSize: { sm: 24, xs: 36 },
+                            color: '#F6B500',
+                          }}
+                        />
+                      </div>
+                      {/* <div style={{ paddingTop: 0 }}>
+                        <Typography
+                          variant='subtitle2'
+                          className='bold'
+                          color=' #F2590D'
+                          style={{ visibility: 'hidden' }}>
+                          aaaaa
+                        </Typography>
+                      </div> */}
+                    </CardContent>
+                  </Card>
+                </Box>
+              </Grid>
 
               <Grid item xs={6} md={4}>
                 <Box sx={{ boxShadow: 0, borderRadius: 4 }}>
@@ -1323,7 +1355,7 @@ const DeviceDetails = props => {
                           sx={{
                             // color: '#2A42CB',
                             // paddingBottom: 0,
-                            typography: { sm: 'h5', xs: 'h6' },
+                            typography: { sm: 'h5', xs: 'body1' },
                           }}
                           className='bold'>
                           {moment(deviceSingleData?.lastUpdate).format(

@@ -101,7 +101,7 @@ const MenuItems = ({ title, link, icon, selected }) => {
       <ListItemIcon sx={{ color: '#0E1726' }}>{icon}</ListItemIcon>
       <ListItemText
         primaryTypographyProps={{
-          variant: 'body1',
+          variant: 'subtitle1',
           fontWeight: selected ? 'bold' : 400,
         }}
         style={{ fontWeight: selected ? 'bold' : 400, fontSize: 18 }}
