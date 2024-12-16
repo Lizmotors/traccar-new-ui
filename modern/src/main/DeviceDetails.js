@@ -566,6 +566,8 @@ const DeviceDetails = props => {
     }
   }, [itemData])
 
+  console.log('itemData', itemData)
+
   return (
     <PageLayout menu={<MainMenu />}>
       <Header />
@@ -977,7 +979,8 @@ const DeviceDetails = props => {
                           sx={{
                             fontSize: 24,
                             color:
-                              itemData?.attributes?.ignition === 'true'
+                              itemData?.attributes?.ignition === 'true' ||
+                              itemData?.attributes?.ignition
                                 ? 'green'
                                 : 'red',
                           }}
@@ -986,14 +989,16 @@ const DeviceDetails = props => {
                       <Typography
                         sx={{
                           color:
-                            itemData?.attributes?.ignition === 'true'
+                            itemData?.attributes?.ignition === 'true' ||
+                            itemData?.attributes?.ignition
                               ? '#089518'
                               : '#FF0000',
                           typography: { sm: 'h4', xs: 'h6' },
                           paddingBottom: 0,
                         }}
                         className='bold'>
-                        {itemData?.attributes?.ignition === 'true'
+                        {itemData?.attributes?.ignition === 'true' ||
+                        itemData?.attributes?.ignition
                           ? 'ON'
                           : 'OFF'}
                       </Typography>
@@ -1095,7 +1100,8 @@ const DeviceDetails = props => {
                           sx={{
                             fontSize: 24,
                             color:
-                              itemData?.attributes?.motion === 'true'
+                              itemData?.attributes?.motion === 'true' ||
+                              itemData?.attributes?.motion
                                 ? 'green'
                                 : 'red',
                           }}
@@ -1104,14 +1110,18 @@ const DeviceDetails = props => {
                       <Typography
                         sx={{
                           color:
-                            itemData?.attributes?.motion === 'true'
+                            itemData?.attributes?.motion === 'true' ||
+                            itemData?.attributes?.motion
                               ? '#089518'
                               : '#FF0000',
                           typography: { sm: 'h4', xs: 'h6' },
                           paddingBottom: 0,
                         }}
                         className='bold'>
-                        {itemData?.attributes?.motion === 'true' ? 'ON' : 'OFF'}
+                        {itemData?.attributes?.motion === 'true' ||
+                        itemData?.attributes?.motion
+                          ? 'ON'
+                          : 'OFF'}
                       </Typography>
                     </CardContent>
                   </Card>
