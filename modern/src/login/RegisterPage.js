@@ -14,6 +14,7 @@ import { useTranslation } from "../common/components/LocalizationProvider";
 import { snackBarDurationShortMs } from "../common/util/duration";
 import { useCatch } from "../reactHelper";
 import Logo from "../resources/images/login-logo.png";
+import Logo2 from "../resources/images/turetlogo.png"
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -60,39 +61,31 @@ const RegisterPage = () => {
     <>
       <div class="maincont">
         <div class="logo">
-          <img src={Logo} alt="logo" />
+          <img src={Logo2} alt="logo" />
         </div>
         <div class="form-cont">
           <div
-            class={`form-subcont  ${
-              localStorage.getItem("mode") &&
+            class={`form-subcont  ${localStorage.getItem("mode") &&
               localStorage.getItem("mode") === "dark"
-                ? "form-subcont1"
-                : ""
-            }`}
+              ? "form-subcont1"
+              : ""
+              }`}
           >
             <div
-              class={`form-title  ${
-                localStorage.getItem("mode") &&
+              style={{ fontWeight: 300, textAlign: 'center' }}
+              class={`form-title  ${localStorage.getItem("mode") &&
                 localStorage.getItem("mode") === "dark"
-                  ? "form-title1"
-                  : ""
-              }`}
+                ? "form-title1"
+                : ""
+                }`}
             >
-              Nice to see you again
-            </div>
-            <div className={classes.header}>
-              <IconButton color="primary" onClick={() => navigate("/login")}>
-                <ArrowBackIcon />
-              </IconButton>
-              <Typography className={classes.title} color="primary">
-                {t("loginRegister")}
-              </Typography>
+              Turet by Gauss Moto
             </div>
             <div class="field-cont">
               <div class="fiele-title">{t("sharedName")}</div>
               <div className="input">
                 <TextField
+                  inputProps={{ style: { fontWeight: 300 } }}
                   required
                   //label={t("sharedName")}
                   name="name"
@@ -107,6 +100,7 @@ const RegisterPage = () => {
               <div class="fiele-title">{t("userEmail")}</div>
               <div className="input">
                 <TextField
+                  inputProps={{ style: { fontWeight: 300 } }}
                   required
                   type="email"
                   //label={t("userEmail")}
@@ -121,6 +115,7 @@ const RegisterPage = () => {
               <div class="fiele-title">{t("userPassword")}</div>
               <div className="input">
                 <TextField
+                  inputProps={{ style: { fontWeight: 300 } }}
                   required
                   //label={t("userPassword")}
                   name="password"
@@ -130,6 +125,15 @@ const RegisterPage = () => {
                   onChange={(event) => setPassword(event.target.value)}
                 />
               </div>
+            </div>
+
+            <div
+              style={{ paddingBottom: 30, fontWeight: 300, color: "#000000" }}
+              class="forget-text"
+              onClick={() => navigate("/login")}
+            //    disabled={!registrationEnabled}
+            >
+              Login
             </div>
 
             <div class="login-btn">

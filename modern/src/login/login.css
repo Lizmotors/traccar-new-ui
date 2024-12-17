@@ -9,9 +9,9 @@ html, body{
     flex-direction: column;
     /* justify-content: center; */
     /* align-items: center; */
-    background: url('../resources//images//bg.jpg') no-repeat 0px 0px;
+    background: linear-gradient(to right, #C9D6FF 0%, #E2E2E2 100%);
     background-size: cover;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Nunito', sans-serif;
     background-attachment: fixed;
     background-position: center;
     height: 110vh;
@@ -25,7 +25,7 @@ html, body{
 }
 
 .logo img{
-    width: 200px;
+    width: 100px;
 }
 
 .quotes{
@@ -84,6 +84,7 @@ html, body{
 }
 .input .MuiFormControl-root{
     width: 100%;
+    font-weight:300;
 }
 .fiele-title{
     font-size: 12px;
@@ -123,13 +124,13 @@ html, body{
 .login-btn button{
     cursor: pointer;
     width: 100%;
-    background-color: blue;
+    background-color: #000000;
     border: none;
     outline: none;
     padding: 10px;
-    border-radius: 10px;
+    border-radius: 5px;
     color:#fff;
-    font-weight: 700;
+    font-weight: 300;
     font-size: 16px;
 }
 

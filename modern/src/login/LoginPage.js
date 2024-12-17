@@ -35,6 +35,7 @@ import LogoImage from "./LogoImage";
 import { useCatch } from "../reactHelper";
 import "./login.css";
 import Logo from "../resources/images/login-logo.png";
+import Logo2 from "../resources/images/turetlogo.png"
 
 const useStyles = makeStyles((theme) => ({
   options: {
@@ -169,32 +170,32 @@ const LoginPage = () => {
     <>
       <div class="maincont">
         <div class="logo">
-          <img src={Logo} alt="logo" />
+          <img src={Logo2} alt="logo" />
         </div>
         <div class="form-cont">
           <div
-            class={`form-subcont  ${
-              localStorage.getItem("mode") &&
+            class={`form-subcont  ${localStorage.getItem("mode") &&
               localStorage.getItem("mode") === "dark"
-                ? "form-subcont1"
-                : ""
-            }`}
+              ? "form-subcont1"
+              : ""
+              }`}
           >
             <div
-              class={`form-title  ${
-                localStorage.getItem("mode") &&
+              style={{ fontWeight: 300, textAlign: 'center' }}
+              class={`form-title  ${localStorage.getItem("mode") &&
                 localStorage.getItem("mode") === "dark"
-                  ? "form-title1"
-                  : ""
-              }`}
+                ? "form-title1"
+                : ""
+                }`}
             >
-              Nice to see you again
+              Turet by Gauss Moto
             </div>
             <div class="field-cont">
               <div class={"fiele-title"}>{t("userEmail")}</div>
-              <div className="input">
+              <div className="input" style={{ fontWeight: 300 }}>
                 <TextField
                   required
+                  inputProps={{ style: { fontWeight: 300 } }}
                   error={failed}
                   //label={t("userEmail")}
                   name="email"
@@ -212,6 +213,7 @@ const LoginPage = () => {
               <div className="input">
                 <TextField
                   required
+                  inputProps={{ style: { fontWeight: 300 } }}
                   error={failed}
                   //label={t("userPassword")}
                   name="password"
@@ -236,6 +238,7 @@ const LoginPage = () => {
                 <label for="remenber">Remenber Me</label>
               </div> */}
               <div
+                style={{ fontWeight: 300, color: "#000000" }}
                 class="forget-text"
                 onClick={() => navigate("/register")}
                 disabled={!registrationEnabled}
