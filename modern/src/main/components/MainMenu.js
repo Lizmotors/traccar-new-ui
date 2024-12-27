@@ -45,7 +45,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { useTranslation } from '../../common/components/LocalizationProvider'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import Logo from '../../resources/images/logo-o2-name.png'
+import Logo from '../../resources/images/logo.png'
 import {
   useAdministrator,
   useManager,
@@ -128,7 +128,7 @@ const useStyles = makeStyles(theme => ({
   },
   logoimg: {
     textAlign: 'centre',
-    width: 150,
+    width: 70,
     //height: 70,
     marginRight: 0,
   },
@@ -172,9 +172,8 @@ const useStyles = makeStyles(theme => ({
     },
     [theme.breakpoints.down('md')]: {
       left: '50%',
-      bottom: `calc(${theme.spacing(3)} + ${
-        theme.dimensions.bottomBarHeight
-      }px)`,
+      bottom: `calc(${theme.spacing(3)} + ${theme.dimensions.bottomBarHeight
+        }px)`,
     },
     transform: 'translateX(-50%)',
   },
@@ -526,8 +525,8 @@ const SettingsMenu = () => {
               }}>
               <ListItemButton
                 sx={{ color: '#0E1726' }}
-                //component={Link}
-                //selected={selected}
+              //component={Link}
+              //selected={selected}
               >
                 <ListItemIcon sx={{ color: '#0E1726' }}>
                   <AddLocationAltIcon />
@@ -546,9 +545,8 @@ const SettingsMenu = () => {
               <Paper
                 square
                 elevation={0}
-                className={`${classes.sidebar} ${
-                  !devicesOpen && classes.sidebarCollapsed
-                }`}>
+                className={`${classes.sidebar} ${!devicesOpen && classes.sidebarCollapsed
+                  }`}>
                 <Paper
                   square
                   elevation={0}

@@ -115,9 +115,8 @@ const useStyles = makeStyles(theme => ({
     },
     [theme.breakpoints.down('md')]: {
       left: '50%',
-      bottom: `calc(${theme.spacing(3)} + ${
-        theme.dimensions.bottomBarHeight
-      }px)`,
+      bottom: `calc(${theme.spacing(3)} + ${theme.dimensions.bottomBarHeight
+        }px)`,
     },
     transform: 'translateX(-50%)',
   },
