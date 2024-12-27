@@ -52,6 +52,7 @@ import TokenDocs from './blockChain/TokenDocs'
 import SettingsMain from './settings/SettingsMain'
 import ReportsMain from './reports/ReportsMain'
 import DeviceDetails from './main/DeviceDetails'
+import AgentPage from './agent/AgentPage'
 
 const Navigation = () => {
   const navigate = useNavigate()
@@ -99,6 +100,8 @@ const Navigation = () => {
       <Route path='/' element={<App />}>
         <Route index element={<MainPage />} />
         <Route path='device/:id/:positionId' element={<DeviceDetails />} />
+
+        <Route path='agent' element={<AgentPage />} />
 
         <Route path='position/:id' element={<PositionPage />} />
         <Route path='network/:positionId' element={<NetworkPage />} />

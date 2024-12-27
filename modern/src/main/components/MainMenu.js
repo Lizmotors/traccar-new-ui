@@ -839,6 +839,12 @@ const SettingsMenu = () => {
           selected={location.pathname.startsWith('/settings/notification')}
           icon={<SettingsIcon />}
         />
+        <MenuItems
+          title={'Agent'}
+          link='/agent'
+          selected={location.pathname.startsWith('/agent')}
+          icon={<SettingsIcon />}
+        />
         {/* <Accordion
           //defaultExpanded
           onChange={() => handleOpen("settings")}
