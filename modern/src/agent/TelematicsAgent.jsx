@@ -1,240 +1,359 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { format } from 'date-fns';
-import Plot from 'react-plotly.js';
-import { v4 as uuidv4 } from 'uuid';
+import React, { useState, useEffect, useRef } from "react";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
+import { v4 as uuidv4 } from "uuid";
+import TelematicsAgentResponse from "./TelematicsAgentResponse";
+import "./styles/AgentResponse.css";
 
 export default function TelematicsAgent() {
-	const [messages, setMessages] = useState([]);
-	const [threadId] = useState(uuidv4());
-	const [sseEvents, setSseEvents] = useState([]);
-	const [inputMessage, setInputMessage] = useState('');
-	const chatEndRef = useRef(null);
+  const [message, setMessage] = useState("");
+  const [vehicleData, setVehicleData] = useState([]);
+  const [streamingResponse, setStreamingResponse] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const responseRef = useRef(null);
+  const [threadId, setThreadId] = useState(uuidv4());
+  const [messages, setMessages] = useState([]);
+  const [isTyping, setIsTyping] = useState(false);
 
-	useEffect(() => {
-		chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-	}, [messages, sseEvents]);
+  useEffect(() => {
+    if (responseRef.current) {
+      responseRef.current.scrollTop = responseRef.current.scrollHeight;
+    }
+  }, [streamingResponse]);
 
-	const parseSSELine = (line) => {
-		if (line.startsWith('data: ')) {
-			try {
-				return JSON.parse(line.slice(6));
-			} catch {
-				return null;
-			}
-		}
-		return null;
-	};
+  // useEffect(() => {
+  //   console.log("Vehicle data updated:", vehicleData);
+  // }, [vehicleData]);
 
-	const renderVisualization = (htmlContent) => {
-		return <div dangerouslySetInnerHTML={{ __html: htmlContent }} className="h-[500px] overflow-auto" />;
-	};
+  //Api related functions
+  const processStreamingData = (data) => {
+    try {
+      // console.log("Received data:", data);
+      if (data.type === "token" && data.content) {
+        setStreamingResponse((prev) => prev + data.content);
+      } else if (data.type === "artifact") {
+        // console.log("Artifact data:", data);
+        if (data["text/csv"]) {
+          const rows = data["text/csv"].split("\n");
+          const headers = rows[0].split(",");
+          const parsedData = rows
+            .slice(1)
+            .filter((row) => row.trim())
+            .map((row) => {
+              const values = row.split(",");
+              const obj = {};
+              headers.forEach((header, index) => {
+                obj[header.trim()] = values[index]?.trim() || null;
+              });
+              return obj;
+            })
+            .filter((row) => {
+              // Ensure we have valid numeric data
+              const hasValidSpeed = !isNaN(parseFloat(row.speed));
+              const hasValidCoords =
+                !isNaN(parseFloat(row.latitude)) &&
+                !isNaN(parseFloat(row.longitude));
+              return hasValidSpeed && hasValidCoords;
+            });
 
-	const renderPlotlyFigure = (content) => {
-		try {
-			const plotData = typeof content === 'string' ? JSON.parse(content) : content;
-			return <Plot
-				data={plotData.data || []}
-				layout={plotData.layout || { autosize: true }}
-				className="w-full h-[500px]"
-			/>;
-		} catch (error) {
-			console.error('Error parsing Plotly data:', error);
-			return <div className="text-red-500">Error rendering visualization</div>;
-		}
-	};
+          // console.log("Parsed data:", parsedData);
+          if (parsedData.length > 0) {
+            setVehicleData(parsedData);
+          }
+        } else if (data["application/json"]) {
+          // Handle JSON data if provided
+          try {
+            const jsonData =
+              typeof data["application/json"] === "string"
+                ? JSON.parse(data["application/json"])
+                : data["application/json"];
+            console.log("JSON data:", jsonData);
 
-	const processStreamResponse = async (response) => {
-		const reader = response.body.getReader();
-		let accumulatedText = '';
-		const decoder = new TextDecoder();
+            if (Array.isArray(jsonData)) {
+              const processedData = jsonData
+                .map((item) => ({
+                  speed: item.speed?.toString() || "0",
+                  latitude: item.latitude?.toString() || "0",
+                  longitude: item.longitude?.toString() || "0",
+                  altitude: item.altitude?.toString() || "0",
+                  servertime: item.servertime || new Date().toISOString(),
+                  // Add any other fields you need
+                }))
+                .filter((item) => !isNaN(parseFloat(item.speed)));
 
-		try {
-			while (true) {
-				const { done, value } = await reader.read();
-				if (done) break;
+              if (processedData.length > 0) {
+                setVehicleData(processedData);
+              }
+            }
+          } catch (e) {
+            console.error("Error parsing JSON data:", e);
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Error processing data:", error);
+    }
+  };
 
-				const chunk = decoder.decode(value);
-				const lines = chunk.split('\n');
-				console.log(chunk)
-				for (const line of lines) {
-					if (!line) continue;
+  const handleSendMessage = async () => {
+    if (!message.trim()) {
+      setError("Please enter a message");
+      return;
+    }
 
-					const eventData = parseSSELine(line);
-					if (!eventData) continue;
+    // Add user message to chat
+    const userMessage = {
+      role: "user",
+      content: message,
+      timestamp: new Date().toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      }),
+    };
+    setMessages((prev) => [...prev, userMessage]);
 
-					switch (eventData.type) {
-						case 'token':
-							accumulatedText += eventData.content;
-							setMessages(prev => {
-								const newMessages = [...prev];
-								if (newMessages.length && newMessages[newMessages.length - 1].role === 'assistant') {
-									newMessages[newMessages.length - 1].content = accumulatedText;
-								} else {
-									newMessages.push({
-										role: 'assistant',
-										content: accumulatedText,
-										timestamp: format(new Date(), 'HH:mm')
-									});
-								}
-								return newMessages;
-							});
-							break;
+    setIsLoading(true);
+    setIsTyping(true);
+    setError(null);
+    setVehicleData([]);
+    setStreamingResponse("");
 
-						case 'tool_start':
-							setSseEvents(prev => [...prev, {
-								type: 'info',
-								content: `Running: ${eventData.tool}`,
-								timestamp: format(new Date(), 'HH:mm')
-							}]);
-							break;
+    try {
+      const response = await fetch("https://api1001.elevatics.online/v2/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          message,
+          thread_id: threadId,
+        }),
+      });
 
-						case 'tool_end':
-							setSseEvents(prev => [...prev, {
-								type: 'success',
-								content: eventData.output,
-								timestamp: format(new Date(), 'HH:mm')
-							}]);
-							break;
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+      let assistantMessage = {
+        role: "assistant",
+        content: "",
+        timestamp: new Date().toLocaleTimeString("en-US", {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        }),
+      };
 
-						case 'artifact':
-							if (eventData['plotly_fig/json']) {
-								setSseEvents(prev => [...prev, {
-									type: 'plotly',
-									content: eventData['plotly_fig/json'],
-									timestamp: format(new Date(), 'HH:mm')
-								}]);
-							} else if (eventData['text/html']) {
-								setSseEvents(prev => [...prev, {
-									type: 'html',
-									content: eventData['text/html'],
-									timestamp: format(new Date(), 'HH:mm')
-								}]);
-							} else if (eventData['text/csv']) {
-								setSseEvents(prev => [...prev, {
-									type: 'csv',
-									content: eventData['text/csv'],
-									timestamp: format(new Date(), 'HH:mm')
-								}]);
-							}
-							break;
-					}
-				}
-			}
-		} catch (error) {
-			console.error('Error processing stream:', error);
-		}
-	};
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
 
-	const handleSubmit = async (e) => {
-		e.preventDefault();
-		if (!inputMessage.trim()) return;
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split("\n");
+        buffer = lines.pop() || "";
 
-		const newMessage = {
-			role: 'user',
-			content: inputMessage,
-			timestamp: format(new Date(), 'HH:mm')
-		};
-		setMessages(prev => [...prev, newMessage]);
-		setInputMessage('');
+        for (const line of lines) {
+          if (line.trim().startsWith("data: ")) {
+            try {
+              const jsonStr = line.slice(6).trim();
+              if (jsonStr) {
+                const data = JSON.parse(jsonStr);
+                if (data.type === "token") {
+                  assistantMessage.content += data.content;
+                  setMessages((prev) => {
+                    const newMessages = [...prev];
+                    const lastMessage = newMessages[newMessages.length - 1];
+                    if (lastMessage && lastMessage.role === "assistant") {
+                      newMessages[newMessages.length - 1] = assistantMessage;
+                    } else {
+                      newMessages.push(assistantMessage);
+                    }
+                    return newMessages;
+                  });
+                }
+                processStreamingData(data);
+              }
+            } catch (e) {
+              console.error("Error parsing JSON:", e);
+            }
+          }
+        }
+      }
+      setMessage("");
+    } catch (error) {
+      setError("Failed to send message. Please try again.");
+      console.error("Failed to send message:", error);
+    } finally {
+      setIsLoading(false);
+      setIsTyping(false);
+    }
+  };
 
-		try {
-			const response = await fetch('https://api1001.elevatics.online/chat', {
-				method: 'POST',
-				headers: {
-					'Accept': 'text/event-stream',
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({
-					message: inputMessage,
-					thread_id: threadId
-				})
-			});
+  return (
+    <div
+      style={{
+        maxWidth: "1200px",
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <div
+        className="no-scrollbar"
+        style={{
+          width: "75%",
+          padding: "0px 100px",
+          flex: 1,
+          overflowY: "auto",
+          maxHeight: "476px",
+        }}
+      >
+        <h1
+          style={{
+            fontSize: "38px",
+            fontFamily: "serif,sans-serif",
+            color: "#333",
+            marginBottom: "20px",
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+          }}
+        >
+          Vehicle Telematics Analytics Agent
+          <span style={{ color: "#666", cursor: "pointer" }}>⚡</span>
+        </h1>
 
-			if (response.ok) {
-				await processStreamResponse(response);
-			} else {
-				throw new Error(`HTTP error! status: ${response.status}`);
-			}
-		} catch (error) {
-			console.error('Connection error:', error);
-			setMessages(prev => [...prev, {
-				role: 'error',
-				content: 'Failed to connect to the server. Please try again.',
-				timestamp: format(new Date(), 'HH:mm')
-			}]);
-		}
-	};
+        {/* Example Commands Section */}
+        <div style={{ marginBottom: "40px" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              marginBottom: "16px",
+              color: "#333",
+            }}
+          >
+            <span style={{ fontSize: "20px" }}>💡</span>
+            <span style={{ fontSize: "18px", fontFamily: "serif,sans-serif" }}>
+              Example commands:
+            </span>
+          </div>
+          <ul
+            style={{
+              listStyle: "none",
+              padding: 0,
+              margin: 0,
+              display: "flex",
+              fontFamily: "serif,sans-serif",
+              flexDirection: "column",
+              gap: "8px",
+              color: "#555",
+              fontSize: "15px",
+            }}
+          >
+            <li>"Plot last ride data of device 7 for last week"</li>
+            <li>"Create a visualization of speed over time"</li>
+            <li>"Show summarized metrics for vehicle position data"</li>
+          </ul>
+        </div>
 
-	return (
-		<div className="container mx-auto max-w-4xl p-4">
-			<h1 className="text-3xl font-bold mb-6">Vehicle Telematics Analytics Agent</h1>
+        {/* Chat Messages */}
+        <div style={{ marginBottom: "24px" }}>
+          <TelematicsAgentResponse
+            messages={messages}
+            isTyping={isTyping}
+            vehicleData={vehicleData}
+          />
+        </div>
 
-			<div className="bg-gray-100 p-4 rounded-lg mb-6">
-				<p className="font-semibold">💡 Example commands:</p>
-				<ul className="list-disc pl-6">
-					<li>Plot last ride data of device 7 for last week</li>
-					<li>Create a visualization of speed over time</li>
-					<li>Show summarized metrics for vehicle position data</li>
-				</ul>
-			</div>
+        {/* Input Section */}
+        <div className="inputContainer">
+          <div
+            style={{
+              position: "relative",
+              maxWidth: "700px",
+              marginBottom: "35px",
+            }}
+          >
+            <input
+              type="text"
+              placeholder="Ask me about your data..."
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              disabled={isLoading}
+              style={{
+                width: "100%",
+                padding: "9px",
+                paddingRight: "50px",
+                fontSize: "14px",
+                borderRadius: "8px",
+                border: "1px solid #E0E0E0",
+                backgroundColor: "#F8F9FA",
+                outline: "none",
+                color: "#333",
+              }}
+              onKeyPress={(e) => {
+                if (e.key === "Enter") {
+                  handleSendMessage();
+                }
+              }}
+            />
+            <button
+              onClick={handleSendMessage}
+              disabled={isLoading}
+              style={{
+                position: "absolute",
+                right: "16px",
+                top: "50%",
+                transform: "translateY(-50%)",
+                background: "none",
+                border: "none",
+                cursor: isLoading ? "not-allowed" : "pointer",
+                opacity: isLoading ? 0.5 : 1,
+                color: "#666",
+              }}
+            >
+              <span style={{ fontSize: "24px" }}>➤</span>
+            </button>
+          </div>
+        </div>
 
-			<div className="bg-white rounded-lg shadow-lg p-4 mb-6 h-[600px] overflow-y-auto">
-				{messages.map((message, index) => (
-					<div key={index} className={`mb-4 ${message.role === 'user' ? 'text-right' : 'text-left'}`}>
-						<div className={`inline-block max-w-[70%] p-3 rounded-lg ${message.role === 'user' ? 'bg-blue-500 text-white' :
-							message.role === 'error' ? 'bg-red-500 text-white' :
-								'bg-gray-200'
-							}`}>
-							<p>{message.content}</p>
-							<p className="text-xs mt-1 opacity-70">{message.timestamp}</p>
-						</div>
-					</div>
-				))}
-
-				{sseEvents.map((event, index) => (
-					<div key={`event-${index}`} className="mb-4">
-						{event.type === 'info' && (
-							<div className="bg-blue-100 text-blue-800 p-2 rounded">{event.content}</div>
-						)}
-						{event.type === 'success' && (
-							<div className="bg-green-100 text-green-800 p-2 rounded">{event.content}</div>
-						)}
-						{event.type === 'plotly' && (
-							<div className="border rounded p-4">
-								{renderPlotlyFigure(event.content)}
-							</div>
-						)}
-						{event.type === 'html' && (
-							<div className="border rounded p-4">
-								{renderVisualization(event.content)}
-							</div>
-						)}
-						{event.type === 'csv' && (
-							<div className="border rounded p-4 overflow-x-auto">
-								<pre>{event.content}</pre>
-							</div>
-						)}
-					</div>
-				))}
-				<div ref={chatEndRef} />
-			</div>
-
-			<form onSubmit={handleSubmit} className="flex gap-2">
-				<input
-					type="text"
-					value={inputMessage}
-					onChange={(e) => setInputMessage(e.target.value)}
-					placeholder="Ask me about your data..."
-					className="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-				/>
-				<button
-					type="submit"
-					className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
-				>
-					Send
-				</button>
-			</form>
-		</div>
-	);
-};
-
+        {error && (
+          <div
+            style={{
+              color: "#dc3545",
+              marginTop: "10px",
+              padding: "12px",
+              backgroundColor: "#fce8e8",
+              borderRadius: "8px",
+            }}
+          >
+            {error}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 import {
   AppBar,
   Breadcrumbs,
@@ -11,24 +11,24 @@ import {
   useMediaQuery,
   useTheme,
   ListItemIcon,
-} from '@mui/material'
-import { useSelector, useDispatch } from 'react-redux'
-import makeStyles from '@mui/styles/makeStyles'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import MenuIcon from '@mui/icons-material/Menu'
-import { useNavigate } from 'react-router-dom'
-import { useTranslation } from './LocalizationProvider'
-import { sessionActions } from '../../store'
+} from "@mui/material";
+import { useSelector, useDispatch } from "react-redux";
+import makeStyles from "@mui/styles/makeStyles";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import MenuIcon from "@mui/icons-material/Menu";
+import { useNavigate } from "react-router-dom";
+import { useTranslation } from "./LocalizationProvider";
+import { sessionActions } from "../../store";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   desktopRoot: {
-    height: '100%',
-    display: 'flex',
+    height: "100%",
+    display: "flex",
   },
   mobileRoot: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
+    height: "100%",
+    display: "flex",
+    flexDirection: "column",
   },
   desktopDrawer: {
     width: theme.dimensions.drawerWidthDesktop,
@@ -43,60 +43,60 @@ const useStyles = makeStyles(theme => ({
   },
   content: {
     flexGrow: 1,
-    alignItems: 'stretch',
-    display: 'flex',
-    flexDirection: 'column',
-    overflowY: 'auto',
+    alignItems: "stretch",
+    display: "flex",
+    flexDirection: "column",
+    overflowY: "auto",
   },
-}))
+}));
 
 const PageTitle = ({ breadcrumbs }) => {
-  const theme = useTheme()
-  const t = useTranslation()
+  const theme = useTheme();
+  const t = useTranslation();
 
-  const desktop = useMediaQuery(theme.breakpoints.up('md'))
+  const desktop = useMediaQuery(theme.breakpoints.up("md"));
 
   if (desktop) {
     return (
-      <Typography variant='h6' noWrap>
+      <Typography variant="h6" noWrap>
         {t(breadcrumbs[0])}
       </Typography>
-    )
+    );
   }
   return (
     <Breadcrumbs>
-      {breadcrumbs.slice(0, -1).map(breadcrumb => (
-        <Typography variant='h6' color='inherit' key={breadcrumb}>
+      {breadcrumbs.slice(0, -1).map((breadcrumb) => (
+        <Typography variant="h6" color="inherit" key={breadcrumb}>
           {t(breadcrumb)}
         </Typography>
       ))}
-      <Typography variant='h6' color='textPrimary'>
+      <Typography variant="h6" color="textPrimary">
         {t(breadcrumbs[breadcrumbs.length - 1])}
       </Typography>
     </Breadcrumbs>
-  )
-}
+  );
+};
 
 const PageLayout = ({ menu, breadcrumbs = [], children }) => {
-  const classes = useStyles()
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+  const classes = useStyles();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const [openDrawer, setOpenDrawer] = useState(false)
+  const [openDrawer, setOpenDrawer] = useState(false);
 
-  const openMenu = useSelector(state => state.session.openMenu)
+  const openMenu = useSelector((state) => state.session.openMenu);
 
   const handleOpenMenu = () => {
-    localStorage.setItem('openMenu', !openMenu)
-    dispatch(sessionActions.updateMenu(!openMenu))
-  }
+    localStorage.setItem("openMenu", !openMenu);
+    dispatch(sessionActions.updateMenu(!openMenu));
+  };
 
   return (
     <>
       <Hidden mdDown>
         <div className={classes.desktopRoot}>
           <Drawer
-            variant='permanent'
+            variant="permanent"
             className={`${
               openMenu ? classes.desktopDrawer : classes.desktopDrawerIcons
             }`}
@@ -104,16 +104,18 @@ const PageLayout = ({ menu, breadcrumbs = [], children }) => {
               paper: openMenu
                 ? classes.desktopDrawer
                 : classes.desktopDrawerIcons,
-            }}>
+            }}
+          >
             {breadcrumbs.length > 0 && (
               <>
                 <div className={classes.toolbar}>
                   <Toolbar>
                     <IconButton
-                      color='inherit'
-                      edge='start'
+                      color="inherit"
+                      edge="start"
                       sx={{ mr: 2 }}
-                      onClick={() => navigate('/')}>
+                      onClick={() => navigate("/")}
+                    >
                       <ArrowBackIcon />
                     </IconButton>
                     <PageTitle breadcrumbs={breadcrumbs} />
@@ -125,11 +127,12 @@ const PageLayout = ({ menu, breadcrumbs = [], children }) => {
 
             <ListItemIcon
               sx={{
-                color: '#0E1726',
-                padding: '8px 16px 8px 16px',
-                cursor: 'pointer',
+                color: "#0E1726",
+                padding: "8px 16px 8px 16px",
+                cursor: "pointer",
               }}
-              onClick={handleOpenMenu}>
+              onClick={handleOpenMenu}
+            >
               {/* <IconButton
                 color='inherit'
                 edge='start'
@@ -148,22 +151,25 @@ const PageLayout = ({ menu, breadcrumbs = [], children }) => {
       <Hidden mdUp>
         <div className={classes.mobileRoot}>
           <Drawer
-            variant='temporary'
+            variant="temporary"
             open={openDrawer}
             onClose={() => setOpenDrawer(false)}
-            classes={{ paper: classes.mobileDrawer }}>
+            classes={{ paper: classes.mobileDrawer }}
+          >
             {menu}
           </Drawer>
           <AppBar
             className={classes.mobileToolbar}
-            position='static'
-            color='inherit'>
+            position="static"
+            color="inherit"
+          >
             <Toolbar>
               <IconButton
-                color='inherit'
-                edge='start'
+                color="inherit"
+                edge="start"
                 sx={{ mr: 2 }}
-                onClick={() => setOpenDrawer(true)}>
+                onClick={() => setOpenDrawer(true)}
+              >
                 <MenuIcon />
               </IconButton>
               <PageTitle breadcrumbs={breadcrumbs} />
@@ -173,7 +179,7 @@ const PageLayout = ({ menu, breadcrumbs = [], children }) => {
         </div>
       </Hidden>
     </>
-  )
-}
+  );
+};
 
-export default PageLayout
+export default PageLayout;
