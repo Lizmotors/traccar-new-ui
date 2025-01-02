@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { memo, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
@@ -12,6 +12,146 @@ import {
 } from "@react-google-maps/api";
 import { Line } from "react-chartjs-2";
 import "./styles/AgentResponse.css";
+
+const components = {
+  ul: memo(({ node, ...props }) => {
+    return (
+      <div>
+        <ul
+          style={{ marginLeft: "8px", listStyleType: "disc", marginTop: "5px" }}
+          {...props}
+        ></ul>
+        {node.children.map((ele, index) => {
+          if (
+            ele.type === "element" &&
+            ele.tagName === "li" &&
+            ele.children?.[0]
+          ) {
+            const deviceText = ele.children[0].value;
+
+            if (deviceText && deviceText.includes("Device ID")) {
+              const deviceMatch = deviceText.match(
+                /Device ID:\s*(\d+),\s*Name:\s*([^,]+)/
+              );
+
+              if (deviceMatch) {
+                const [, deviceId, deviceName] = deviceMatch;
+                return (
+                  <div
+                    key={index}
+                    style={{
+                      background: "#ffffff",
+                      borderRadius: "8px",
+                      padding: "20px",
+                      marginBottom: "20px",
+                      boxShadow: "inset 0 2px 8px rgba(0, 0, 0, 0.1)",
+                      width: "300px",
+                      display: "inline-block",
+                      marginRight: "20px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <div
+                      style={{
+                        color: "#6B7280",
+                        fontSize: "15px",
+                        marginBottom: "8px",
+                      }}
+                    >
+                      Device ID: {deviceId}
+                    </div>
+                    <div
+                      style={{
+                        color: "#111827",
+                        fontSize: "18px",
+                        fontWeight: "600",
+                      }}
+                    >
+                      {deviceName.trim()}
+                    </div>
+                  </div>
+                );
+              }
+            }
+          }
+          return null;
+        })}
+      </div>
+    );
+  }),
+  ol: memo(({ node, ...props }) => {
+    return (
+      <div>
+        <ol
+          style={{ marginLeft: "8px", listStyleType: "decimal", marginTop: "5px" }}
+          {...props}
+        ></ol>
+        {node.children.map((ele, index) => {
+          if (
+            ele.type === "element" &&
+            ele.tagName === "li" &&
+            ele.children?.[0]
+          ) {
+            const deviceText = ele.children[0].value;
+
+            if (deviceText && deviceText.includes("Device ID")) {
+              const deviceMatch = deviceText.match(
+                /Device ID:\s*(\d+),\s*Name:\s*([^,]+)/
+              );
+
+              if (deviceMatch) {
+                const [, deviceId, deviceName] = deviceMatch;
+                return (
+                  <div
+                    key={index}
+                    style={{
+                      background: "#ffffff",
+                      borderRadius: "8px",
+                      padding: "20px",
+                      marginBottom: "20px",
+                      boxShadow: "inset 0 2px 8px rgba(0, 0, 0, 0.1)",
+                      width: "300px",
+                      display: "inline-block",
+                      marginRight: "20px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <div
+                      style={{
+                        color: "#6B7280",
+                        fontSize: "15px",
+                        marginBottom: "8px",
+                      }}
+                    >
+                      Device ID: {deviceId}
+                    </div>
+                    <div
+                      style={{
+                        color: "#111827",
+                        fontSize: "18px",
+                        fontWeight: "600",
+                      }}
+                    >
+                      {deviceName.trim()}
+                    </div>
+                  </div>
+                );
+              }
+            }
+          }
+          return null;
+        })}
+      </div>
+    );
+  }),
+  table: memo(({ node, ...props }) => {
+    return (
+      <div>
+        <ul className="ml-8 list-disc my-5" {...props}></ul>
+      </div>
+    );
+  }),
+};
 
 const GOOGLE_MAPS_API_KEY = "AIzaSyBNLrJhOMz6idD05pzfn5lhA-TAw-mAZCU";
 
@@ -163,7 +303,7 @@ export default function TelematicsAgentResponse({
             msg.role === "user" ? "user-message" : "assistant-message"
           }`}
         >
-          <div style={{ display: "flex" }}>
+          <div style={{ display: "flex", gap: "5px" }}>
             <div className="message-avatar">
               {msg.role === "user" ? (
                 <FaRegUserCircle style={{ marginTop: "3px" }} size={20} />
@@ -175,15 +315,7 @@ export default function TelematicsAgentResponse({
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
                 rehypePlugins={[rehypeRaw]}
-                components={{
-                  img: ({ node, ...props }) => (
-                    <img
-                      style={{ maxWidth: "100%", height: "auto" }}
-                      {...props}
-                      loading="lazy"
-                    />
-                  ),
-                }}
+                components={components}
               >
                 {msg.content}
               </ReactMarkdown>
@@ -350,7 +482,7 @@ export default function TelematicsAgentResponse({
                   backgroundColor: "white",
                   borderRadius: "8px",
                   padding: "16px",
-                  boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+                  boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
                 }}
               >
                 <h3
@@ -421,7 +553,7 @@ export default function TelematicsAgentResponse({
                   style={{
                     backgroundColor: "white",
                     borderRadius: "8px",
-                    boxShadow: "0px 0px 4px rgba(0, 0, 0, 0.1)",
+                    boxShadow: "inset rgba(0, 0, 0, 0.1) 0px 0px 4px",
                     padding: "16px",
                     marginBottom: "16px",
                     marginTop: "16px",

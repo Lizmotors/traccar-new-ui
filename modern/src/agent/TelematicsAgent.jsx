@@ -20,8 +20,10 @@ ChartJS.register(
   Legend
 );
 import { v4 as uuidv4 } from "uuid";
+export { TELEMATICS_BASE_URL } from "../env";
 import TelematicsAgentResponse from "./TelematicsAgentResponse";
 import "./styles/AgentResponse.css";
+import { TELEMATICS_BASE_URL } from "../env";
 
 export default function TelematicsAgent() {
   const [message, setMessage] = useState("");
@@ -139,7 +141,7 @@ export default function TelematicsAgent() {
     setStreamingResponse("");
 
     try {
-      const response = await fetch("https://api1001.elevatics.online/v2/chat", {
+      const response = await fetch(`${TELEMATICS_BASE_URL}/chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -167,8 +169,9 @@ export default function TelematicsAgent() {
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
-
-        buffer += decoder.decode(value, { stream: true });
+        const chunk = decoder.decode(value, { stream: true });
+        // console.log("chunks messages are=>", chunk);
+        buffer += chunk;
         const lines = buffer.split("\n");
         buffer = lines.pop() || "";
 
@@ -190,6 +193,22 @@ export default function TelematicsAgent() {
                     }
                     return newMessages;
                   });
+                  // setMessages((prev) =>
+                  //   prev.map((message, index) =>
+                  //    ( index === prev.length - 1 )&&(message.role=="assista")
+                  //       ? {
+                  //           ...message,
+                  //           role: "assistant",
+                  //           content: message.content + data.content,
+                  //           timestamp: new Date().toLocaleTimeString("en-US", {
+                  //             hour: "2-digit",
+                  //             minute: "2-digit",
+                  //             hour12: false,
+                  //           }),
+                  //         }
+                  //       : message
+                  //   )
+                  // );
                 }
                 processStreamingData(data);
               }
@@ -212,7 +231,7 @@ export default function TelematicsAgent() {
   return (
     <div
       style={{
-        maxWidth: "1200px",
+        maxWidth: "100%",
         height: "100vh",
         display: "flex",
         flexDirection: "column",
@@ -220,16 +239,18 @@ export default function TelematicsAgent() {
       }}
     >
       <div
-        className="no-scrollbar"
+        className="no-scrollbar mainContent"
+        ref={responseRef}
         style={{
-          width: "75%",
+          width: "80%",
           padding: "0px 100px",
           flex: 1,
           overflowY: "auto",
-          maxHeight: "476px",
+          maxHeight: "490px",
         }}
       >
         <h1
+          className="mainContent-title"
           style={{
             fontSize: "38px",
             fontFamily: "serif,sans-serif",
@@ -255,12 +276,18 @@ export default function TelematicsAgent() {
               color: "#333",
             }}
           >
-            <span style={{ fontSize: "20px" }}>💡</span>
-            <span style={{ fontSize: "18px", fontFamily: "serif,sans-serif" }}>
+            <span className="mainContent-icon" style={{ fontSize: "20px" }}>
+              💡
+            </span>
+            <span
+              className="mainContent-cmd"
+              style={{ fontSize: "18px", fontFamily: "serif,sans-serif" }}
+            >
               Example commands:
             </span>
           </div>
           <ul
+            className="mainContent-ex"
             style={{
               listStyle: "none",
               padding: 0,
@@ -291,9 +318,10 @@ export default function TelematicsAgent() {
         {/* Input Section */}
         <div className="inputContainer">
           <div
+            className="inputContainer-inner"
             style={{
               position: "relative",
-              maxWidth: "700px",
+              maxWidth: "765px",
               marginBottom: "35px",
             }}
           >
