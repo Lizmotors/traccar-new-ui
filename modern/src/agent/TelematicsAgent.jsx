@@ -193,22 +193,6 @@ export default function TelematicsAgent() {
                     }
                     return newMessages;
                   });
-                  // setMessages((prev) =>
-                  //   prev.map((message, index) =>
-                  //    ( index === prev.length - 1 )&&(message.role=="assista")
-                  //       ? {
-                  //           ...message,
-                  //           role: "assistant",
-                  //           content: message.content + data.content,
-                  //           timestamp: new Date().toLocaleTimeString("en-US", {
-                  //             hour: "2-digit",
-                  //             minute: "2-digit",
-                  //             hour12: false,
-                  //           }),
-                  //         }
-                  //       : message
-                  //   )
-                  // );
                 }
                 processStreamingData(data);
               }
@@ -232,79 +216,25 @@ export default function TelematicsAgent() {
     <div
       style={{
         maxWidth: "100%",
-        height: "100vh",
+        height: "75vh",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
       }}
     >
       <div
-        className="no-scrollbar mainContent"
+        className=""
         ref={responseRef}
         style={{
           width: "80%",
           padding: "0px 100px",
           flex: 1,
           overflowY: "auto",
-          maxHeight: "490px",
+          height: "200px",
         }}
       >
-        <h1
-          className="mainContent-title"
-          style={{
-            fontSize: "38px",
-            fontFamily: "serif,sans-serif",
-            color: "#333",
-            marginBottom: "20px",
-            display: "flex",
-            alignItems: "center",
-            gap: "10px",
-          }}
-        >
-          Vehicle Telematics Analytics Agent
-          <span style={{ color: "#666", cursor: "pointer" }}>⚡</span>
-        </h1>
 
         {/* Example Commands Section */}
-        <div style={{ marginBottom: "40px" }}>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-              marginBottom: "16px",
-              color: "#333",
-            }}
-          >
-            <span className="mainContent-icon" style={{ fontSize: "20px" }}>
-              💡
-            </span>
-            <span
-              className="mainContent-cmd"
-              style={{ fontSize: "18px", fontFamily: "serif,sans-serif" }}
-            >
-              Example commands:
-            </span>
-          </div>
-          <ul
-            className="mainContent-ex"
-            style={{
-              listStyle: "none",
-              padding: 0,
-              margin: 0,
-              display: "flex",
-              fontFamily: "serif,sans-serif",
-              flexDirection: "column",
-              gap: "8px",
-              color: "#555",
-              fontSize: "15px",
-            }}
-          >
-            <li>"Plot last ride data of device 7 for last week"</li>
-            <li>"Create a visualization of speed over time"</li>
-            <li>"Show summarized metrics for vehicle position data"</li>
-          </ul>
-        </div>
 
         {/* Chat Messages */}
         <div style={{ marginBottom: "24px" }}>
