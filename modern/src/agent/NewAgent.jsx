@@ -277,30 +277,38 @@ const NewAgent = () => {
 	};
 
 	return (
-		<div className="telematics-agent">
-			<h1>Vehicle Telematics Analytics Agent</h1>
+		<div className="telematics-agent" style={{ width: "100%", display: "flex", flexDirection: 'column', gap: "20px", alignItems: "center", justifyContent: "center" }}>
+			<div style={{ width: "900px", height: "600px", overflow: 'scroll', display: "flex", flexDirection: 'column', gap: "10px" }} className="chat-container">
+				{messages.map((msg, index) => {
+					if (msg.role === "user") {
+						return (
+							<div style={{ background: "red", padding: "5px" }} key={index} className={`chat-message ${msg.role}`}>
+								<div className="message-content">{msg.content}</div>
+								<div className="timestamp">{msg.timestamp}</div>
+							</div>
 
-			<div className="example-commands">
-				<h3>💡 Example commands:</h3>
-				<ul>
-					<li>Plot last ride data of device 7 for last week</li>
-					<li>Create a visualization of speed over time</li>
-					<li>Show summarized metrics for vehicle position data</li>
-				</ul>
+						)
+					}
+
+					if (msg.role === "assistant") {
+						return (
+							<div style={{ background: "green", padding: "5px" }} key={index} className={`chat-message ${msg.role}`}>
+								<div className="message-content">{msg.content}</div>
+								<div className="timestamp">{msg.timestamp}</div>
+							</div>
+
+						)
+
+					}
+
+					return (
+						<div style={{ background: "blue", padding: "5px" }} className="events-container">
+							{events.map((event, index) => renderEvent(event, index))}
+						</div>
+					)
+				})}
 			</div>
 
-			<div className="chat-container">
-				{messages.map((msg, index) => (
-					<div key={index} className={`chat-message ${msg.role}`}>
-						<div className="message-content">{msg.content}</div>
-						<div className="timestamp">{msg.timestamp}</div>
-					</div>
-				))}
-			</div>
-
-			<div className="events-container">
-				{events.map((event, index) => renderEvent(event, index))}
-			</div>
 
 			<div className="input-container">
 				<input
