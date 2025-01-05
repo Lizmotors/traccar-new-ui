@@ -42,10 +42,7 @@ export default function TelematicsAgent() {
     }
   }, [streamingResponse]);
 
-  // useEffect(() => {
-  //   console.log("Vehicle data updated:", vehicleData);
-  // }, [vehicleData]);
-
+  
   //Api related functions
   const processStreamingData = (data) => {
     try {
@@ -139,6 +136,7 @@ export default function TelematicsAgent() {
     setError(null);
     setVehicleData([]);
     setStreamingResponse("");
+    
 
     try {
       const response = await fetch(`${TELEMATICS_BASE_URL}/chat`, {
@@ -193,22 +191,6 @@ export default function TelematicsAgent() {
                     }
                     return newMessages;
                   });
-                  // setMessages((prev) =>
-                  //   prev.map((message, index) =>
-                  //    ( index === prev.length - 1 )&&(message.role=="assista")
-                  //       ? {
-                  //           ...message,
-                  //           role: "assistant",
-                  //           content: message.content + data.content,
-                  //           timestamp: new Date().toLocaleTimeString("en-US", {
-                  //             hour: "2-digit",
-                  //             minute: "2-digit",
-                  //             hour12: false,
-                  //           }),
-                  //         }
-                  //       : message
-                  //   )
-                  // );
                 }
                 processStreamingData(data);
               }

@@ -21,7 +21,7 @@ const components = {
           style={{ marginLeft: "8px", listStyleType: "disc", marginTop: "5px" }}
           {...props}
         ></ul>
-        {node.children.map((ele, index) => {
+        {node.children?.map((ele, index) => {
           if (
             ele.type === "element" &&
             ele.tagName === "li" &&
@@ -38,6 +38,7 @@ const components = {
                 const [, deviceId, deviceName] = deviceMatch;
                 return (
                   <div
+                    className="device-card"
                     key={index}
                     style={{
                       background: "#ffffff",
@@ -80,20 +81,24 @@ const components = {
     );
   }),
   ol: memo(({ node, ...props }) => {
+    console.log("Node is => ", node)
     return (
       <div>
         <ol
-          style={{ marginLeft: "8px", listStyleType: "decimal", marginTop: "5px" }}
+          style={{
+            marginLeft: "8px",
+            listStyleType: "decimal",
+            marginTop: "5px",
+          }}
           {...props}
         ></ol>
-        {node.children.map((ele, index) => {
+        {node.children?.map((ele, index) => {
           if (
             ele.type === "element" &&
             ele.tagName === "li" &&
             ele.children?.[0]
           ) {
             const deviceText = ele.children[0].value;
-
             if (deviceText && deviceText.includes("Device ID")) {
               const deviceMatch = deviceText.match(
                 /Device ID:\s*(\d+),\s*Name:\s*([^,]+)/
@@ -103,6 +108,7 @@ const components = {
                 const [, deviceId, deviceName] = deviceMatch;
                 return (
                   <div
+                    className="device-card"
                     key={index}
                     style={{
                       background: "#ffffff",
@@ -292,8 +298,7 @@ export default function TelematicsAgentResponse({
     },
   };
 
-  // console.log("Messages are: =>", messages);
-  // console.log("Vehicle data are: =>", vehicleData);
+ 
   return (
     <div>
       {messages.map((msg, index) => (
@@ -380,7 +385,7 @@ export default function TelematicsAgentResponse({
                     {path.map((point, index) => (
                       <Marker
                         key={index}
-                        position={point}
+                        // position={point}
                         label={
                           index === 0
                             ? "S"

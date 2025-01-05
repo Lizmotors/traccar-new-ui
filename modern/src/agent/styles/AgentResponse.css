@@ -97,12 +97,37 @@ td {
   border-radius: 9px;
 }
 
+.device-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
 /* Mobile View */
 @media only screen and (max-width: 400px) {
 }
 
 /* tab view screens (max-width: 768px) */
 @media only screen and (max-width: 768px) {
+  .mainContent {
+    max-height: 500px !important;
+    width: 80% !important;
+  }
+  .mainContent-title {
+    font-size: 25px !important;
+  }
+  .mainContent-title span {
+    display: none !important;
+  }
+  .mainContent-cmd {
+    font-size: 16px !important;
+  }
+  .mainContent-ex {
+    font-size: 16px !important;
+  }
+  .inputContainer-inner {
+    max-width: 520px !important;
+    margin-bottom: 79px !important;
+  }
 }
 
 /* For screens with a max width of 1300px */
