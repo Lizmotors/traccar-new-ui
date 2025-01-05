@@ -201,7 +201,6 @@ export default function TelematicsAgent() {
       }}
     >
       <div
-        className=""
         ref={responseRef}
         style={{
           width: "80%",
