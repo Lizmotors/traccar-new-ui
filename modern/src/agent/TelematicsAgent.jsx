@@ -1,24 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
 import { v4 as uuidv4 } from "uuid";
 export { TELEMATICS_BASE_URL } from "../env";
 import TelematicsAgentResponse from "./TelematicsAgentResponse";
@@ -30,27 +10,18 @@ export default function TelematicsAgent() {
   const [vehicleData, setVehicleData] = useState([]);
   const [streamingResponse, setStreamingResponse] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
   const responseRef = useRef(null);
   const [threadId, setThreadId] = useState(uuidv4());
   const [messages, setMessages] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
 
-  useEffect(() => {
-    if (responseRef.current) {
-      responseRef.current.scrollTop = responseRef.current.scrollHeight;
-    }
-  }, [streamingResponse]);
-
-  
-  //Api related functions
   const processStreamingData = (data) => {
     try {
       // console.log("Received data:", data);
       if (data.type === "token" && data.content) {
         setStreamingResponse((prev) => prev + data.content);
       } else if (data.type === "artifact") {
-        // console.log("Artifact data:", data);
+        console.log("Artifact data:", data);
         if (data["text/csv"]) {
           const rows = data["text/csv"].split("\n");
           const headers = rows[0].split(",");
@@ -113,7 +84,8 @@ export default function TelematicsAgent() {
     }
   };
 
-  const handleSendMessage = async () => {
+  const handleSendMessage = async (e) => {
+    e.preventDefault();
     if (!message.trim()) {
       setError("Please enter a message");
       return;
@@ -133,10 +105,8 @@ export default function TelematicsAgent() {
 
     setIsLoading(true);
     setIsTyping(true);
-    setError(null);
     setVehicleData([]);
     setStreamingResponse("");
-    
 
     try {
       const response = await fetch(`${TELEMATICS_BASE_URL}/chat`, {
@@ -168,7 +138,7 @@ export default function TelematicsAgent() {
         const { done, value } = await reader.read();
         if (done) break;
         const chunk = decoder.decode(value, { stream: true });
-        // console.log("chunks messages are=>", chunk);
+        console.log("chunks messages are=>", chunk);
         buffer += chunk;
         const lines = buffer.split("\n");
         buffer = lines.pop() || "";
@@ -202,7 +172,17 @@ export default function TelematicsAgent() {
       }
       setMessage("");
     } catch (error) {
-      setError("Failed to send message. Please try again.");
+      const assistantMessage = {
+        role: "assistant",
+        content: "Failed to send message. Please try again.",
+        timestamp: new Date().toLocaleTimeString("en-US", {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        }),
+      };
+
+      setMessages((prev) => [...prev, assistantMessage]);
       console.error("Failed to send message:", error);
     } finally {
       setIsLoading(false);
@@ -214,80 +194,23 @@ export default function TelematicsAgent() {
     <div
       style={{
         maxWidth: "100%",
-        height: "100vh",
+        height: "75vh",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
       }}
     >
       <div
-        className="no-scrollbar mainContent"
+        className=""
         ref={responseRef}
         style={{
           width: "80%",
           padding: "0px 100px",
           flex: 1,
           overflowY: "auto",
-          maxHeight: "490px",
+          height: "200px",
         }}
       >
-        <h1
-          className="mainContent-title"
-          style={{
-            fontSize: "38px",
-            fontFamily: "serif,sans-serif",
-            color: "#333",
-            marginBottom: "20px",
-            display: "flex",
-            alignItems: "center",
-            gap: "10px",
-          }}
-        >
-          Vehicle Telematics Analytics Agent
-          <span style={{ color: "#666", cursor: "pointer" }}>⚡</span>
-        </h1>
-
-        {/* Example Commands Section */}
-        <div style={{ marginBottom: "40px" }}>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-              marginBottom: "16px",
-              color: "#333",
-            }}
-          >
-            <span className="mainContent-icon" style={{ fontSize: "20px" }}>
-              💡
-            </span>
-            <span
-              className="mainContent-cmd"
-              style={{ fontSize: "18px", fontFamily: "serif,sans-serif" }}
-            >
-              Example commands:
-            </span>
-          </div>
-          <ul
-            className="mainContent-ex"
-            style={{
-              listStyle: "none",
-              padding: 0,
-              margin: 0,
-              display: "flex",
-              fontFamily: "serif,sans-serif",
-              flexDirection: "column",
-              gap: "8px",
-              color: "#555",
-              fontSize: "15px",
-            }}
-          >
-            <li>"Plot last ride data of device 7 for last week"</li>
-            <li>"Create a visualization of speed over time"</li>
-            <li>"Show summarized metrics for vehicle position data"</li>
-          </ul>
-        </div>
-
         {/* Chat Messages */}
         <div style={{ marginBottom: "24px" }}>
           <TelematicsAgentResponse
@@ -299,7 +222,8 @@ export default function TelematicsAgent() {
 
         {/* Input Section */}
         <div className="inputContainer">
-          <div
+          <form
+            onSubmit={handleSendMessage}
             className="inputContainer-inner"
             style={{
               position: "relative",
@@ -324,14 +248,9 @@ export default function TelematicsAgent() {
                 outline: "none",
                 color: "#333",
               }}
-              onKeyPress={(e) => {
-                if (e.key === "Enter") {
-                  handleSendMessage();
-                }
-              }}
             />
             <button
-              onClick={handleSendMessage}
+              type="submit"
               disabled={isLoading}
               style={{
                 position: "absolute",
@@ -347,22 +266,8 @@ export default function TelematicsAgent() {
             >
               <span style={{ fontSize: "24px" }}>➤</span>
             </button>
-          </div>
+          </form>
         </div>
-
-        {error && (
-          <div
-            style={{
-              color: "#dc3545",
-              marginTop: "10px",
-              padding: "12px",
-              backgroundColor: "#fce8e8",
-              borderRadius: "8px",
-            }}
-          >
-            {error}
-          </div>
-        )}
       </div>
     </div>
   );
