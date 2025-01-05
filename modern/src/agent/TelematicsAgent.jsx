@@ -30,23 +30,12 @@ export default function TelematicsAgent() {
   const [vehicleData, setVehicleData] = useState([]);
   const [streamingResponse, setStreamingResponse] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
   const responseRef = useRef(null);
   const [threadId, setThreadId] = useState(uuidv4());
   const [messages, setMessages] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
 
-  useEffect(() => {
-    if (responseRef.current) {
-      responseRef.current.scrollTop = responseRef.current.scrollHeight;
-    }
-  }, [streamingResponse]);
 
-  // useEffect(() => {
-  //   console.log("Vehicle data updated:", vehicleData);
-  // }, [vehicleData]);
-
-  //Api related functions
   const processStreamingData = (data) => {
     try {
       // console.log("Received data:", data);
@@ -116,7 +105,8 @@ export default function TelematicsAgent() {
     }
   };
 
-  const handleSendMessage = async () => {
+  const handleSendMessage = async (e) => {
+    e.preventDefault()
     if (!message.trim()) {
       setError("Please enter a message");
       return;
@@ -136,7 +126,6 @@ export default function TelematicsAgent() {
 
     setIsLoading(true);
     setIsTyping(true);
-    setError(null);
     setVehicleData([]);
     setStreamingResponse("");
 
@@ -170,7 +159,7 @@ export default function TelematicsAgent() {
         const { done, value } = await reader.read();
         if (done) break;
         const chunk = decoder.decode(value, { stream: true });
-        // console.log("chunks messages are=>", chunk);
+        console.log("chunks messages are=>", chunk);
         buffer += chunk;
         const lines = buffer.split("\n");
         buffer = lines.pop() || "";
@@ -204,7 +193,17 @@ export default function TelematicsAgent() {
       }
       setMessage("");
     } catch (error) {
-      setError("Failed to send message. Please try again.");
+      const assistantMessage = {
+        role: "assistant",
+        content: "Failed to send message. Please try again.",
+        timestamp: new Date().toLocaleTimeString("en-US", {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        }),
+      };
+
+      setMessages(prev => [...prev, assistantMessage])
       console.error("Failed to send message:", error);
     } finally {
       setIsLoading(false);
@@ -234,7 +233,6 @@ export default function TelematicsAgent() {
         }}
       >
 
-        {/* Example Commands Section */}
 
         {/* Chat Messages */}
         <div style={{ marginBottom: "24px" }}>
@@ -247,7 +245,8 @@ export default function TelematicsAgent() {
 
         {/* Input Section */}
         <div className="inputContainer">
-          <div
+          <form
+            onSubmit={handleSendMessage}
             className="inputContainer-inner"
             style={{
               position: "relative",
@@ -272,14 +271,9 @@ export default function TelematicsAgent() {
                 outline: "none",
                 color: "#333",
               }}
-              onKeyPress={(e) => {
-                if (e.key === "Enter") {
-                  handleSendMessage();
-                }
-              }}
             />
             <button
-              onClick={handleSendMessage}
+              type="submit"
               disabled={isLoading}
               style={{
                 position: "absolute",
@@ -295,22 +289,9 @@ export default function TelematicsAgent() {
             >
               <span style={{ fontSize: "24px" }}>➤</span>
             </button>
-          </div>
+          </form>
         </div>
 
-        {error && (
-          <div
-            style={{
-              color: "#dc3545",
-              marginTop: "10px",
-              padding: "12px",
-              backgroundColor: "#fce8e8",
-              borderRadius: "8px",
-            }}
-          >
-            {error}
-          </div>
-        )}
       </div>
     </div>
   );

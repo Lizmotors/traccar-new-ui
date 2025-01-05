@@ -1,4 +1,3 @@
-import { useJsApiLoader } from "@react-google-maps/api";
 import {
 	GoogleMap,
 	Marker,
