@@ -1,24 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
 import { v4 as uuidv4 } from "uuid";
 export { TELEMATICS_BASE_URL } from "../env";
 import TelematicsAgentResponse from "./TelematicsAgentResponse";
@@ -42,7 +22,7 @@ export default function TelematicsAgent() {
       if (data.type === "token" && data.content) {
         setStreamingResponse((prev) => prev + data.content);
       } else if (data.type === "artifact") {
-        // console.log("Artifact data:", data);
+        console.log("Artifact data:", data);
         if (data["text/csv"]) {
           const rows = data["text/csv"].split("\n");
           const headers = rows[0].split(",");

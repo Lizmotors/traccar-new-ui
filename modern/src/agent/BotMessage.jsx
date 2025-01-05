@@ -6,6 +6,26 @@ import AltitudeChart from "./AltitudeChart";
 import RenderMap from "./RenderMap";
 import MetricsSection from "./MetricsSection";
 import RenderMarkdown from "./RenderMarkdown";
+import {
+	Chart as ChartJS,
+	CategoryScale,
+	LinearScale,
+	PointElement,
+	LineElement,
+	Title,
+	Tooltip,
+	Legend,
+} from "chart.js";
+
+ChartJS.register(
+	CategoryScale,
+	LinearScale,
+	PointElement,
+	LineElement,
+	Title,
+	Tooltip,
+	Legend
+);
 
 export default function BotMessage({ msg, vehicleData }) {
 
