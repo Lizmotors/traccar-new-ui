@@ -1,11 +1,18 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, {
+  lazy,
+  Suspense,
+  useEffect,
+  useState,
+  useRef,
+  useMemo,
+} from "react";
 import { v4 as uuidv4 } from "uuid";
-import Plot from "react-plotly.js";
 import Papa from "papaparse";
 import "./styles/NewAgent.css";
 import { FaRegUserCircle } from "react-icons/fa";
-import RenderMarkdown from "./RenderMarkdown";
 import { BsRobot } from "react-icons/bs";
+const Plot = lazy(() => import("react-plotly.js"));
+const RenderMarkdown = lazy(() => import("./RenderMarkdown"));
 
 const NewAgent = () => {
   const [messages, setMessages] = useState([]);
@@ -242,12 +249,14 @@ const NewAgent = () => {
         try {
           const plotData = JSON.parse(event.content);
           return (
-            <Plot
-              key={index}
-              data={plotData.data}
-              layout={plotData.layout}
-              style={{ width: "100%", height: "500px" }}
-            />
+            <Suspense fallback={<div>Loading...</div>}>
+              <Plot
+                key={index}
+                data={plotData.data}
+                layout={plotData.layout}
+                style={{ width: "100%", height: "500px" }}
+              />
+            </Suspense>
           );
         } catch (error) {
           console.error("Error parsing Plotly data:", error);
@@ -284,18 +293,20 @@ const NewAgent = () => {
           }));
 
           return (
-            <Plot
-              className="dataVisulaization"
-              key={index}
-              data={traces}
-              layout={{
-                title: "Data Visualization",
-                xaxis: { title: xColumn },
-                yaxis: { title: "Values" },
-                height: 500,
-                width: "100%",
-              }}
-            />
+            <Suspense fallback={<div>Loading...</div>}>
+              <Plot
+                className="dataVisulaization"
+                key={index}
+                data={traces}
+                layout={{
+                  title: "Data Visualization",
+                  xaxis: { title: xColumn },
+                  yaxis: { title: "Values" },
+                  height: 500,
+                  width: "100%",
+                }}
+              />
+            </Suspense>
           );
         }
         return null;
@@ -327,15 +338,22 @@ const NewAgent = () => {
     }
   };
 
-  const TypingIndicator = () => (
-    <div className="message">
-      <div className="typing-indicator">
-        <div className="typing-indicator-dot"></div>
-        <div className="typing-indicator-dot"></div>
-        <div className="typing-indicator-dot"></div>
-      </div>
-    </div>
-  );
+  const TypingIndicator = () => {
+    const memoizedTypingIndicator = useMemo(
+      () => (
+        <div className="message">
+          <div className="typing-indicator">
+            <div className="typing-indicator-dot"></div>
+            <div className="typing-indicator-dot"></div>
+            <div className="typing-indicator-dot"></div>
+          </div>
+        </div>
+      ),
+      []
+    );
+
+    return memoizedTypingIndicator;
+  };
 
   return (
     <div
@@ -380,7 +398,9 @@ const NewAgent = () => {
                     <div className="message-avatar">
                       <FaRegUserCircle style={{ marginTop: "3px" }} size={20} />
                     </div>
-                    <RenderMarkdown content={msg.content} />
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <RenderMarkdown content={msg.content} />
+                    </Suspense>
                   </div>
                   <div className="timestamp">{msg.timestamp}</div>
                 </div>
@@ -397,7 +417,9 @@ const NewAgent = () => {
                     <div className="message-avatar">
                       <BsRobot size={20} />
                     </div>
-                    <RenderMarkdown content={msg.content} />
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <RenderMarkdown content={msg.content} />
+                    </Suspense>
                   </div>
                   {msg.artifacts?.map((artifact, artifactIndex) =>
                     renderEvent(artifact, `${index}-${artifactIndex}`)
