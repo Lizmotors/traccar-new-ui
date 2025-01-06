@@ -12,6 +12,47 @@
   /* Firefox */
 }
 
+.agent-header {
+  padding: 2rem 2rem 0;
+}
+
+.agent-header h1 {
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 1.5rem;
+}
+
+.example-commands {
+  background-color: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
+.example-label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.example-commands ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.example-commands li {
+  color: #666;
+  margin-bottom: 0.75rem;
+  font-size: 0.95rem;
+}
+
+.example-commands li:last-child {
+  margin-bottom: 0;
+}
+
 .no-scrollbar::-webkit-scrollbar {
   display: none;
   /* Chrome, Safari, and Opera */

@@ -17,9 +17,9 @@ export default function AgentPage() {
         <Header />
         <div className="header-padding"></div>
         <NewAgent />
-        {/*
-        <TelematicsAgent />
-        */}
+        
+        {/* <TelematicsAgent /> */}
+       
 
         {/* <AgentChat /> */}
       </PageLayout>

@@ -210,6 +210,7 @@ export default function TelematicsAgent() {
           height: "200px",
         }}
       >
+        
         {/* Chat Messages */}
         <div style={{ marginBottom: "24px" }}>
           <TelematicsAgentResponse
