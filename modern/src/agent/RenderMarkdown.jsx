@@ -2,6 +2,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import { memo } from "react";
+import "./styles/AgentResponse.css";
 
 const components = {
   ul: memo(({ node, ...props }) => {
@@ -28,6 +29,7 @@ const components = {
                 const [, deviceId, deviceName] = deviceMatch;
                 return (
                   <div
+                    className="device-card"
                     key={index}
                     style={{
                       background: "#ffffff",
@@ -97,6 +99,7 @@ const components = {
                 const [, deviceId, deviceName] = deviceMatch;
                 return (
                   <div
+                    className="device-card"
                     key={index}
                     style={{
                       background: "#ffffff",

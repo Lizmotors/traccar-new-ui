@@ -9,6 +9,7 @@ import React, {
 import { v4 as uuidv4 } from "uuid";
 import Papa from "papaparse";
 import "./styles/NewAgent.css";
+import './styles/KPICards.css';
 import { FaRegUserCircle } from "react-icons/fa";
 import { BsRobot } from "react-icons/bs";
 const Plot = lazy(() => import("react-plotly.js"));
@@ -266,22 +267,44 @@ const NewAgent = () => {
       case "csv_content":
         const data = parsedData[event.id];
         if (!data) return null;
-        console.log("data is => ", data);
 
-        if (data.length === 1) {
+        if (data.length > 1 && data.length < 10) {
           return (
             <div key={index} className="kpi-cards">
-              {Object.entries(data[0]).map(([key, value]) => (
-                <div className="kpi-card" key={key}>
-                  <h3>{key}</h3>
-                  <p>{value}</p>
-                </div>
-              ))}
+              {data.map((dataItem, dataIndex) => {
+                const entries = Object.entries(dataItem);
+                if (entries.length === 0 || entries.some(([_, value]) => !value && value !== 0)) return null;
+                
+                return (
+                  <div className="kpi-card" key={dataIndex}>
+                    <div className="device-card">
+                      {entries.map(([key, value], entryIndex) => (
+                        <div key={key}>
+                          {entryIndex === 0 ? (
+                            <div className="key-value-header">
+                              <div className="key-label">
+                                {key}:
+                              </div>
+                              <div className="value-text">
+                                {value}
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="value-item">
+                              {value}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           );
         }
 
-        if (data.length > 1) {
+        if (data.length > 10) {
           const columns = Object.keys(data[0]);
           const xColumn = columns[0];
           const traces = columns.slice(1).map((column) => ({
