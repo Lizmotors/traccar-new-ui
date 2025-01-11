@@ -13,7 +13,7 @@
 }
 
 .agent-header {
-  padding: 2rem 2rem 0;
+  padding: 4rem 2rem 4rem;
 }
 
 .agent-header h1 {
@@ -127,7 +127,7 @@ td {
 }
 
 .user-message {
-  background-color: #f8f9fa;
+  /* background-color: #f8f9fa; */
   padding: 16px;
   border-radius: 9px;
 }
@@ -147,11 +147,10 @@ td {
 @media only screen and (max-width: 400px) {
 }
 
-/* tab view screens (max-width: 768px) */
-@media only screen and (max-width: 768px) {
+/* tab view screens (max-width: 900px) */
+@media only screen and (max-width: 900px) {
   .mainContent {
-    max-height: 500px !important;
-    width: 80% !important;
+    height: 63vh !important;
   }
   .mainContent-title {
     font-size: 25px !important;
@@ -167,7 +166,7 @@ td {
   }
   .inputContainer-inner {
     max-width: 520px !important;
-    margin-bottom: 79px !important;
+    margin-bottom: 90px !important;
   }
 }
 
@@ -179,6 +178,9 @@ td {
 /* For screens with a min width of 1350px */
 @media only screen and (min-width: 1350px) {
   /* Styles for min-width 1350px */
+  .agent-header {
+    padding: 4rem 2rem 4rem;
+  }
   .mainContent {
     max-height: 740px !important;
   }
@@ -219,12 +221,19 @@ td {
     font-size: 21px !important;
   }
   .inputContainer-inner {
-    max-width: 1035px !important;
+    max-width: 1100px !important;
     margin-bottom: 45px !important;
+  }
+  .agent-header {
+    padding: 4rem 2rem 4rem;
   }
 }
 
 /* For large screens with a min width of 1600px */
 @media only screen and (min-width: 2000px) {
   /* Styles for min-width 1600px */
+  .inputContainer-inner {
+    max-width: 1350px !important;
+    margin-bottom: 50px !important;
+  }
 }

@@ -9,9 +9,11 @@ import React, {
 import { v4 as uuidv4 } from "uuid";
 import Papa from "papaparse";
 import "./styles/NewAgent.css";
-import './styles/KPICards.css';
+import "./styles/KPICards.css";
+import "./styles/AgentResponse.css";
 import { FaRegUserCircle } from "react-icons/fa";
 import { BsRobot } from "react-icons/bs";
+// import NewAgentBanner from "./NewAgentBanner";
 const Plot = lazy(() => import("react-plotly.js"));
 const RenderMarkdown = lazy(() => import("./RenderMarkdown"));
 
@@ -19,11 +21,13 @@ const NewAgent = () => {
   const [messages, setMessages] = useState([]);
   const [prompt, setPrompt] = useState("");
   const [accumulatedText, setAccumulatedText] = useState("");
+  const [selectedDevice, setSelectedDevice] = useState(null);
   const threadId = useRef(uuidv4());
   const [parsedData, setParsedData] = useState({});
   const currentArtifacts = useRef([]);
   const [isLoading, setIsLoading] = useState(false);
   const responseRef = useRef(null);
+  const isDarkMode = localStorage.getItem("mode") === "dark";
 
   useEffect(() => {
     const parseCSVEvents = async () => {
@@ -250,11 +254,21 @@ const NewAgent = () => {
         try {
           const plotData = JSON.parse(event.content);
           return (
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense
+              fallback={
+                <div style={{ color: isDarkMode ? "#ffffff" : "inherit" }}>
+                  Loading...
+                </div>
+              }
+            >
               <Plot
                 key={index}
                 data={plotData.data}
-                layout={plotData.layout}
+                layout={{
+                  ...plotData.layout,
+                  paper_bgcolor: "transparent",
+                  plot_bgcolor: "transparent",
+                }}
                 style={{ width: "100%", height: "500px" }}
               />
             </Suspense>
@@ -269,30 +283,53 @@ const NewAgent = () => {
         if (!data) return null;
 
         if (data.length > 1 && data.length < 10) {
+          // Check if this is a devices list by looking for typical device properties
+          const isDevicesList = data.some((item) =>
+            Object.keys(item).some(
+              (key) =>
+                key.toLowerCase().includes("device") ||
+                key.toLowerCase().includes("id") ||
+                key.toLowerCase().includes("name")
+            )
+          );
+
           return (
             <div key={index} className="kpi-cards">
               {data.map((dataItem, dataIndex) => {
                 const entries = Object.entries(dataItem);
-                if (entries.length === 0 || entries.some(([_, value]) => !value && value !== 0)) return null;
-                
+                if (
+                  entries.length === 0 ||
+                  entries.some(([_, value]) => !value && value !== 0)
+                )
+                  return null;
+
                 return (
                   <div className="kpi-card" key={dataIndex}>
-                    <div className="device-card">
+                    <div
+                      className={`device-card ${
+                        isDevicesList && dataItem === selectedDevice
+                          ? "selected-device"
+                          : ""
+                      }`}
+                      onClick={() => {
+                        if (isDevicesList) {
+                          setSelectedDevice(dataItem);
+                          setPrompt(
+                            `Tell me about device ${Object.values(dataItem)[0]}`
+                          );
+                        }
+                      }}
+                      style={{ cursor: isDevicesList ? "pointer" : "default" }}
+                    >
                       {entries.map(([key, value], entryIndex) => (
                         <div key={key}>
                           {entryIndex === 0 ? (
                             <div className="key-value-header">
-                              <div className="key-label">
-                                {key}:
-                              </div>
-                              <div className="value-text">
-                                {value}
-                              </div>
+                              <div className="key-label">{key}:</div>
+                              <div className="value-text">{value}</div>
                             </div>
                           ) : (
-                            <div className="value-item">
-                              {value}
-                            </div>
+                            <div className="value-item">{value}</div>
                           )}
                         </div>
                       ))}
@@ -304,40 +341,45 @@ const NewAgent = () => {
           );
         }
 
-        if (data.length > 10) {
-          const columns = Object.keys(data[0]);
-          const xColumn = columns[0];
-          const traces = columns.slice(1).map((column) => ({
-            type: "scatter",
-            mode: "lines",
-            name: column,
-            x: data.map((row) => row[xColumn]),
-            y: data.map((row) => row[column]),
-          }));
+        // if (data.length > 10) {
+        //   const columns = Object.keys(data[0]);
+        //   const xColumn = columns[0];
+        //   const traces = columns.slice(1).map((column) => ({
+        //     type: "scatter",
+        //     mode: "lines",
+        //     name: column,
+        //     x: data.map((row) => row[xColumn]),
+        //     y: data.map((row) => row[column]),
+        //   }));
 
-          return (
-            <Suspense fallback={<div>Loading...</div>}>
-              <Plot
-                className="dataVisulaization"
-                key={index}
-                data={traces}
-                layout={{
-                  title: "Data Visualization",
-                  xaxis: { title: xColumn },
-                  yaxis: { title: "Values" },
-                  height: 500,
-                  width: "100%",
-                }}
-              />
-            </Suspense>
-          );
-        }
+        //   return (
+        //     <Suspense fallback={<div>Loading...</div>}>
+        //       <Plot
+        //         className="dataVisulaization"
+        //         key={index}
+        //         data={traces}
+        //         layout={{
+        //           title: "Data Visualization",
+        //           xaxis: { title: xColumn },
+        //           yaxis: { title: "Values" },
+        //           height: 500,
+        //           width: "100%",
+        //           paper_bgcolor: "transparent",
+        //           plot_bgcolor: "transparent",
+        //         }}
+        //       />
+        //     </Suspense>
+        //   );
+        // }
         return null;
 
       case "html_content":
         return (
           <div
-            style={{ padding: "5px" }}
+            style={{
+              color: isDarkMode ? "#ffffff" : "inherit",
+              padding: "5px",
+            }}
             key={index}
             className="html-content"
             dangerouslySetInnerHTML={{ __html: event.content }}
@@ -364,17 +406,17 @@ const NewAgent = () => {
   const TypingIndicator = () => {
     const memoizedTypingIndicator = useMemo(
       () => (
-        <div className="message">
-          <div className="typing-indicator">
-            <div className="typing-indicator-dot"></div>
-            <div className="typing-indicator-dot"></div>
-            <div className="typing-indicator-dot"></div>
-          </div>
-        </div>
+        <div className="loader"></div>
+        // <div className="message">
+        //   <div className="typing-indicator">
+        //     <div className="typing-indicator-dot"></div>
+        //     <div className="typing-indicator-dot"></div>
+        //     <div className="typing-indicator-dot"></div>
+        //   </div>
+        // </div>
       ),
       []
     );
-
     return memoizedTypingIndicator;
   };
 
@@ -387,6 +429,7 @@ const NewAgent = () => {
         flexDirection: "column",
         alignItems: "center",
       }}
+      className="mainContent"
     >
       <div
         ref={responseRef}
@@ -400,32 +443,64 @@ const NewAgent = () => {
         }}
       >
         <div className="agent-header">
-          <h1>Vehicle Telematics Analytics Agent</h1>
-          <div className="example-commands">
+          {/* <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <NewAgentBanner />
+          </div> */}
+          <div class="card">
+            Welcome to Telematics Agent, How can I assist you?
+          </div>
+          {/* <div className="example-commands">
             <p className="example-label">💡 Example commands:</p>
             <ul style={{ listStyleType: "disc", marginLeft: "19px" }}>
               <li>"Plot last ride data of device 7 for last week"</li>
               <li>"Create a visualization of speed over time"</li>
               <li>"Show summarized metrics for vehicle position data"</li>
             </ul>
-          </div>
+          </div> */}
         </div>
 
         {/* Chat Messages */}
-        <div style={{ marginBottom: "24px" }}>
+        <div style={{ marginBottom: "30px", marginTop: "40px" }}>
           {messages.map((msg, index) => {
             if (msg.role === "user") {
               return (
                 <div key={index} className={`message user-message ${msg.role}`}>
                   <div style={{ display: "flex", gap: "5px" }}>
-                    <div className="message-avatar">
+                    <div
+                      className="message-avatar"
+                      style={{ color: isDarkMode ? "#ffffff" : "inherit" }}
+                    >
                       <FaRegUserCircle style={{ marginTop: "3px" }} size={20} />
                     </div>
-                    <Suspense fallback={<div>Loading...</div>}>
-                      <RenderMarkdown content={msg.content} />
-                    </Suspense>
+                    <div style={{ color: isDarkMode ? "#ffffff" : "inherit" }}>
+                      <Suspense
+                        fallback={
+                          <div
+                            style={{
+                              color: isDarkMode ? "#ffffff" : "inherit",
+                            }}
+                          >
+                            Loading...
+                          </div>
+                        }
+                      >
+                        <RenderMarkdown content={msg.content} />
+                      </Suspense>
+                    </div>
                   </div>
-                  <div className="timestamp">{msg.timestamp}</div>
+                  <div
+                    className="timestamp"
+                    style={{ color: isDarkMode ? "#ffffff" : "inherit" }}
+                  >
+                    {msg.timestamp}
+                  </div>
                 </div>
               );
             }
@@ -437,17 +512,27 @@ const NewAgent = () => {
                   className={`message assistant-message ${msg.role}`}
                 >
                   <div style={{ display: "flex", gap: "5px" }}>
-                    <div className="message-avatar">
+                    <div
+                      className="message-avatar"
+                      style={{ color: isDarkMode ? "#ffffff" : "inherit" }}
+                    >
                       <BsRobot size={20} />
                     </div>
-                    <Suspense fallback={<div>Loading...</div>}>
-                      <RenderMarkdown content={msg.content} />
-                    </Suspense>
+                    <div style={{ color: isDarkMode ? "#ffffff" : "inherit" }}>
+                      <Suspense fallback={<div>Loading...</div>}>
+                        <RenderMarkdown content={msg.content} />
+                      </Suspense>
+                    </div>
                   </div>
                   {msg.artifacts?.map((artifact, artifactIndex) =>
                     renderEvent(artifact, `${index}-${artifactIndex}`)
                   )}
-                  <div className="timestamp">{msg.timestamp}</div>
+                  <div
+                    className="timestamp"
+                    style={{ color: isDarkMode ? "#ffffff" : "inherit" }}
+                  >
+                    {msg.timestamp}
+                  </div>
                 </div>
               );
             }

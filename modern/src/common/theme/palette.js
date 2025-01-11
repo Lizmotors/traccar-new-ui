@@ -1,57 +1,69 @@
-import { amber, grey, green, indigo, red, common } from "@mui/material/colors";
+import { grey, common } from "@mui/material/colors";
 
+// Define the base colors that will be used across themes
 const colors = {
   white: common.white,
-  background: grey[50],
-  primary: indigo[900],
-  secondary: green[500],
-  positive: green[500],
-  medium: amber[700],
-  negative: red[500],
+  black: common.black,
   neutral: grey[500],
+  positive: "#4CAF50",
+  negative: "#FF5252",
   geometry: "#3bb2d0",
+  primary: "#4D6FFF",
+  secondary: "#8C7CFF",
 };
 
-export default {
-  mode: localStorage.getItem("mode") ? localStorage.getItem("mode") : "light",
-  // ...(localStorage.getItem("mode") && localStorage.getItem("mode") === "light"
-  //   ? {
-  //       // palette values for dark mode
-  //       // primary: deepOrange,
-  //       // divider: deepOrange[700],
-  //       // background: {
-  //       //   default: deepOrange[900],
-  //       //   paper: deepOrange[900],
-  //       // },
+const isLightMode = localStorage.getItem("mode") === "light";
 
-  //       text: {
-  //         primary: grey[800],
-  //         secondary: grey[500],
-  //       },
-  //     }
-  //   : {
-  //       // palette values for light mode
-  //       // primary: amber,
-  //       // divider: amber[200],
-  //       primary: "#112D74",
-  //       backgroundColor: {
-  //         default: "#112D74",
-  //         paper: "#112D74",
-  //       },
-  //       text: {
-  //         primary: "#fff",
-  //         secondary: "#fff",
-  //       },
-  //     }),
-  // // background: {
-  // //   default: colors.background,
-  // // },
+// Create the theme palette configuration
+const palette = {
+  mode: isLightMode ? "light" : "dark",
+  colors,
+  ...colors,
+  background: isLightMode
+    ? {
+        default: common.white,
+        paper: common.white,
+      }
+    : {
+        default: "#0A0B14",
+        paper: "#040d1b",
+        gradient:
+          "linear-gradient(135deg,rgb(6, 8, 24) 0%,rgb(9, 10, 24) 100%)",
+      },
   primary: {
     main: colors.primary,
+    light: "#6B89FF",
+    dark: "#3B5BDB",
+    ...(isLightMode
+      ? {}
+      : { gradient: "linear-gradient(90deg, #4D6FFF 0%, #8C7CFF 100%)" }),
+    contrastText: common.white,
   },
   secondary: {
     main: colors.secondary,
-    contrastText: colors.white,
+    light: "#A594FF",
+    dark: "#7B68FF",
+    ...(isLightMode
+      ? {}
+      : { gradient: "linear-gradient(90deg, #8C7CFF 0%, #B095FF 100%)" }),
+    contrastText: common.white,
   },
-  colors,
+  text: {
+    primary: isLightMode ? grey[900] : common.white,
+    secondary: isLightMode ? grey[700] : "rgba(255, 255, 255, 0.7)",
+    disabled: isLightMode ? "rgba(0, 0, 0, 0.38)" : "rgba(255, 255, 255, 0.5)",
+  },
+  divider: isLightMode ? "rgba(0, 0, 0, 0.12)" : "rgba(255, 255, 255, 0.12)",
+  error: {
+    main: "#FF5252",
+    light: "#FF7676",
+    dark: "#DB4646",
+  },
+  success: {
+    main: "#4CAF50",
+    light: "#6FBF73",
+    dark: "#3B8A3F",
+  },
 };
+
+export default palette;

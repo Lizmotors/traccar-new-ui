@@ -1,3 +1,193 @@
+.loader {
+  position: relative;
+  width: 2.5em;
+  height: 2.5em;
+  transform: rotate(165deg);
+}
+
+.loader:before,
+.loader:after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: block;
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: 0.25em;
+  transform: translate(-50%, -50%);
+}
+
+.loader:before {
+  animation: before 2s infinite;
+}
+
+.loader:after {
+  animation: after 2s infinite;
+}
+
+@keyframes before {
+  0% {
+    width: 0.5em;
+    box-shadow: 1em -0.75em hsla(337, 84%, 48%, 0.75),
+      -1em 0.75em hsla(190, 61%, 65%, 0.75);
+  }
+  35% {
+    width: 2.5em;
+    box-shadow: 0 -0.75em hsla(337, 84%, 48%, 0.75),
+      0 0.75em hsla(190, 61%, 65%, 0.75);
+  }
+  70% {
+    width: 0.5em;
+    box-shadow: -1em -0.75em hsla(337, 84%, 48%, 0.75),
+      1em 0.75em hsla(190, 61%, 65%, 0.75);
+  }
+  100% {
+    box-shadow: 1em -0.75em hsla(337, 84%, 48%, 0.75),
+      -1em 0.75em hsla(190, 61%, 65%, 0.75);
+  }
+}
+
+@keyframes after {
+  0% {
+    height: 0.5em;
+    box-shadow: 0.75em 1em hsla(160, 50%, 48%, 0.75),
+      -0.75em -1em hsla(41, 82%, 52%, 0.75);
+  }
+  35% {
+    height: 2.5em;
+    box-shadow: 0.75em 0 hsla(160, 50%, 48%, 0.75),
+      -0.75em 0 hsla(41, 82%, 52%, 0.75);
+  }
+  70% {
+    height: 0.5em;
+    box-shadow: 0.75em -1em hsla(160, 50%, 48%, 0.75),
+      -0.75em 1em hsla(41, 82%, 52%, 0.75);
+  }
+  100% {
+    box-shadow: 0.75em 1em hsla(160, 50%, 48%, 0.75),
+      -0.75em -1em hsla(41, 82%, 52%, 0.75);
+  }
+}
+
+html,
+body {
+  height: 100%;
+}
+
+.loader {
+  position: absolute;
+  top: calc(50% - 1.25em);
+  left: calc(50% - 1.25em);
+}
+
+@property --rotate {
+  syntax: "<angle>";
+  initial-value: 360deg;
+  inherits: false;
+}
+
+:root {
+  --card-height: 100px;
+  --card-width: calc(var(--card-height) / 1.5);
+}
+
+@property --rotate {
+  syntax: "<angle>";
+  initial-value: 360deg;
+  inherits: false;
+}
+
+:root {
+  --card-height: 100px;
+  --card-width: calc(var(--card-height) / 1.5);
+}
+
+.card {
+  background: rgb(6, 8, 24);
+  width: 100%;
+  height: var(--card-height);
+  padding: 3px;
+  position: relative;
+  border-radius: 6px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  display: flex;
+  font-size: 1.5em;
+  color: rgb(88 199 250 / 100%);
+  cursor: pointer;
+  font-family: SF-Pro-light;
+}
+
+.card:hover {
+  color: rgb(88 199 250 / 100%);
+  transition: color 1s;
+}
+.card:hover:before,
+.card:hover:after {
+  animation: none;
+  opacity: 0;
+}
+
+.card::before {
+  content: "";
+  width: 104%;
+  height: 102%;
+  border-radius: 8px;
+  background-image: linear-gradient(
+    var(--rotate),
+    #5ddcff,
+    #3c67e3 43%,
+    #4e00c2
+  );
+  position: absolute;
+  z-index: -1;
+  top: -1%;
+  left: -2%;
+  animation: spin 2.5s linear infinite;
+}
+
+.card::after {
+  position: absolute;
+  content: "";
+  top: calc(var(--card-height) / 6);
+  left: 0;
+  right: 0;
+  z-index: -1;
+  height: 100%;
+  width: 100%;
+  margin: 0 auto;
+  transform: scale(0.8);
+  filter: blur(calc(var(--card-height) / 6));
+  background-image: linear-gradient(
+    var(--rotate),
+    #5ddcff,
+    #3c67e3 43%,
+    #4e00c2
+  );
+  opacity: 1;
+  transition: opacity 0.5s;
+  animation: spin 2.5s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    --rotate: 0deg;
+  }
+  100% {
+    --rotate: 360deg;
+  }
+}
+
+a {
+  color: #212534;
+  text-decoration: none;
+  font-family: sans-serif;
+  font-weight: bold;
+  margin-top: 2rem;
+}
+
 .agent-container {
   display: flex;
   flex-direction: column;
@@ -7,10 +197,6 @@
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
     Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   position: relative;
-}
-
-.agent-header {
-  padding: 1rem 2rem 0;
 }
 
 .agent-header h1 {
@@ -51,7 +237,7 @@
 }
 
 .user-message {
-  background-color: #f8f9fa;
+  /* background-color: #f8f9fa; */
   padding: 16px;
   border-radius: 9px;
 }
@@ -129,9 +315,18 @@
   font-size: 0.8rem;
 }
 
+.device-card {
+  transition: all 0.3s ease;
+}
+
 .device-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.device-card.selected-device {
+  border: 2px solid #007bff;
+  background-color: rgba(0, 123, 255, 0.05);
 }
 
 .prompt-input {
@@ -214,11 +409,89 @@
   }
 }
 
+/* SVG Animation Styles */
+@keyframes pulseNode {
+  0% {
+    r: 3;
+    opacity: 0.7;
+  }
+  50% {
+    r: 4;
+    opacity: 1;
+  }
+  100% {
+    r: 3;
+    opacity: 0.7;
+  }
+}
+
+@keyframes signalFlow {
+  0% {
+    stroke-dashoffset: 200;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.neural-network .node {
+  animation: pulseNode 3s ease-in-out infinite;
+}
+
+.neural-network .connection {
+  stroke-dasharray: 8;
+  animation: signalFlow 4s linear infinite;
+  opacity: 0.3;
+}
+
+.neural-network .title {
+  font-family: Arial, sans-serif;
+  font-weight: 600;
+  animation: fadeIn 2s ease-out forwards;
+}
+
+.neural-network .subtitle {
+  font-family: Arial, sans-serif;
+  font-weight: 400;
+  animation: fadeIn 2s ease-out forwards;
+  animation-delay: 0.5s;
+  opacity: 0;
+}
+
+/* tab view screens (max-width: 895px) */
+@media only screen and (max-width: 895px) {
+  .agent-header {
+    padding: 4rem 2rem 4rem;
+  }
+}
+
+.neural-network .layer-1 .node {
+  animation-delay: 0s;
+}
+.neural-network .layer-2 .node {
+  animation-delay: 0.5s;
+}
+.neural-network .layer-3 .node {
+  animation-delay: 1s;
+}
+.neural-network .layer-4 .node {
+  animation-delay: 1.5s;
+}
+
 /* For large screens with a min width of 1600px */
 @media only screen and (min-width: 1600px) {
   /* Styles for min-width 1600px */
   .agent-header {
-    padding: 1rem 2rem 0;
+    padding: 4rem 2rem 4rem;
   }
 
   .agent-header h1 {
@@ -235,5 +508,20 @@
     font-weight: 600;
     color: #333;
     margin-bottom: 1rem;
+  }
+}
+
+/* For large screens with a min width of 2000px */
+@media only screen and (min-width: 2000px) {
+  /* Styles for min-width 1600px */
+  .agent-header {
+    padding: 4rem 2rem 4rem;
+  }
+  .inputContainer-inner {
+    max-width: 1350px !important;
+    margin-bottom: 55px !important;
+  }
+  .neural-network {
+    padding-left: 200px !important;
   }
 }

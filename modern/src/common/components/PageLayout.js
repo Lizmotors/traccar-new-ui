@@ -127,7 +127,7 @@ const PageLayout = ({ menu, breadcrumbs = [], children }) => {
 
             <ListItemIcon
               sx={{
-                color: "#0E1726",
+                color: theme => theme.palette.mode === 'dark' ? '#fff' : '#0E1726',
                 padding: "8px 16px 8px 16px",
                 cursor: "pointer",
               }}

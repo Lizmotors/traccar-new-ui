@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
     width: theme.dimensions.drawerWidthDesktop,
     bottom: theme.dimensions.bottomBarHeight,
     transition: "transform .5s ease",
-    //backgroundColor: "white",
+    // backgroundColor: "white",
     [theme.breakpoints.down("md")]: {
       width: "100%",
       margin: 0,

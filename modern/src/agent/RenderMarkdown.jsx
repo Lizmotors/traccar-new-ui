@@ -148,11 +148,28 @@ const components = {
       </div>
     );
   }),
+  p: memo(({ node, ...props }) => {
+    const isDarkMode = localStorage.getItem("mode") === "dark";
+    return <p style={{ color: isDarkMode ? '#ffffff' : 'inherit' }} {...props} />;
+  }),
+  span: memo(({ node, ...props }) => {
+    const isDarkMode = localStorage.getItem("mode") === "dark";
+    return <span style={{ color: isDarkMode ? '#ffffff' : 'inherit' }} {...props} />;
+  }),
+  li: memo(({ node, ...props }) => {
+    const isDarkMode = localStorage.getItem("mode") === "dark";
+    return <li style={{ color: isDarkMode ? '#ffffff' : 'inherit' }} {...props} />;
+  }),
+  a: memo(({ node, ...props }) => {
+    const isDarkMode = localStorage.getItem("mode") === "dark";
+    return <a style={{ color: isDarkMode ? '#ffffff' : 'inherit' }} {...props} />;
+  }),
 };
 
 export default function RenderMarkdown({ content }) {
+  const isDarkMode = localStorage.getItem("mode") === "dark";
   return (
-    <div className="message-content">
+    <div className="message-content" style={{ color: isDarkMode ? '#ffffff' : 'inherit' }}>
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         rehypePlugins={[rehypeRaw]}

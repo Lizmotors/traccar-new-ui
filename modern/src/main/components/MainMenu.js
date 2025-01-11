@@ -89,7 +89,9 @@ const MenuItems = ({ title, link, icon, selected }) => {
 
   return (
     <ListItemButton
-      sx={{ color: "#0E1726" }}
+      sx={{
+        color: (theme) => (theme.palette.mode === "dark" ? "#fff" : "#0E1726"),
+      }}
       key={link}
       component={Link}
       to={link}
@@ -100,11 +102,19 @@ const MenuItems = ({ title, link, icon, selected }) => {
         }
       }}
     >
-      <ListItemIcon sx={{ color: "#0E1726" }}>{icon}</ListItemIcon>
+      <ListItemIcon
+        sx={{
+          color: (theme) =>
+            theme.palette.mode === "dark" ? "#fff" : "#0E1726",
+        }}
+      >
+        {icon}
+      </ListItemIcon>
       <ListItemText
         primaryTypographyProps={{
           variant: "subtitle1",
           fontWeight: selected ? "bold" : 400,
+          color: "inherit",
         }}
         style={{ fontWeight: selected ? "bold" : 400, fontSize: 18 }}
         primary={title}
@@ -519,7 +529,14 @@ const SettingsMenu = () => {
             className="popper-main"
           >
             <AccordionSummary
-              expandIcon={<ExpandMoreIcon sx={{ color: "#0E1726" }} />}
+              expandIcon={
+                <ExpandMoreIcon
+                  sx={{
+                    color: (theme) =>
+                      theme.palette.mode === "dark" ? "#fff" : "#0E1726",
+                  }}
+                />
+              }
               style={{
                 border: "none",
                 boxShadow: "none",
@@ -529,11 +546,19 @@ const SettingsMenu = () => {
               }}
             >
               <ListItemButton
-                sx={{ color: "#0E1726" }}
-                //component={Link}
-                //selected={selected}
+                sx={{
+                  color: (theme) =>
+                    theme.palette.mode === "dark" ? "#fff" : "#0E1726",
+                }}
+                // component={Link}
+                // selected={selected}
               >
-                <ListItemIcon sx={{ color: "#0E1726" }}>
+                <ListItemIcon
+                  sx={{
+                    color: (theme) =>
+                      theme.palette.mode === "dark" ? "#fff" : "#0E1726",
+                  }}
+                >
                   <AddLocationAltIcon />
                 </ListItemIcon>
                 <ListItemText
