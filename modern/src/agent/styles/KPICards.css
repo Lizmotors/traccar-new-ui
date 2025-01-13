@@ -12,8 +12,12 @@
 }
 
 .device-card {
-  background: #ffffff;
-  border-radius: 8px;
+  background: #020f1f;
+  position: relative;
+  z-index: 5;
+  transition: all;
+  animation-duration: 300s;
+  border-radius: 10px;
   padding: 20px;
   box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.1);
   width: 100%;
@@ -21,16 +25,86 @@
   overflow: hidden;
 }
 
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.border-effect-blue:hover::after,
+.border-effect-blue:hover::before,
+.border-effect:hover::after,
+.border-effect:hover::before,
+.border-effect-grey:hover::after,
+.border-effect-grey:hover::before {
+  content: "";
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-image: conic-gradient(
+    from var(--angle),
+    transparent,
+    #2fc5ebf7,
+    transparent 50%,
+    #2fc5ebf7
+  );
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  z-index: 4;
+  padding: 3px;
+  border-radius: 10px;
+  animation: 3s spin linear infinite;
+}
+
+.border-effect:hover::after,
+.border-effect:hover::before {
+  background-image: conic-gradient(
+    from var(--angle),
+    transparent,
+    #2fc5ebf7,
+    transparent 50%,
+    #6eec85
+  );
+}
+
+.border-effect-grey:hover::after,
+.border-effect-grey:hover::before {
+  background-image: conic-gradient(
+    from var(--angle),
+    transparent,
+    #f4f5f6f7,
+    transparent 50%,
+    #b8f3f3
+  );
+  z-index: -1;
+}
+
+.border-effect::before,
+.border-effect-grey:hover::before,
+.border-effect-blue:hover::before {
+  filter: blur(1.5rem);
+  opacity: 0.5;
+}
+@keyframes spin {
+  from {
+    --angle: 0deg;
+  }
+  to {
+    --angle: 360deg;
+  }
+}
+
 .key-value-header {
   display: flex;
   align-items: center;
   margin-bottom: 16px;
-  border-bottom: 1px solid #E5E7EB;
+  border-bottom: 1px solid #07f0ff;
   padding-bottom: 8px;
 }
 
 .key-label {
-  color: #6B7280;
+  color: #6b7280;
   font-size: 16px;
   text-transform: capitalize;
   font-weight: 500;

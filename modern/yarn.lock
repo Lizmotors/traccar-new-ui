@@ -11879,6 +11879,11 @@ react-mui-dropzone@^4.0.6:
     clsx "^1.0.2"
     react-dropzone "^10.2.1"
 
+react-parallax-tilt@^1.7.272:
+  version "1.7.272"
+  resolved "https://registry.npmjs.org/react-parallax-tilt/-/react-parallax-tilt-1.7.272.tgz"
+  integrity sha512-mzJFR+gB9cbAnFwwq6QngQ+j51WSlGA2N2dyyzlEo/mwq11Amdw+RndF1tKRBlkVHQVbgv8pDFEFUeS/TVHPyA==
+
 react-plotly.js@^2.6.0:
   version "2.6.0"
   resolved "https://registry.npmjs.org/react-plotly.js/-/react-plotly.js-2.6.0.tgz"

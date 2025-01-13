@@ -13,6 +13,7 @@ import "./styles/KPICards.css";
 import "./styles/AgentResponse.css";
 import { FaRegUserCircle } from "react-icons/fa";
 import { BsRobot } from "react-icons/bs";
+import Tilt from "react-parallax-tilt";
 // import NewAgentBanner from "./NewAgentBanner";
 const Plot = lazy(() => import("react-plotly.js"));
 const RenderMarkdown = lazy(() => import("./RenderMarkdown"));
@@ -268,10 +269,10 @@ const NewAgent = () => {
                   ...plotData.layout,
                   paper_bgcolor: "transparent",
                   plot_bgcolor: "transparent",
-                  font:{color:"#ffffff"},
+                  font: { color: isDarkMode ? "#ffffff" : "inherit" },
                   title: {
                     ...plotData.layout?.title,
-                    font: { color: '#ffffff' }
+                    font: { color: isDarkMode ? "#ffffff" : "inherit" },
                   },
                 }}
                 style={{ width: "100%", height: "500px" }}
@@ -310,35 +311,70 @@ const NewAgent = () => {
 
                 return (
                   <div className="kpi-card" key={dataIndex}>
-                    <div
-                      className={`device-card ${
-                        isDevicesList && dataItem === selectedDevice
-                          ? "selected-device"
-                          : ""
-                      }`}
-                      onClick={() => {
-                        if (isDevicesList) {
-                          setSelectedDevice(dataItem);
-                          setPrompt(
-                            `Tell me about device ${Object.values(dataItem)[0]}`
-                          );
-                        }
-                      }}
-                      style={{ cursor: isDevicesList ? "pointer" : "default" }}
+                    <Tilt
+                      key={index}
+                      tiltMaxAngleX={17}
+                      tiltMaxAngleY={17}
+                      glareEnable={false}
+                      scale={1.07}
+                      transitionSpeed={1000}
+                      className="border-effect"
                     >
-                      {entries.map(([key, value], entryIndex) => (
-                        <div key={key}>
-                          {entryIndex === 0 ? (
-                            <div className="key-value-header">
-                              <div className="key-label">{key}:</div>
-                              <div className="value-text">{value}</div>
-                            </div>
-                          ) : (
-                            <div className="value-item">{value}</div>
-                          )}
-                        </div>
-                      ))}
-                    </div>
+                      <div
+                        className={`device-card ${
+                          isDevicesList && dataItem === selectedDevice
+                            ? "selected-device"
+                            : ""
+                        }`}
+                        onClick={() => {
+                          if (isDevicesList) {
+                            setSelectedDevice(dataItem);
+                            setPrompt(
+                              `Tell me about device ${
+                                Object.values(dataItem)[0]
+                              }`
+                            );
+                          }
+                        }}
+                        style={{
+                          cursor: isDevicesList ? "pointer" : "default",
+                        }}
+                      >
+                        {entries.map(([key, value], entryIndex) => (
+                          <div key={key}>
+                            {entryIndex === 0 ? (
+                              <div className="key-value-header">
+                                <div
+                                  style={{
+                                    color: isDarkMode ? "#07F0FF" : "inherit",
+                                  }}
+                                  className="key-label"
+                                >
+                                  {key}:
+                                </div>
+                                <div
+                                  style={{
+                                    color: isDarkMode ? "#07F0FF" : "inherit",
+                                  }}
+                                  className="value-text"
+                                >
+                                  {value}
+                                </div>
+                              </div>
+                            ) : (
+                              <div
+                                style={{
+                                  color: isDarkMode ? "#07F0FF" : "inherit",
+                                }}
+                                className="value-item"
+                              >
+                                {value}
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </Tilt>
                   </div>
                 );
               })}
