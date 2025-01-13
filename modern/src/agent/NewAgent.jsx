@@ -268,6 +268,11 @@ const NewAgent = () => {
                   ...plotData.layout,
                   paper_bgcolor: "transparent",
                   plot_bgcolor: "transparent",
+                  font:{color:"#ffffff"},
+                  title: {
+                    ...plotData.layout?.title,
+                    font: { color: '#ffffff' }
+                  },
                 }}
                 style={{ width: "100%", height: "500px" }}
               />
@@ -453,7 +458,7 @@ const NewAgent = () => {
           >
             <NewAgentBanner />
           </div> */}
-          <div class="card">
+          <div className="card">
             Welcome to Telematics Agent, How can I assist you?
           </div>
           {/* <div className="example-commands">
