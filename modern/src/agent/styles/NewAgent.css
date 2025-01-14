@@ -95,15 +95,15 @@ body {
 .card {
   background: rgb(6, 8, 24);
   width: 100%;
-  height: var(--card-height);
+  height: 150px;
   padding: 3px;
   position: relative;
-  border-radius: 6px;
+  border-radius: 20px;
   justify-content: center;
   align-items: center;
   text-align: center;
   display: flex;
-  font-size: 1.5em;
+  font-size: 1.8em;
   color: rgb(88 199 250 / 100%);
   cursor: pointer;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
@@ -122,9 +122,9 @@ body {
 
 .card::before {
   content: "";
-  width: 104%;
-  height: 102%;
-  border-radius: 8px;
+  width: 102%;
+  height: 104%;
+  border-radius: 20px;
   background-image: linear-gradient(
     var(--rotate),
     #5ddcff,
@@ -133,8 +133,8 @@ body {
   );
   position: absolute;
   z-index: -1;
-  top: -1%;
-  left: -2%;
+  top: -2%;
+  left: -1%;
   animation: spin 2.5s linear infinite;
 }
 
@@ -222,7 +222,7 @@ a {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
   align-items: flex-start;
 }
 
@@ -371,9 +371,9 @@ a {
 }
 
 .typing-indicator-dot {
-  width: 5px;
-  height: 5px;
-  background-color: #666;
+  width: 7px;
+  height: 7px;
+  background-color: #fff;
   border-radius: 50%;
   animation: typing-animation 1.4s infinite;
   opacity: 0.4;
@@ -457,6 +457,39 @@ a {
   opacity: 0;
 }
 
+
+/* Gradient Div */
+.gradient-div {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  bottom: -4px;
+  left: -4px;
+  background: linear-gradient(90deg, #4633eb, #7a35eb);
+  border-radius: 100px;
+  filter: blur(8px);
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+.inputContainer-inner:hover .gradient-div {
+  opacity: 0.7;
+}
+
+@keyframes tilt {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(0.5deg);
+  }
+}
+
+.gradient-div {
+  animation: tilt 3s infinite ease-in-out;
+}
+
 /* tab view screens (max-width: 895px) */
 @media only screen and (max-width: 895px) {
   .agent-header {
@@ -480,6 +513,10 @@ a {
 /* For large screens with a min width of 1600px */
 @media only screen and (min-width: 1600px) {
   /* Styles for min-width 1600px */
+  .card {
+    font-size: 2.3em !important;
+    height: 180px !important;
+  }
   .agent-header {
     padding: 4rem 2rem 4rem;
   }
@@ -503,7 +540,11 @@ a {
 
 /* For large screens with a min width of 2000px */
 @media only screen and (min-width: 2000px) {
-  /* Styles for min-width 1600px */
+  /* Styles for min-width 2000px */
+  .card {
+    font-size: 2.9em !important;
+    height: 220px !important;
+  }
   .agent-header {
     padding: 4rem 2rem 4rem;
   }
@@ -513,5 +554,20 @@ a {
   }
   .neural-network {
     padding-left: 200px !important;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
   }
 }

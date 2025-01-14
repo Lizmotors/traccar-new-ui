@@ -13,10 +13,26 @@ import "./styles/KPICards.css";
 import "./styles/AgentResponse.css";
 import { FaRegUserCircle } from "react-icons/fa";
 import { BsRobot } from "react-icons/bs";
+import { Mic } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Tilt from "react-parallax-tilt";
 // import NewAgentBanner from "./NewAgentBanner";
 const Plot = lazy(() => import("react-plotly.js"));
 const RenderMarkdown = lazy(() => import("./RenderMarkdown"));
+import styled, { keyframes } from "styled-components";
+
+const typeAnimation = keyframes`
+  0% { width: 0 }
+  50% { width: 100% }
+  100% { width: 0 }
+`;
+
+const AnimatedText = styled.div`
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  animation: ${typeAnimation} 6s linear infinite;
+`;
 
 const NewAgent = () => {
   const [messages, setMessages] = useState([]);
@@ -27,6 +43,7 @@ const NewAgent = () => {
   const [parsedData, setParsedData] = useState({});
   const currentArtifacts = useRef([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isListening, setIsListening] = useState(false);
   const responseRef = useRef(null);
   const isDarkMode = localStorage.getItem("mode") === "dark";
 
@@ -249,11 +266,44 @@ const NewAgent = () => {
     }
   };
 
+  const handleSpeechToText = () => {
+    if (!("webkitSpeechRecognition" in window)) {
+      alert("Speech recognition is not supported in this browser");
+      return;
+    }
+
+    const recognition = new window.webkitSpeechRecognition();
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = "en-US";
+
+    recognition.onstart = () => {
+      setIsListening(true);
+    };
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      setPrompt(transcript);
+    };
+
+    recognition.onerror = (event) => {
+      console.error("Speech recognition error:", event.error);
+      setIsListening(false);
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+
+    recognition.start();
+  };
+
   const renderEvent = (event, index) => {
     switch (event.type) {
       case "plotly_fig":
         try {
           const plotData = JSON.parse(event.content);
+          // console.log("Plot Data", plotData.layout);
           return (
             <Suspense
               fallback={
@@ -269,13 +319,22 @@ const NewAgent = () => {
                   ...plotData.layout,
                   paper_bgcolor: "transparent",
                   plot_bgcolor: "transparent",
-                  font: { color: isDarkMode ? "#ffffff" : "inherit" },
+                  font: {
+                    color: isDarkMode ? "#ffffff" : "inherit",
+                  },
                   title: {
                     ...plotData.layout?.title,
                     font: { color: isDarkMode ? "#ffffff" : "inherit" },
                   },
                 }}
-                style={{ width: "100%", height: "500px" }}
+                style={{
+                  width: "100%",
+                  height: "60vh",
+                  minHeight: "550px",
+                  borderRadius: "12px",
+                  overflow: "hidden",
+                  border: isDarkMode ? "1px solid rgba(255, 255, 255, 0.1)" : "1px solid rgba(0, 0, 0, 0.1)"
+                }}
               />
             </Suspense>
           );
@@ -447,14 +506,14 @@ const NewAgent = () => {
   const TypingIndicator = () => {
     const memoizedTypingIndicator = useMemo(
       () => (
-        <div className="loader"></div>
-        // <div className="message">
-        //   <div className="typing-indicator">
-        //     <div className="typing-indicator-dot"></div>
-        //     <div className="typing-indicator-dot"></div>
-        //     <div className="typing-indicator-dot"></div>
-        //   </div>
-        // </div>
+        // <div className="loader"></div>
+        <div className="message">
+          <div className="typing-indicator">
+            <div className="typing-indicator-dot"></div>
+            <div className="typing-indicator-dot"></div>
+            <div className="typing-indicator-dot"></div>
+          </div>
+        </div>
       ),
       []
     );
@@ -465,7 +524,7 @@ const NewAgent = () => {
     <div
       style={{
         maxWidth: "100%",
-        height: "75vh",
+        height: "69vh",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -483,6 +542,7 @@ const NewAgent = () => {
           height: "200px",
         }}
       >
+        {/* Agent Header */}
         <div className="agent-header">
           {/* <div
             style={{
@@ -495,7 +555,9 @@ const NewAgent = () => {
             <NewAgentBanner />
           </div> */}
           <div className="card">
-            Welcome to Telematics Agent, How can I assist you?
+            <AnimatedText>
+              Welcome to Telematics Agent, How can I assist you?
+            </AnimatedText>
           </div>
           {/* <div className="example-commands">
             <p className="example-label">💡 Example commands:</p>
@@ -594,23 +656,59 @@ const NewAgent = () => {
               marginBottom: "35px",
             }}
           >
+            <div className="gradient-div"></div>
+            <button
+              type="button"
+              onClick={handleSpeechToText}
+              style={{
+                position: "absolute",
+                left: "12px",
+                top: "8px",
+                width: "35px",
+                height: "35px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                borderRadius: "50%",
+                background: "linear-gradient(90deg, #4633eb, #7a35eb)",
+                border: "none",
+                cursor: "pointer",
+                color: "#fff",
+                zIndex: 2,
+                transition: "transform 0.2s ease",
+                boxShadow: "0 0 15px rgba(70, 51, 235, 0.3)",
+              }}
+            >
+              <span
+                style={{
+                  display: "flex",
+                  animation: isListening ? "pulse 1.5s infinite" : "none",
+                }}
+              >
+                <Mic size={20} />
+              </span>
+            </button>
             <input
               type="text"
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
               placeholder="Ask me about your data..."
-              className="prompt-input "
+              className="prompt-input"
               disabled={isLoading}
               style={{
                 width: "100%",
-                padding: "9px",
-                paddingRight: "50px",
-                fontSize: "14px",
-                borderRadius: "8px",
-                border: "1px solid #E0E0E0",
-                backgroundColor: "#F8F9FA",
+                padding: "16px 24px",
+                paddingLeft: "55px",
+                paddingRight: "55px",
+                fontSize: "16px",
+                borderRadius: "100px",
+                border: "1px solid rgba(255, 255, 255, 0)",
+                backgroundColor: "rgb(8, 9, 24)",
                 outline: "none",
-                color: "#333",
+                color: "#fff",
+                position: "relative",
+                zIndex: "1",
+                backdropFilter: "blur(8px)",
               }}
             />
             <button
@@ -619,18 +717,27 @@ const NewAgent = () => {
               className="submit-button"
               style={{
                 position: "absolute",
-                right: "16px",
-                top: "50%",
-
-                transform: "translateY(-50%)",
-                background: "none",
+                right: "12px",
+                top: "8px",
+                width: "35px",
+                height: "35px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                borderRadius: "50%",
+                background: "linear-gradient(90deg, #4633eb, #7a35eb)",
                 border: "none",
                 cursor: isLoading ? "not-allowed" : "pointer",
                 opacity: isLoading ? 0.5 : 1,
-                color: "#666",
+                color: "#fff",
+                zIndex: 2,
+                transition: "transform 0.2s ease",
+                boxShadow: "0 0 15px rgba(70, 51, 235, 0.3)",
               }}
             >
-              <span style={{ fontSize: "24px" }}>➤</span>
+              <span style={{ display: "flex" }}>
+                <ArrowRight size={20} />
+              </span>
             </button>
           </form>
         </div>
