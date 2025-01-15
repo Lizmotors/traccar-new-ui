@@ -171,10 +171,11 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
   },
   profileImg: {
-    width: 40,
-    height: 40,
+    width: 25,
+    height: 25,
     borderRadius: "50%",
     marginRight: 10,
+    marginTop: 7,
     [theme.breakpoints.only("xs")]: {
       width: 40,
       height: 40,

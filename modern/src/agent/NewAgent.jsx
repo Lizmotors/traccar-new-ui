@@ -46,6 +46,8 @@ const NewAgent = () => {
   const [isListening, setIsListening] = useState(false);
   const responseRef = useRef(null);
   const isDarkMode = localStorage.getItem("mode") === "dark";
+  const [speechTranscript, setSpeechTranscript] = useState("");
+  const [shouldSubmit, setShouldSubmit] = useState(false);
 
   useEffect(() => {
     const parseCSVEvents = async () => {
@@ -78,6 +80,13 @@ const NewAgent = () => {
       responseRef.current.scrollTop = responseRef.current.scrollHeight;
     }
   }, [messages]);
+
+  useEffect(() => {
+    if (shouldSubmit && speechTranscript) {
+      handleSubmit({ preventDefault: () => {} });
+      setShouldSubmit(false);
+    }
+  }, [shouldSubmit, speechTranscript]);
 
   const addMessage = (
     role,
@@ -279,11 +288,14 @@ const NewAgent = () => {
 
     recognition.onstart = () => {
       setIsListening(true);
+      setSpeechTranscript("");
+      setShouldSubmit(false);
     };
 
     recognition.onresult = (event) => {
-      const transcript = event.results[0][0].transcript;
-      setPrompt(transcript);
+      const text = event.results[0][0].transcript;
+      setPrompt(text);
+      setSpeechTranscript(text);
     };
 
     recognition.onerror = (event) => {
@@ -293,6 +305,7 @@ const NewAgent = () => {
 
     recognition.onend = () => {
       setIsListening(false);
+      setShouldSubmit(true);
     };
 
     recognition.start();
@@ -333,7 +346,9 @@ const NewAgent = () => {
                   minHeight: "550px",
                   borderRadius: "12px",
                   overflow: "hidden",
-                  border: isDarkMode ? "1px solid rgba(255, 255, 255, 0.1)" : "1px solid rgba(0, 0, 0, 0.1)"
+                  border: isDarkMode
+                    ? "1px solid rgba(255, 255, 255, 0.1)"
+                    : "1px solid rgba(0, 0, 0, 0.1)",
                 }}
               />
             </Suspense>
@@ -554,19 +569,26 @@ const NewAgent = () => {
           >
             <NewAgentBanner />
           </div> */}
-          <div className="card">
-            <AnimatedText>
-              Welcome to Telematics Agent, How can I assist you?
-            </AnimatedText>
-          </div>
-          {/* <div className="example-commands">
-            <p className="example-label">💡 Example commands:</p>
-            <ul style={{ listStyleType: "disc", marginLeft: "19px" }}>
-              <li>"Plot last ride data of device 7 for last week"</li>
-              <li>"Create a visualization of speed over time"</li>
-              <li>"Show summarized metrics for vehicle position data"</li>
-            </ul>
-          </div> */}
+
+          {isDarkMode ? (
+            <div className="card">
+              <AnimatedText>
+                Welcome to Telematics Agent, How can I assist you?
+              </AnimatedText>
+            </div>
+          ) : (
+            <>
+              <h1>Telematics Analytics Agent</h1>
+              <div className="example-commands">
+                <p className="example-label">💡 Example commands:</p>
+                <ul style={{ listStyleType: "disc", marginLeft: "19px" }}>
+                  <li>"Plot last ride data of device 7 for last week"</li>
+                  <li>"Create a visualization of speed over time"</li>
+                  <li>"Show summarized metrics for vehicle position data"</li>
+                </ul>
+              </div>
+            </>
+          )}
         </div>
 
         {/* Chat Messages */}
@@ -656,7 +678,8 @@ const NewAgent = () => {
               marginBottom: "35px",
             }}
           >
-            <div className="gradient-div"></div>
+            {isDarkMode ? <div className="gradient-div"></div> : ""}
+
             <button
               type="button"
               onClick={handleSpeechToText}
@@ -702,10 +725,14 @@ const NewAgent = () => {
                 paddingRight: "55px",
                 fontSize: "16px",
                 borderRadius: "100px",
-                border: "1px solid rgba(255, 255, 255, 0)",
-                backgroundColor: "rgb(8, 9, 24)",
+                border: `${
+                  isDarkMode
+                    ? "1px solid rgba(255, 255, 255, 0)"
+                    : "1px solid rgb(222, 225, 228)"
+                }`,
+                backgroundColor: `${isDarkMode ? "rgb(8, 9, 24)" : "#ffffff"}`,
                 outline: "none",
-                color: "#fff",
+                color: `${isDarkMode ? "#fff" : "inherit"}`,
                 position: "relative",
                 zIndex: "1",
                 backdropFilter: "blur(8px)",
