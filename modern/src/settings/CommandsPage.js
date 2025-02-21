@@ -36,6 +36,7 @@ const CommandsPage = () => {
   const [searchKeyword, setSearchKeyword] = useState("");
   const [loading, setLoading] = useState(false);
   const limitCommands = useRestriction("limitCommands");
+  const isDarkMode = localStorage.getItem("mode") === "dark";
 
   useEffectAsync(async () => {
     setLoading(true);
@@ -55,7 +56,12 @@ const CommandsPage = () => {
     <>
       <SearchHeader keyword={searchKeyword} setKeyword={setSearchKeyword} />
       <Table>
-        <TableHead>
+        <TableHead
+          sx={{
+            backgroundColor: isDarkMode ? "#080a18" : "white",
+            color: isDarkMode ? "white" : "black",
+          }}
+        >
           <TableRow>
             <TableCell>{t("sharedDescription")}</TableCell>
             <TableCell>{t("sharedType")}</TableCell>

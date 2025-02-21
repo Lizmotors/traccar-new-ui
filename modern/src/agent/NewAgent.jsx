@@ -316,7 +316,7 @@ const NewAgent = () => {
       case "plotly_fig":
         try {
           const plotData = JSON.parse(event.content);
-          // console.log("Plot Data", plotData.layout);
+          console.log("Plot Data => ", plotData);
           return (
             <Suspense
               fallback={
@@ -572,9 +572,11 @@ const NewAgent = () => {
 
           {isDarkMode ? (
             <div className="card">
-              <AnimatedText>
-                Welcome to Telematics Agent, How can I assist you?
-              </AnimatedText>
+              <div class="neon-container">
+                <h1 style={{ color: "#fff", size: "5rem" }} class="neon-text">
+                  AI intelligence for Telematics
+                </h1>
+              </div>
             </div>
           ) : (
             <>

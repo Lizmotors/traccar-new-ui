@@ -46,6 +46,7 @@ const RouteReportPage = () => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
+  const isDarkMode = localStorage.getItem("mode") === "dark";
 
   const handleSubmit = useCatch(async ({ deviceIds, from, to, type }) => {
     const query = new URLSearchParams({ from, to });
@@ -119,7 +120,12 @@ const RouteReportPage = () => {
             </ReportFilter>
           </div>
           <Table>
-            <TableHead>
+            <TableHead
+              sx={{
+                backgroundColor: isDarkMode ? "#080a18" : "white",
+                color: isDarkMode ? "white" : "black",
+              }}
+            >
               <TableRow>
                 <TableCell className={classes.columnAction} />
                 <TableCell>{t("sharedDevice")}</TableCell>

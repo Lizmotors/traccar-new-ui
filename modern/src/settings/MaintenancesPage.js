@@ -39,6 +39,7 @@ const MaintenacesPage = () => {
   const [loading, setLoading] = useState(false);
   const speedUnit = useAttributePreference("speedUnit");
   const distanceUnit = useAttributePreference("distanceUnit");
+  const isDarkMode = localStorage.getItem("mode") === "dark";
 
   useEffectAsync(async () => {
     setLoading(true);
@@ -74,7 +75,12 @@ const MaintenacesPage = () => {
     <>
       <SearchHeader keyword={searchKeyword} setKeyword={setSearchKeyword} />
       <Table>
-        <TableHead>
+        <TableHead
+          sx={{
+            backgroundColor: isDarkMode ? "#080a18" : "white",
+            color: isDarkMode ? "white" : "black",
+          }}
+        >
           <TableRow>
             <TableCell>{t("sharedName")}</TableCell>
             <TableCell>{t("sharedType")}</TableCell>

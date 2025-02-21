@@ -26,6 +26,44 @@
   animation: after 2s infinite;
 }
 
+/* .neon-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Arial", sans-serif;
+  overflow: hidden;
+} */
+
+.neon-text {
+  font-size: 10rem;
+  color: #fff;
+  text-shadow: 0 0 5px #ff005e, 0 0 10px #ff005e, 0 0 20px #ff005e,
+    0 0 40px #ff005e, 0 0 80px #ff005e;
+  animation: glow 1.5s infinite alternate;
+}
+
+@keyframes glow {
+  0% {
+    text-shadow: 0 0 5px #ff005e, 0 0 10px #ff005e, 0 0 20px #ff005e,
+      0 0 40px #ff005e, 0 0 80px #ff005e;
+  }
+  100% {
+    text-shadow: 0 0 10px #00d4ff, 0 0 20px #00d4ff, 0 0 40px #00d4ff,
+      0 0 80px #00d4ff, 0 0 160px #00d4ff;
+  }
+}
+
+@keyframes glow {
+  0% {
+    text-shadow: 0 0 5px #ff005e, 0 0 10px #ff005e, 0 0 20px #ff005e,
+      0 0 40px #ff005e, 0 0 80px #ff005e;
+  }
+  100% {
+    text-shadow: 0 0 10px #00d4ff, 0 0 20px #00d4ff, 0 0 40px #00d4ff,
+      0 0 80px #00d4ff, 0 0 160px #00d4ff;
+  }
+}
+
 @keyframes before {
   0% {
     width: 0.5em;
@@ -103,7 +141,7 @@ body {
   align-items: center;
   text-align: center;
   display: flex;
-  font-size: 1.8em;
+  font-size: 5em;
   color: rgb(88 199 250 / 100%);
   cursor: pointer;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
@@ -457,7 +495,6 @@ a {
   opacity: 0;
 }
 
-
 /* Gradient Div */
 .gradient-div {
   position: absolute;
@@ -478,7 +515,8 @@ a {
 }
 
 @keyframes tilt {
-  0%, 100% {
+  0%,
+  100% {
     transform: rotate(0deg);
   }
   50% {

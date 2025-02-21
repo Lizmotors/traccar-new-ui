@@ -34,6 +34,7 @@ const ComputedAttributesPage = () => {
   const [searchKeyword, setSearchKeyword] = useState("");
   const [loading, setLoading] = useState(false);
   const administrator = useAdministrator();
+  const isDarkMode = localStorage.getItem("mode") === "dark";
 
   useEffectAsync(async () => {
     setLoading(true);
@@ -53,7 +54,12 @@ const ComputedAttributesPage = () => {
     <>
       <SearchHeader keyword={searchKeyword} setKeyword={setSearchKeyword} />
       <Table>
-        <TableHead>
+        <TableHead
+          sx={{
+            backgroundColor: isDarkMode ? "#080a18" : "white",
+            color: isDarkMode ? "white" : "black",
+          }}
+        >
           <TableRow>
             <TableCell>{t("sharedDescription")}</TableCell>
             <TableCell>{t("sharedAttribute")}</TableCell>

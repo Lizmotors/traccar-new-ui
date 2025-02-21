@@ -81,6 +81,7 @@ const TripReportPage = () => {
   const [rewardsData, setRewardsData] = useState([]);
   const [deviceData, setDeviceData] = useState({});
   const [btnLoading, setBtnLoading] = useState(false);
+  const isDarkMode = localStorage.getItem("mode") === "dark";
 
   const createMarkers = () => [
     {
@@ -273,7 +274,12 @@ const TripReportPage = () => {
             </ReportFilter>
           </div>
           <Table>
-            <TableHead>
+            <TableHead
+              sx={{
+                backgroundColor: isDarkMode ? "#080a18" : "white",
+                color: isDarkMode ? "white" : "black",
+              }}
+            >
               <TableRow>
                 <TableCell className={classes.columnAction} />
                 {columns.map((key) => (

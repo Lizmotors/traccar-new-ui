@@ -31,6 +31,7 @@ const DevicesPage = () => {
   const [items, setItems] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [loading, setLoading] = useState(false);
+  const isDarkMode = localStorage.getItem("mode") === "dark";
 
   useEffectAsync(async () => {
     setLoading(true);
@@ -50,7 +51,12 @@ const DevicesPage = () => {
     <>
       <SearchHeader keyword={searchKeyword} setKeyword={setSearchKeyword} />
       <Table>
-        <TableHead>
+        <TableHead
+          sx={{
+            backgroundColor: isDarkMode ? "#080a18" : "white",
+            color: isDarkMode ? "white" : "black",
+          }}
+        >
           <TableRow>
             <TableCell>{t("sharedName")}</TableCell>
             <TableCell>{t("deviceIdentifier")}</TableCell>

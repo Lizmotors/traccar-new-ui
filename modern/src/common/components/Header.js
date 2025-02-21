@@ -137,7 +137,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "flex-end",
     padding: "15px 50px",
-    borderBottom: "1px solid #d9d2d2",
+    // borderBottom: "1px solid #d9d2d2",
     [theme.breakpoints.up("xs")]: {
       padding: "15px 5px",
     },

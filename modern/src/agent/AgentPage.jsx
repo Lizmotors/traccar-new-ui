@@ -8,7 +8,7 @@ export default function AgentPage() {
     <div>
       <PageLayout
         menu={<SettingsMenu />}
-        //breadcrumbs={["sharedDeviceAccumulators"]}
+        // breadcrumbs={["sharedDeviceAccumulators"]}
       >
         <Header />
         <div className="header-padding"></div>
