@@ -47,6 +47,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "../../common/components/LocalizationProvider";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Logo from "../../resources/images/logo.png";
+import NewLogo from "../../resources/images/NewLogo.png";
 import {
   useAdministrator,
   useManager,
@@ -140,8 +141,8 @@ const useStyles = makeStyles((theme) => ({
   },
   logoimg: {
     textAlign: "centre",
-    width: 70,
-    //height: 70,
+    width: 150,
+    // height: 70,
     marginRight: 0,
   },
   sidebar: {
@@ -501,7 +502,7 @@ const SettingsMenu = () => {
         {openMenu && (
           <div className={classes.logocont}>
             <div>
-              <img src={Logo} alt="logo" className={classes.logoimg} />
+              <img src={NewLogo} alt="logo" className={classes.logoimg} />
             </div>
           </div>
         )}

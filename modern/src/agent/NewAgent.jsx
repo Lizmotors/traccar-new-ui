@@ -725,7 +725,7 @@ const NewAgent = () => {
                 padding: "16px 24px",
                 paddingLeft: "55px",
                 paddingRight: "55px",
-                fontSize: "16px",
+                fontSize: "20px",
                 borderRadius: "100px",
                 border: `${
                   isDarkMode

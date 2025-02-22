@@ -329,12 +329,11 @@ a {
 
 .message-avatar {
   flex-shrink: 0;
-  width: 31px;
-  height: 31px;
+  width: 33px;
+  height: 33px;
   display: flex;
-  margin-top: 9px;
+  margin-top: 25px;
   align-items: center;
-  justify-content: center;
   color: #666;
 }
 
@@ -574,6 +573,15 @@ a {
     color: #333;
     margin-bottom: 1rem;
   }
+  /* p {
+    font-size: 30px !important;
+  } */
+
+  /* .message-avatar {
+    width: 31px;
+    height: 31px;
+    margin-top: 20px;
+  } */
 }
 
 /* For large screens with a min width of 2000px */
@@ -609,3 +617,143 @@ a {
     opacity: 1;
   }
 }
+
+/* Base Styles */
+.markdown {
+  font-family: "Georgia", serif;
+  line-height: 1.8;
+  font-size: 18px;
+}
+
+/* Headings */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: 1.2;
+  font-weight: 600;
+  margin-top: 15px;
+  margin-bottom: 20px;
+}
+
+p,
+li,
+ol,
+ul {
+  font-size: 24px;
+}
+
+h1 {
+  font-size: 36px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 20px;
+}
+/* Paragraphs */
+p {
+  margin-bottom: 20px;
+  text-align: justify;
+}
+/* Links */
+a {
+  color: #1a73e8;
+  text-decoration: none;
+  border-bottom: 1px solid #1a73e8;
+  transition: color 0.2s ease, border-bottom-color 0.2s ease;
+}
+a:hover {
+  color: #004abf;
+  border-bottom-color: #004abf;
+}
+/* Blockquotes */
+blockquote {
+  margin: 20px 0;
+  padding: 15px;
+  background-color: #f4f4f4;
+  border-left: 4px solid #ccc;
+  font-style: italic;
+  color: #555;
+}
+blockquote p {
+  margin: 0;
+}
+/* Images */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 20px 0;
+}
+/* Lists */
+ul,
+ol {
+  margin: 20px 0;
+  padding-left: 40px;
+}
+li {
+  margin-bottom: 10px;
+}
+/* Code */
+pre,
+code {
+  font-family: "Courier New", monospace;
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+pre {
+  padding: 10px;
+  overflow-x: auto;
+}
+/* Horizontal Rule */
+hr {
+  border: 0;
+  height: 1px;
+  background: #ccc;
+  margin: 40px 0;
+}
+/* Media Embeds */
+iframe,
+video {
+  max-width: 100%;
+  height: auto;
+  margin: 20px 0;
+}
+/* Table
+.markdown table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+.markdown table,
+.markdown th,
+.markdown td {
+  border: 1px solid #ddd;
+}
+.markdown th,
+.markdown td {
+  padding: 10px;
+  text-align: left;
+} */
+/* Responsive Design
+@media (max-width: 768px) {
+  .markdown {
+    padding: 15px;
+  }
+  .markdown h1 {
+    font-size: 28px;
+  }
+  .markdown h2 {
+    font-size: 24px;
+  }
+  .markdown h3 {
+    font-size: 20px;
+  }
+} */

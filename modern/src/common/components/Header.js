@@ -348,28 +348,29 @@ const Header = () => {
             }}
           >
             <div>
-              <img
+              {/* <img
                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSrf1xjorLVFcNPL_A746ew0_fIzLFTY5Ngw&usqp=CAU"
                 alt="logo"
                 className={classes.profileImg}
-              />
+              /> */}
             </div>
-            <Typography variant="h6" component={"h6"}>
+            <Typography sx={{ fontSize: "12px" }} variant="h6" component={"h6"}>
               {user.name}
             </Typography>
             <KeyboardArrowDownIcon sx={{ color: "gray", marginLeft: 1 }} />
           </div>
         </IconButton>
-        <StyledMenu id="profile-menu"
+        <StyledMenu
+          id="profile-menu"
           open={Boolean(profileMenu)}
           anchorEl={profileMenu}
           onClose={() => setProfileMenu(null)}
           className={classes.headerMenu}
           classes={{ paper: classes.profileMenu }}
-          disableAutoFocusItem>
-       
+          disableAutoFocusItem
+        >
           <div className={classes.profileMenuUser}>
-            <Typography color={"#000000"}   variant="h4" weight="medium">
+            <Typography color={"#000000"} variant="h4" weight="medium">
               {user.name}
             </Typography>
           </div>
@@ -379,7 +380,7 @@ const Header = () => {
               classes.profileMenuItem,
               classes.headerMenuItem
             )}
-            sx={{color:"#000000" }} 
+            sx={{ color: "#000000" }}
             component={Link}
             to={`/settings/user/${userId}/profile`}
             onClick={() => {
@@ -393,7 +394,7 @@ const Header = () => {
               classes.profileMenuItem,
               classes.headerMenuItem
             )}
-            sx={{color:"#000000" }} 
+            sx={{ color: "#000000" }}
             onClick={() => {
               if (localStorage.getItem("mode")) {
                 if (localStorage.getItem("mode") === "dark") {
@@ -425,7 +426,7 @@ const Header = () => {
             <LogoutIcon className={classes.profileMenuIcon} />{" "}
             {t("loginLogout")}
           </MenuItem>
-          </StyledMenu>
+        </StyledMenu>
       </div>
     </AppBar>
   );
