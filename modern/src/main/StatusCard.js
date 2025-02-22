@@ -15,6 +15,7 @@ import {
   Menu,
   MenuItem,
   CardMedia,
+  styled,
 } from "@mui/material";
 import makeStyles from "@mui/styles/makeStyles";
 import CloseIcon from "@mui/icons-material/Close";
@@ -92,14 +93,23 @@ const useStyles = makeStyles((theme) => ({
 
 const StatusRow = ({ name, content }) => {
   const classes = useStyles();
+  const isDarkMode = localStorage.getItem("mode") === "dark";
 
   return (
     <TableRow sx={{ marginBottom: 0 }}>
       <TableCell className={classes.cell}>
-        <Typography variant="subtitle2">{name}</Typography>
+        <Typography
+          variant="subtitle2"
+          sx={{ color: isDarkMode ? "#000000" : "inherit" }}
+        >
+          {name}
+        </Typography>
       </TableCell>
       <TableCell className={classes.cell}>
-        <Typography variant="body2" color="">
+        <Typography
+          variant="body2"
+          sx={{ color: isDarkMode ? "#000000" : "inherit" }}
+        >
           {content}
         </Typography>
       </TableCell>
@@ -175,6 +185,22 @@ const StatusCard = ({ deviceId, onClose }) => {
     }
   }, [navigate]);
 
+  // Define the styles for the Card (as a style object)
+  const CardStyles = {
+    backgroundColor: "rgba(255, 255, 255, 0.05)",
+    backdropFilter: "blur(10px)",
+    borderRadius: "12px",
+    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+    border: "1px solid rgba(255, 255, 255, 0.3)",
+  };
+
+  // Create a styled Menu component with the same styles as the Card
+  const StyledMenu = styled(Menu)(({ theme }) => ({
+    "& .MuiPaper-root": {
+      ...CardStyles, // Apply the same styles as the Card
+    },
+  }));
+
   return (
     <>
       {device && (
@@ -219,7 +245,7 @@ const StatusCard = ({ deviceId, onClose }) => {
                 </IconButton> */}
               </CardMedia>
             )}
-            {/* )} */}
+
             {position && (
               <CardContent className={classes.content}>
                 <Table size="small" classes={{ root: classes.table }}>
@@ -229,6 +255,7 @@ const StatusCard = ({ deviceId, onClose }) => {
                         maxHeight: 200,
                         overflow: "auto",
                         width: "100%",
+                        color: isDarkMode ? "#000000" : "inherit",
                       }}
                     >
                       {positionItems
@@ -307,10 +334,11 @@ const StatusCard = ({ deviceId, onClose }) => {
         </Draggable>
       )}
       {position && (
-        <Menu
+        <StyledMenu
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}
           onClose={() => setAnchorEl(null)}
+          className={classes.card}
         >
           <MenuItem
             onClick={() => {
@@ -318,14 +346,15 @@ const StatusCard = ({ deviceId, onClose }) => {
               navigate(`/device/${deviceId}/${position.id}`);
             }}
           >
-            <Typography color="secondary">{t("sharedShowDetails")}</Typography>
+            <Typography color={isDarkMode?"#000000":"#000000"}>{t("sharedShowDetails")}</Typography>
           </MenuItem>
-          <MenuItem onClick={handleGeofence}>
+          <MenuItem sx={{color:"#000000"}} onClick={handleGeofence}>
             {t("sharedCreateGeofence")}
           </MenuItem>
           <MenuItem
             component="a"
             target="_blank"
+            sx={{color:"#000000"}}
             href={`https://www.google.com/maps/search/?api=1&query=${position.latitude}%2C${position.longitude}`}
           >
             {t("linkGoogleMaps")}
@@ -333,6 +362,7 @@ const StatusCard = ({ deviceId, onClose }) => {
           <MenuItem
             component="a"
             target="_blank"
+            sx={{color:"#000000"}}
             href={`http://maps.apple.com/?ll=${position.latitude},${position.longitude}`}
           >
             {t("linkAppleMaps")}
@@ -340,11 +370,12 @@ const StatusCard = ({ deviceId, onClose }) => {
           <MenuItem
             component="a"
             target="_blank"
+            sx={{color:"#000000"}}
             href={`https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${position.latitude}%2C${position.longitude}&heading=${position.course}`}
           >
             {t("linkStreetView")}
           </MenuItem>
-        </Menu>
+        </StyledMenu>
       )}
       <RemoveDialog
         open={removing}

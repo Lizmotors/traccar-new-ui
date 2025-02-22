@@ -59,6 +59,7 @@ const StopReportPage = () => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
+  const isDarkMode = localStorage.getItem("mode") === "dark";
 
   const handleSubmit = useCatch(async ({ deviceId, from, to, type }) => {
     const query = new URLSearchParams({ deviceId, from, to });
@@ -148,7 +149,7 @@ const StopReportPage = () => {
             </ReportFilter>
           </div>
           <Table>
-            <TableHead>
+            <TableHead sx={{backgroundColor:isDarkMode?"#040d1b":"#ffffff"}}>
               <TableRow>
                 <TableCell className={classes.columnAction} />
                 {columns.map((key) => (
@@ -156,7 +157,7 @@ const StopReportPage = () => {
                 ))}
               </TableRow>
             </TableHead>
-            <TableBody>
+            <TableBody  sx={{backgroundColor:isDarkMode?"#040d1b":"#ffffff"}}>
               {!loading ? (
                 items.map((item) => (
                   <TableRow key={item.positionId}>

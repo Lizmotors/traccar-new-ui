@@ -65,6 +65,7 @@ const EventReportPage = () => {
   const [loading, setLoading] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [position, setPosition] = useState(null);
+  const isDarkMode = localStorage.getItem("mode") === "dark";
 
   useEffectAsync(async () => {
     if (selectedItem) {
@@ -224,7 +225,7 @@ const EventReportPage = () => {
             </ReportFilter>
           </div>
           <Table>
-            <TableHead>
+            <TableHead sx={{backgroundColor:isDarkMode?"#040d1b":"#ffffff"}}>
               <TableRow>
                 <TableCell className={classes.columnAction} />
                 {columns.map((key) => (

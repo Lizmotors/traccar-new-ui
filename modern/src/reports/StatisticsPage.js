@@ -44,6 +44,7 @@ const StatisticsPage = () => {
   ]);
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
+  const isDarkMode = localStorage.getItem("mode") === "dark";
 
   const handleSubmit = useCatch(async ({ from, to }) => {
     setLoading(true);
@@ -72,14 +73,14 @@ const StatisticsPage = () => {
         </ReportFilter>
       </div>
       <Table>
-        <TableHead>
+        <TableHead sx={{backgroundColor:isDarkMode?"#040d1b":"#ffffff"}}>
           <TableRow>
             {columns.map((key) => (
               <TableCell key={key}>{t(columnsMap.get(key))}</TableCell>
             ))}
           </TableRow>
         </TableHead>
-        <TableBody>
+        <TableBody  sx={{backgroundColor:isDarkMode?"#040d1b":"#ffffff"}}>
           {!loading ? (
             items.map((item) => (
               <TableRow key={item.id}>

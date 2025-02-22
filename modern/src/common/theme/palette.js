@@ -25,7 +25,7 @@ const palette = {
         paper: common.white,
       }
     : {
-        default: "#0A0B14",
+        default: "#070818",
         paper: "#040d1b",
         gradient:
           "linear-gradient(135deg,rgb(6, 8, 24) 0%,rgb(9, 10, 24) 100%)",

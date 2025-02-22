@@ -21,7 +21,7 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { makeStyles } from "@mui/styles";
+import { makeStyles, styled } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 import {
   Menu as MenuIcon,
@@ -272,6 +272,23 @@ const Header = () => {
   const user = useSelector((state) => state.session.user);
 
   const userId = useSelector((state) => state.session.user.id);
+  const isDarkMode = localStorage.getItem("mode") === "dark";
+
+  // Define the styles for the Card (as a style object)
+  const CardStyles = {
+    backgroundColor: "rgba(255, 255, 255, 0.05)",
+    backdropFilter: "blur(10px)",
+    borderRadius: "12px",
+    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+    border: "1px solid rgba(255, 255, 255, 0.3)",
+  };
+
+  // Create a styled Menu component with the same styles as the Card
+  const StyledMenu = styled(Menu)(({ theme }) => ({
+    "& .MuiPaper-root": {
+      ...CardStyles, // Apply the same styles as the Card
+    },
+  }));
 
   const handleLogout = async () => {
     const notificationToken = window.localStorage.getItem("notificationToken");
@@ -343,18 +360,16 @@ const Header = () => {
             <KeyboardArrowDownIcon sx={{ color: "gray", marginLeft: 1 }} />
           </div>
         </IconButton>
-
-        <Menu
-          id="profile-menu"
+        <StyledMenu id="profile-menu"
           open={Boolean(profileMenu)}
           anchorEl={profileMenu}
           onClose={() => setProfileMenu(null)}
           className={classes.headerMenu}
           classes={{ paper: classes.profileMenu }}
-          disableAutoFocusItem
-        >
+          disableAutoFocusItem>
+       
           <div className={classes.profileMenuUser}>
-            <Typography variant="h4" weight="medium">
+            <Typography color={"#000000"}   variant="h4" weight="medium">
               {user.name}
             </Typography>
           </div>
@@ -364,6 +379,7 @@ const Header = () => {
               classes.profileMenuItem,
               classes.headerMenuItem
             )}
+            sx={{color:"#000000" }} 
             component={Link}
             to={`/settings/user/${userId}/profile`}
             onClick={() => {
@@ -377,6 +393,7 @@ const Header = () => {
               classes.profileMenuItem,
               classes.headerMenuItem
             )}
+            sx={{color:"#000000" }} 
             onClick={() => {
               if (localStorage.getItem("mode")) {
                 if (localStorage.getItem("mode") === "dark") {
@@ -408,7 +425,7 @@ const Header = () => {
             <LogoutIcon className={classes.profileMenuIcon} />{" "}
             {t("loginLogout")}
           </MenuItem>
-        </Menu>
+          </StyledMenu>
       </div>
     </AppBar>
   );

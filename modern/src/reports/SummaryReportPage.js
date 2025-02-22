@@ -60,6 +60,7 @@ const SummaryReportPage = () => {
   const [daily, setDaily] = useState(false);
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
+  const isDarkMode = localStorage.getItem("mode") === "dark";
 
   const handleSubmit = useCatch(
     async ({ deviceIds, groupIds, from, to, type }) => {
@@ -143,7 +144,7 @@ const SummaryReportPage = () => {
         </ReportFilter>
       </div>
       <Table>
-        <TableHead>
+        <TableHead sx={{backgroundColor:isDarkMode?"#040d1b":"#ffffff"}}>
           <TableRow>
             <TableCell>{t("sharedDevice")}</TableCell>
             {columns.map((key) => (
@@ -151,7 +152,7 @@ const SummaryReportPage = () => {
             ))}
           </TableRow>
         </TableHead>
-        <TableBody>
+        <TableBody  sx={{backgroundColor:isDarkMode?"#040d1b":"#ffffff"}}>
           {!loading ? (
             items.map((item) => (
               <TableRow key={`${item.deviceId}_${Date.parse(item.startTime)}`}>

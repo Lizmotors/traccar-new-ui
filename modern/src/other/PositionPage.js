@@ -33,6 +33,7 @@ const PositionPage = () => {
   const { id } = useParams();
 
   const [item, setItem] = useState();
+  const isDarkMode = localStorage.getItem("mode") === "dark";
 
   useEffectAsync(async () => {
     if (id) {
@@ -74,14 +75,14 @@ const PositionPage = () => {
         <Container maxWidth="sm">
           <Paper>
             <Table>
-              <TableHead>
+              <TableHead sx={{ backgroundColor:isDarkMode?"#040d1b":"#ffffff"}}>
                 <TableRow>
                   <TableCell>{t('stateName')}</TableCell>
                   <TableCell>{t('sharedName')}</TableCell>
                   <TableCell>{t('stateValue')}</TableCell>
                 </TableRow>
               </TableHead>
-              <TableBody>
+              <TableBody  sx={{backgroundColor:isDarkMode?"#040d1b":"#ffffff"}}>
                 {item && Object.getOwnPropertyNames(item).filter((it) => it !== 'attributes').map((property) => (
                   <TableRow key={property}>
                     <TableCell>{property}</TableCell>
