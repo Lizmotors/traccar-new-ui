@@ -203,7 +203,7 @@ const useStyles = makeStyles((theme) => ({
   },
   container: {
     margin: 0,
-    padding: 10,
+    // padding: 10,
     width: "100%",
     height: "100%",
   },
@@ -422,8 +422,8 @@ const MainPage = () => {
   return (
     <>
       <PageLayout menu={<MainMenu />}>
-        <Header />
-        <div className="header-padding"></div>
+        {/* <Header /> */}
+        {/* <div className="header-padding"></div> */}
         {/* <div className={classes.headerCont}>
           <div className={classes.flexBottom}>
             <Card className={classes.cardCircle}>
@@ -570,7 +570,7 @@ const MainPage = () => {
 
         <div
           className={classes.container}
-          style={{ display: "flex", height: "90vh" }}
+          style={{ display: "flex", height: "100vh" }}
         >
           {/* <Container
             style={{ height: '85vh', width: '100%', maxWidth: '100%' }}

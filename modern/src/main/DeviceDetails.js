@@ -573,9 +573,15 @@ const DeviceDetails = (props) => {
   console.log("itemData", itemData);
 
   return (
-    <PageLayout style={{backgroundColor:isDarkMode?"070818":"#ffffff"}} menu={<MainMenu />}>
+    <PageLayout
+      style={{ backgroundColor: isDarkMode ? "070818" : "#ffffff" }}
+      menu={<MainMenu />}
+    >
       <Header />
-      <div style={{backgroundColor:isDarkMode?"070818":"#ffffff"}}  className="header-padding horizontal-padding main-div">
+      <div
+        style={{ backgroundColor: isDarkMode ? "070818" : "#ffffff" }}
+        className="header-padding horizontal-padding main-div"
+      >
         <Grid container spacing={2}>
           <Grid item xs={12} md={3}>
             <Box
@@ -588,7 +594,7 @@ const DeviceDetails = (props) => {
                 sx={{
                   boxShadow: 3,
                   borderRadius: 4,
-                  backgroundColor:isDarkMode?"#040d1b":"#ffffff"
+                  backgroundColor: isDarkMode ? "#040d1b" : "#ffffff",
                 }}
               >
                 <CardContent>
@@ -684,20 +690,18 @@ const DeviceDetails = (props) => {
                 </CardContent>
               </Card>
             </Box>
-            <Box sx={{ boxShadow: 0, borderRadius: 4, marginTop: 7 }}>
+            <Box sx={{ boxShadow: 0, borderRadius: 4, marginTop: 3 }}>
               <Card
                 sx={{
                   boxShadow: 3,
                   borderRadius: 4,
                   height: 112,
                   maxHeight: 112,
-                  backgroundColor:isDarkMode?"#040d1b":"#ffffff"
+                  backgroundColor: isDarkMode ? "#040d1b" : "#ffffff",
                 }}
               >
                 <CardContent>
-                  <Typography variant="subtitle1" sx={{}}>
-                    Driver
-                  </Typography>
+                  <Typography variant="subtitle1">Driver</Typography>
                   <Typography
                     variant="h5"
                     className="bold"
@@ -715,7 +719,13 @@ const DeviceDetails = (props) => {
             <Grid container spacing={2} sx={{ paddingBottom: 0 }}>
               <Grid item xs={6} md={4}>
                 <Box sx={{ boxShadow: 0, borderRadius: 4 }}>
-                  <Card sx={{ boxShadow: 3, borderRadius: 4, backgroundColor:isDarkMode?"#040d1b":"#ffffff" }}>
+                  <Card
+                    sx={{
+                      boxShadow: 3,
+                      borderRadius: 4,
+                      backgroundColor: isDarkMode ? "#040d1b" : "#ffffff",
+                    }}
+                  >
                     <CardContent>
                       <div className="flex-cont">
                         <Typography>Odometer</Typography>
@@ -798,7 +808,13 @@ const DeviceDetails = (props) => {
               </Grid>
               <Grid item xs={6} md={4}>
                 <Box sx={{ boxShadow: 0, borderRadius: 4 }}>
-                  <Card sx={{ boxShadow: 3, borderRadius: 4, backgroundColor:isDarkMode?"#040d1b":"#ffffff" }}>
+                  <Card
+                    sx={{
+                      boxShadow: 3,
+                      borderRadius: 4,
+                      backgroundColor: isDarkMode ? "#040d1b" : "#ffffff",
+                    }}
+                  >
                     <CardContent>
                       <div className="flex-cont">
                         <Typography>Total Distance</Typography>
@@ -994,7 +1010,13 @@ const DeviceDetails = (props) => {
               </Grid>
               <Grid item xs={6} md={4}>
                 <Box sx={{ boxShadow: 0, borderRadius: 4 }}>
-                  <Card sx={{ boxShadow: 3, borderRadius: 4, backgroundColor:isDarkMode?"#040d1b":"#ffffff" }}>
+                  <Card
+                    sx={{
+                      boxShadow: 3,
+                      borderRadius: 4,
+                      backgroundColor: isDarkMode ? "#040d1b" : "#ffffff",
+                    }}
+                  >
                     <CardContent>
                       {/* <div className='flex-cont'>
                         <Typography>Status</Typography>
@@ -1059,7 +1081,13 @@ const DeviceDetails = (props) => {
                 </Box>
               </Grid>
               <Grid item xs={12} md={12}>
-                <Card sx={{ boxShadow: 3, borderRadius: 4, backgroundColor:isDarkMode?"#040d1b":"#ffffff" }}>
+                <Card
+                  sx={{
+                    boxShadow: 3,
+                    borderRadius: 4,
+                    backgroundColor: isDarkMode ? "#040d1b" : "#ffffff",
+                  }}
+                >
                   <CardContent>
                     <div
                       style={{
@@ -1132,7 +1160,13 @@ const DeviceDetails = (props) => {
               </Grid>
               <Grid item xs={6} md={4}>
                 <Box sx={{ boxShadow: 0, borderRadius: 4 }}>
-                  <Card sx={{ boxShadow: 3, borderRadius: 4, backgroundColor:isDarkMode?"#040d1b":"#ffffff" }}>
+                  <Card
+                    sx={{
+                      boxShadow: 3,
+                      borderRadius: 4,
+                      backgroundColor: isDarkMode ? "#040d1b" : "#ffffff",
+                    }}
+                  >
                     <CardContent>
                       {/* <div className='flex-cont'>
                         <Typography>Last Updated</Typography>
@@ -1186,7 +1220,13 @@ const DeviceDetails = (props) => {
               </Grid>
               <Grid item xs={6} md={4}>
                 <Box sx={{ boxShadow: 0, borderRadius: 4 }}>
-                  <Card sx={{ boxShadow: 3, borderRadius: 4, backgroundColor:isDarkMode?"#040d1b":"#ffffff" }}>
+                  <Card
+                    sx={{
+                      boxShadow: 3,
+                      borderRadius: 4,
+                      backgroundColor: isDarkMode ? "#040d1b" : "#ffffff",
+                    }}
+                  >
                     <CardContent>
                       <div className="flex-cont">
                         <Typography>Speed</Typography>
@@ -1258,7 +1298,13 @@ const DeviceDetails = (props) => {
               </Grid> */}
               <Grid item xs={6} md={4}>
                 <Box sx={{ boxShadow: 0, borderRadius: 4 }}>
-                  <Card sx={{ boxShadow: 3, borderRadius: 4, backgroundColor:isDarkMode?"#040d1b":"#ffffff" }}>
+                  <Card
+                    sx={{
+                      boxShadow: 3,
+                      borderRadius: 4,
+                      backgroundColor: isDarkMode ? "#040d1b" : "#ffffff",
+                    }}
+                  >
                     <CardContent>
                       <div className="flex-cont">
                         <Typography>Satellites</Typography>
@@ -1305,7 +1351,13 @@ const DeviceDetails = (props) => {
 
               <Grid item xs={6} md={4}>
                 <Box sx={{ boxShadow: 0, borderRadius: 4 }}>
-                  <Card sx={{ boxShadow: 3, borderRadius: 4, backgroundColor:isDarkMode?"#040d1b":"#ffffff" }}>
+                  <Card
+                    sx={{
+                      boxShadow: 3,
+                      borderRadius: 4,
+                      backgroundColor: isDarkMode ? "#040d1b" : "#ffffff",
+                    }}
+                  >
                     <CardContent>
                       <div className="flex-cont">
                         <Typography>Last Trip</Typography>
@@ -1340,7 +1392,13 @@ const DeviceDetails = (props) => {
               </Grid>
               <Grid item xs={6} md={4}>
                 <Box sx={{ boxShadow: 0, borderRadius: 4 }}>
-                  <Card sx={{ boxShadow: 3, borderRadius: 4, backgroundColor:isDarkMode?"#040d1b":"#ffffff" }}>
+                  <Card
+                    sx={{
+                      boxShadow: 3,
+                      borderRadius: 4,
+                      backgroundColor: isDarkMode ? "#040d1b" : "#ffffff",
+                    }}
+                  >
                     <CardContent
                       sx={{ cursor: "pointer" }}
                       onClick={() => {
@@ -1374,7 +1432,13 @@ const DeviceDetails = (props) => {
 
               <Grid item xs={6} md={4}>
                 <Box sx={{ boxShadow: 0, borderRadius: 4 }}>
-                  <Card sx={{ boxShadow: 3, borderRadius: 4, backgroundColor:isDarkMode?"#040d1b":"#ffffff" }}>
+                  <Card
+                    sx={{
+                      boxShadow: 3,
+                      borderRadius: 4,
+                      backgroundColor: isDarkMode ? "#040d1b" : "#ffffff",
+                    }}
+                  >
                     <CardContent>
                       <div className="flex-cont">
                         <Typography>Last Updated</Typography>
@@ -1383,7 +1447,7 @@ const DeviceDetails = (props) => {
                       <div style={{ paddingBottom: 8 }}>
                         <Typography
                           sx={{
-                            color: '#2A42CB',
+                            color: "#2A42CB",
                             paddingBottom: 0,
                             typography: { sm: "h5", xs: "body1" },
                           }}
@@ -1411,7 +1475,13 @@ const DeviceDetails = (props) => {
         <Grid container spacing={2} sx={{ paddingTop: 3 }}>
           <Grid item xs={12} md={12}>
             <Box sx={{ boxShadow: 0, borderRadius: 4 }}>
-              <Card sx={{ boxShadow: 3, borderRadius: 4, backgroundColor:isDarkMode?"#040d1b":"#ffffff" }}>
+              <Card
+                sx={{
+                  boxShadow: 3,
+                  borderRadius: 4,
+                  backgroundColor: isDarkMode ? "#040d1b" : "#ffffff",
+                }}
+              >
                 <CardContent>
                   <div className={classes.container}>
                     {selectedItem && (
@@ -1453,7 +1523,9 @@ const DeviceDetails = (props) => {
                         <Table sx={{ marginBottom: "0" }}>
                           <TableHead
                             sx={{
-                              backgroundColor:isDarkMode?"#040d1b":"#ffffff",
+                              backgroundColor: isDarkMode
+                                ? "#040d1b"
+                                : "#ffffff",
                               color: isDarkMode ? "white" : "black",
                             }}
                           >
@@ -1472,7 +1544,9 @@ const DeviceDetails = (props) => {
                           </TableHead>
                           <TableBody
                             sx={{
-                              backgroundColor:isDarkMode?"#040d1b":"#ffffff",
+                              backgroundColor: isDarkMode
+                                ? "#040d1b"
+                                : "#ffffff",
                               color: isDarkMode ? "white" : "black",
                             }}
                           >

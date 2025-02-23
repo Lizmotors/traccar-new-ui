@@ -25,6 +25,7 @@ import {
   FormControlLabel,
   Checkbox,
   Badge,
+  Menu,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
@@ -83,6 +84,11 @@ import BarChartIcon from "@mui/icons-material/BarChart";
 import HomeIcon from "@mui/icons-material/Home";
 import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
 import LinkIcon from "@mui/icons-material/Link";
+import { styled } from "@mui/material/styles";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
+import classNames from "classnames";
+import { User } from "lucide-react";
 
 const MenuItems = ({ title, link, icon, selected }) => {
   const dispatch = useDispatch();
@@ -123,6 +129,22 @@ const MenuItems = ({ title, link, icon, selected }) => {
     </ListItemButton>
   );
 };
+
+// Define the styles for the Card (as a style object)
+const CardStyles = {
+  backgroundColor: "rgba(255, 255, 255, 0.05)",
+  backdropFilter: "blur(10px)",
+  borderRadius: "12px",
+  boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+  border: "1px solid rgba(255, 255, 255, 0.3)",
+};
+
+// Create a styled Menu component with the same styles as the Card
+const StyledMenu = styled(Menu)(({ theme }) => ({
+  "& .MuiPaper-root": {
+    ...CardStyles,
+  },
+}));
 
 const useStyles = makeStyles((theme) => ({
   last_content: {
@@ -277,7 +299,36 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     height: "100%",
   },
+  profileMenu: {
+    minWidth: 265,
+  },
+  profileMenuUser: {
+    padding: theme.spacing(2),
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
+    borderRadius: "10px",
+  },
+  profileMenuItem: {
+    color: theme.palette.text.hint,
+    "&:hover": {
+      backgroundColor: "#F3F5FF",
+    },
+  },
+  profileMenuIcon: {
+    marginRight: theme.spacing(2),
+    color: theme.palette.text.hint,
+    "&:hover": {
+      color: theme.palette.primary.main,
+    },
+  },
+  headerMenuItem: {
+    "&:hover, &:focus": {
+      backgroundColor: theme.palette.background.light,
+    },
+  },
 }));
+
+const isDarkMode = localStorage.getItem("mode") === "dark";
 
 const SettingsMenu = () => {
   const theme = useTheme();
@@ -473,6 +524,13 @@ const SettingsMenu = () => {
   const pathName = location.pathname.split("/");
 
   const openMenu = useSelector((state) => state.session.openMenu);
+
+  const [profileMenu, setProfileMenu] = useState(null);
+
+  const handleLogoutProfile = () => {
+    const dispatch = useDispatch();
+    dispatch(sessionActions.logout());
+  };
 
   return (
     <>
@@ -888,151 +946,6 @@ const SettingsMenu = () => {
         />
         {/* <Accordion
           //defaultExpanded
-          onChange={() => handleOpen("settings")}
-          expanded={open === "settings" ? true : false}
-          style={{ border: "none", boxShadow: "none", padding: 0 }}
-        >
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon sx={{ color: "#1875d8" }} />}
-            style={{
-              border: "none",
-              boxShadow: "none",
-              padding: 0,
-              paddingRight: 50,
-              margin: 0,
-            }}
-          >
-            <ListItemButton
-              sx={{ color: "#1875d8" }}
-              //component={Link}
-              //selected={selected}
-            >
-              <ListItemIcon sx={{ color: "#1875d8" }}>
-                <SettingsIcon />
-              </ListItemIcon>
-              <ListItemText
-                primaryTypographyProps={{
-                  fontWeight: "bold",
-                  variant: "body1",
-                }}
-                style={{ fontWeight: "bold" }}
-                primary={"Settings"}
-              />
-            </ListItemButton>
-          </AccordionSummary>
-          <AccordionDetails
-            style={{ border: "none", boxShadow: "none", paddingTop: 0 }}
-            className={classes.details}
-          >
-            <MenuItems
-              title={t("sharedPreferences")}
-              link="/settings/preferences"
-              icon={<SettingsIcon />}
-              selected={location.pathname === "/settings/preferences"}
-            />
-            {!readonly && (
-              <>
-                <MenuItems
-                  title={t("sharedNotifications")}
-                  link="/settings/notifications"
-                  icon={<NotificationsIcon />}
-                  selected={location.pathname.startsWith(
-                    "/settings/notification"
-                  )}
-                />
-                <MenuItems
-                  title={t("settingsUser")}
-                  link={`/settings/user/${userId}`}
-                  icon={<PersonIcon />}
-                  selected={location.pathname === `/settings/user/${userId}`}
-                />
-                <MenuItems
-                  title={t("sharedGeofences")}
-                  link="/geofences"
-                  icon={<CreateIcon />}
-                  selected={location.pathname.startsWith("/settings/geofence")}
-                />
-                {!features.disableGroups && (
-                  <MenuItems
-                    title={t("settingsGroups")}
-                    link="/settings/groups"
-                    icon={<FolderIcon />}
-                    selected={location.pathname.startsWith("/settings/group")}
-                  />
-                )}
-                {!features.disableDrivers && (
-                  <MenuItems
-                    title={t("sharedDrivers")}
-                    link="/settings/drivers"
-                    icon={<PersonIcon />}
-                    selected={location.pathname.startsWith("/settings/driver")}
-                  />
-                )}
-                {!features.disableCalendars && (
-                  <MenuItems
-                    title={t("sharedCalendars")}
-                    link="/settings/calendars"
-                    icon={<TodayIcon />}
-                    selected={location.pathname.startsWith(
-                      "/settings/calendar"
-                    )}
-                  />
-                )}
-                {!features.disableComputedAttributes && (
-                  <MenuItems
-                    title={t("sharedComputedAttributes")}
-                    link="/settings/attributes"
-                    icon={<StorageIcon />}
-                    selected={location.pathname.startsWith(
-                      "/settings/attribute"
-                    )}
-                  />
-                )}
-                {!features.disableMaintenance && (
-                  <MenuItems
-                    title={t("sharedMaintenance")}
-                    link="/settings/maintenances"
-                    icon={<BuildIcon />}
-                    selected={location.pathname.startsWith(
-                      "/settings/maintenance"
-                    )}
-                  />
-                )}
-                <MenuItems
-                  title={t("sharedSavedCommands")}
-                  link="/settings/commands"
-                  icon={<PublishIcon />}
-                  selected={location.pathname.startsWith("/settings/command")}
-                />
-              </>
-            )}
-            {manager && (
-              <>
-                <List>
-                  {admin && (
-                    <MenuItems
-                      title={t("settingsServer")}
-                      link="/settings/server"
-                      icon={<StorageIcon />}
-                      selected={location.pathname === "/settings/server"}
-                    />
-                  )}
-                  <MenuItems
-                    title={t("settingsUsers")}
-                    link="/settings/users"
-                    icon={<PeopleIcon />}
-                    selected={
-                      location.pathname.startsWith("/settings/user") &&
-                      location.pathname !== `/settings/user/${userId}`
-                    }
-                  />
-                </List>
-              </>
-            )}
-          </AccordionDetails>
-        </Accordion> */}
-        {/* <Accordion
-          //defaultExpanded
           style={{ border: "none", boxShadow: "none", padding: 0 }}
         >
           <AccordionSummary
@@ -1111,6 +1024,129 @@ const SettingsMenu = () => {
           />
         </ListItemButton> */}
       </List>
+      <div
+        style={{ marginTop: "auto", paddingLeft: "10px", marginTop: "40px" }}
+      >
+        <IconButton
+          onClick={(e) => setProfileMenu(e.currentTarget)}
+          style={{
+            width: "100%",
+            justifyContent: "flex-start",
+            padding: "8px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              gap: "35px",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            {/* Circle around the user icon */}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "21px",
+                height: "21px",
+                borderRadius: "50%",
+                border: "1px solid gray",
+                backgroundColor: "lightgray",
+              }}
+            >
+              <Typography
+                sx={{ fontSize: "12px" }}
+                variant="h6"
+                component={"h6"}
+              >
+                <User size={15} />
+              </Typography>
+            </div>
+            <div
+              style={{
+                fontSize: "17px",
+                color: isDarkMode ? "#ffffff" : "#000000",
+              }}
+            >
+              {user.name}
+            </div>
+            {/* <KeyboardArrowDownIcon sx={{ color: "gray", marginLeft: 1 }} /> */}
+          </div>
+        </IconButton>
+        <StyledMenu
+          id="profile-menu"
+          open={Boolean(profileMenu)}
+          anchorEl={profileMenu}
+          onClose={() => setProfileMenu(null)}
+          className={classes.headerMenu}
+          classes={{ paper: classes.profileMenu }}
+          disableAutoFocusItem
+        >
+          <div className={classes.profileMenuUser}>
+            <Typography
+              color={isDarkMode ? "#ffffff" : "#000000"}
+              variant="h5"
+              weight="medium"
+            >
+              {user.name}
+            </Typography>
+          </div>
+
+          <MenuItem
+            className={classNames(
+              classes.profileMenuItem,
+              classes.headerMenuItem
+            )}
+            sx={{ color: isDarkMode ? "#ffffff" : "#000000" }}
+            component={Link}
+            to={`/settings/user/${userId}/profile`}
+            onClick={() => {
+              setProfileMenu(null);
+            }}
+          >
+            <PersonIcon className={classes.profileMenuIcon} /> Profile
+          </MenuItem>
+          <MenuItem
+            className={classNames(
+              classes.profileMenuItem,
+              classes.headerMenuItem
+            )}
+            sx={{ color: isDarkMode ? "#ffffff" : "#000000" }}
+            component={Link}
+            onClick={() => {
+              if (localStorage.getItem("mode")) {
+                if (localStorage.getItem("mode") === "dark") {
+                  localStorage.setItem("mode", "light");
+                } else {
+                  localStorage.setItem("mode", "dark");
+                }
+              } else {
+                localStorage.setItem("mode", "dark");
+              }
+              window.location.reload();
+            }}
+          >
+            <DarkModeIcon className={classes.profileMenuIcon} />
+            {localStorage.getItem("mode") &&
+            localStorage.getItem("mode") === "dark"
+              ? "Light"
+              : "Dark"}
+          </MenuItem>
+          <MenuItem
+            className={classNames(
+              classes.profileMenuItem,
+              classes.headerMenuItem
+            )}
+            sx={{ color: "red" }}
+            onClick={handleLogoutProfile}
+          >
+            <LogoutIcon className={classes.profileMenuIcon} />
+            {t("loginLogout")}
+          </MenuItem>
+        </StyledMenu>
+      </div>
     </>
   );
 };

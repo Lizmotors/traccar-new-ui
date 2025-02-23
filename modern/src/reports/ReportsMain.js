@@ -70,7 +70,7 @@ const SettingsMain = () => {
         menu={<ReportsMenu />}
         //breadcrumbs={["sharedDeviceAccumulators"]}
       >
-        <Header />
+        {/* <Header /> */}
         <div className="header-padding"></div>
         <TabContext value={value}>
           <Tabs

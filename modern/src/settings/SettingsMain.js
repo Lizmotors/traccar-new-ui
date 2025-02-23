@@ -96,7 +96,7 @@ const SettingsMain = () => {
         menu={<SettingsMenu />}
         //breadcrumbs={["sharedDeviceAccumulators"]}
       >
-        <Header />
+        {/* <Header /> */}
         <div className='header-padding'></div>
         <TabContext value={value}>
           {/* <AppBar

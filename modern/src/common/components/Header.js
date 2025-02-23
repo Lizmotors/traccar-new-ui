@@ -272,7 +272,6 @@ const Header = () => {
   const user = useSelector((state) => state.session.user);
 
   const userId = useSelector((state) => state.session.user.id);
-  const isDarkMode = localStorage.getItem("mode") === "dark";
 
   // Define the styles for the Card (as a style object)
   const CardStyles = {
