@@ -339,7 +339,7 @@ a {
 
 .timestamp {
   color: #adb5bd;
-  font-size: 0.8rem;
+  font-size: 1.2rem;
 }
 
 .device-card {
@@ -726,34 +726,3 @@ video {
   height: auto;
   margin: 20px 0;
 }
-/* Table
-.markdown table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 20px;
-}
-.markdown table,
-.markdown th,
-.markdown td {
-  border: 1px solid #ddd;
-}
-.markdown th,
-.markdown td {
-  padding: 10px;
-  text-align: left;
-} */
-/* Responsive Design
-@media (max-width: 768px) {
-  .markdown {
-    padding: 15px;
-  }
-  .markdown h1 {
-    font-size: 28px;
-  }
-  .markdown h2 {
-    font-size: 24px;
-  }
-  .markdown h3 {
-    font-size: 20px;
-  }
-} */

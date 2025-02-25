@@ -16,28 +16,12 @@ import { BsRobot } from "react-icons/bs";
 import { Mic } from "lucide-react";
 import { ArrowRight } from "lucide-react";
 import Tilt from "react-parallax-tilt";
-// import NewAgentBanner from "./NewAgentBanner";
 const Plot = lazy(() => import("react-plotly.js"));
 const RenderMarkdown = lazy(() => import("./RenderMarkdown"));
-import styled, { keyframes } from "styled-components";
-
-const typeAnimation = keyframes`
-  0% { width: 0 }
-  50% { width: 100% }
-  100% { width: 0 }
-`;
-
-const AnimatedText = styled.div`
-  display: inline-block;
-  overflow: hidden;
-  white-space: nowrap;
-  animation: ${typeAnimation} 6s linear infinite;
-`;
 
 const NewAgent = () => {
   const [messages, setMessages] = useState([]);
   const [prompt, setPrompt] = useState("");
-  const [accumulatedText, setAccumulatedText] = useState("");
   const [selectedDevice, setSelectedDevice] = useState(null);
   const threadId = useRef(uuidv4());
   const [parsedData, setParsedData] = useState({});
@@ -48,6 +32,9 @@ const NewAgent = () => {
   const isDarkMode = localStorage.getItem("mode") === "dark";
   const [speechTranscript, setSpeechTranscript] = useState("");
   const [shouldSubmit, setShouldSubmit] = useState(false);
+  const inputRef = useRef(null);
+  const accumulatedTextRef = useRef("");
+  const artifactsRef = useRef([]);
 
   useEffect(() => {
     const parseCSVEvents = async () => {
@@ -88,6 +75,12 @@ const NewAgent = () => {
     }
   }, [shouldSubmit, speechTranscript]);
 
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [messages]);
+
   const addMessage = (
     role,
     content,
@@ -104,7 +97,8 @@ const NewAgent = () => {
     const decoder = new TextDecoder("utf-8");
     let buffer = "";
 
-    currentArtifacts.current = [];
+    accumulatedTextRef.current = "";
+    artifactsRef.current = [];
 
     setMessages((prev) => [
       ...prev,
@@ -115,7 +109,6 @@ const NewAgent = () => {
         artifacts: [],
       },
     ]);
-    setAccumulatedText("");
 
     try {
       while (true) {
@@ -141,39 +134,32 @@ const NewAgent = () => {
       console.error("Error processing stream:", error);
       addMessage("system", `Error processing response: ${error.message}`);
     } finally {
-      if (accumulatedText) {
-        setMessages((prev) => {
-          const newMessages = [...prev];
-          const lastMessage = newMessages[newMessages.length - 1];
-          newMessages[newMessages.length - 1] = {
-            ...lastMessage,
-            content: accumulatedText,
-            artifacts: currentArtifacts.current,
-          };
-          return newMessages;
-        });
-      }
+      setMessages((prev) => {
+        const newMessages = [...prev];
+        const lastMessage = newMessages[newMessages.length - 1];
+        newMessages[newMessages.length - 1] = {
+          ...lastMessage,
+          content: accumulatedTextRef.current,
+          artifacts: artifactsRef.current,
+        };
+        return newMessages;
+      });
     }
   };
 
   const handleSSEEvent = (data) => {
     switch (data.type) {
       case "token":
-        setAccumulatedText((prev) => {
-          const newText = prev + (data.content || "");
-          setMessages((prev) => {
-            const newMessages = [...prev];
-            if (newMessages.length > 0) {
-              const lastMessage = newMessages[newMessages.length - 1];
-              newMessages[newMessages.length - 1] = {
-                ...lastMessage,
-                content: newText + "",
-                artifacts: currentArtifacts.current,
-              };
-            }
-            return newMessages;
-          });
-          return newText;
+        accumulatedTextRef.current += data.content || "";
+        setMessages((prev) => {
+          const newMessages = [...prev];
+          const lastMessage = newMessages[newMessages.length - 1];
+          newMessages[newMessages.length - 1] = {
+            ...lastMessage,
+            content: accumulatedTextRef.current,
+            artifacts: artifactsRef.current,
+          };
+          return newMessages;
         });
         break;
 
@@ -192,13 +178,13 @@ const NewAgent = () => {
         }
 
         if (Object.keys(newArtifact).length > 0) {
-          currentArtifacts.current = [...currentArtifacts.current, newArtifact];
+          artifactsRef.current = [...artifactsRef.current, newArtifact];
           setMessages((prev) => {
             const newMessages = [...prev];
             const lastMessage = newMessages[newMessages.length - 1];
             newMessages[newMessages.length - 1] = {
               ...lastMessage,
-              artifacts: currentArtifacts.current,
+              artifacts: artifactsRef.current,
             };
             return newMessages;
           });
@@ -316,7 +302,7 @@ const NewAgent = () => {
       case "plotly_fig":
         try {
           const plotData = JSON.parse(event.content);
-          console.log("Plot Data => ", plotData);
+          // console.log("Plot Data => ", plotData);
           return (
             <Suspense
               fallback={
@@ -559,17 +545,6 @@ const NewAgent = () => {
       >
         {/* Agent Header */}
         <div className="agent-header">
-          {/* <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <NewAgentBanner />
-          </div> */}
-
           {isDarkMode ? (
             <div className="card">
               <div class="neon-container">
@@ -596,15 +571,16 @@ const NewAgent = () => {
         {/* Chat Messages */}
         <div style={{ marginBottom: "30px", marginTop: "40px" }}>
           {messages.map((msg, index) => {
+            // console.log("messages of pair are", messages);
             if (msg.role === "user") {
               return (
                 <div key={index} className={`message user-message ${msg.role}`}>
-                  <div style={{ display: "flex", gap: "5px" }}>
+                  <div style={{ display: "flex", gap: "7px" }}>
                     <div
                       className="message-avatar"
                       style={{ color: isDarkMode ? "#ffffff" : "inherit" }}
                     >
-                      <FaRegUserCircle style={{ marginTop: "3px" }} size={20} />
+                      <FaRegUserCircle style={{ marginTop: "3px" }} size={25} />
                     </div>
                     <div style={{ color: isDarkMode ? "#ffffff" : "inherit" }}>
                       <Suspense
@@ -633,17 +609,18 @@ const NewAgent = () => {
             }
 
             if (msg.role === "assistant") {
+              // console.log("assistant messages are =>", msg.content);
               return (
                 <div
                   key={index}
                   className={`message assistant-message ${msg.role}`}
                 >
-                  <div style={{ display: "flex", gap: "5px" }}>
+                  <div style={{ display: "flex", gap: "7px" }}>
                     <div
                       className="message-avatar"
                       style={{ color: isDarkMode ? "#ffffff" : "inherit" }}
                     >
-                      <BsRobot size={20} />
+                      <BsRobot size={25} />
                     </div>
                     <div style={{ color: isDarkMode ? "#ffffff" : "inherit" }}>
                       <Suspense fallback={<div>Loading...</div>}>
@@ -717,6 +694,7 @@ const NewAgent = () => {
               type="text"
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
+              ref={inputRef}
               placeholder="Ask me about your data..."
               className="prompt-input"
               disabled={isLoading}

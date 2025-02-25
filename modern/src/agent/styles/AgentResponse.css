@@ -106,17 +106,6 @@ td {
   align-items: flex-start;
 }
 
-/* .message-avatar {
-  flex-shrink: 0;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  margin-top: 16px;
-  align-items: center;
-  justify-content: center;
-  color: #666;
-} */
-
 .message-content {
   flex: 1;
   /* max-width: calc(100% - 44px); */

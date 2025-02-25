@@ -690,7 +690,7 @@ const DeviceDetails = (props) => {
                 </CardContent>
               </Card>
             </Box>
-            <Box sx={{ boxShadow: 0, borderRadius: 4, marginTop: 3 }}>
+            <Box sx={{ boxShadow: 0, borderRadius: 4, marginTop: 7 }}>
               <Card
                 sx={{
                   boxShadow: 3,
