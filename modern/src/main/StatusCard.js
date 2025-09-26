@@ -46,13 +46,12 @@ const useStyles = makeStyles((theme) => ({
     width: theme.dimensions.statusCard,
     padding: 3,
     borderRadius: 20,
+    backgroundColor: '#FFFFFF',
   },
   media: {
     height: theme.dimensions.popupImageHeight,
     display: "flex",
-
-    //justifyContent: "flex-end",
-    //alignItems: "flex-start",
+    marginBottom: 13,
   },
   mediaButton: {
     color: theme.palette.colors.white,
@@ -80,6 +79,17 @@ const useStyles = makeStyles((theme) => ({
     "& .MuiTableCell-sizeSmall": {
       paddingLeft: 0,
       paddingRight: 0,
+      border: "none",
+    },
+    borderCollapse: "separate",
+    borderSpacing: "0 2px",
+    width: "100%",
+    "& .MuiTableBody-root": {
+      borderRadius: "8px",
+      overflow: "hidden",
+    },
+    "& .MuiTableRow-root": {
+      border: "none",
     },
   },
   cell: {
@@ -89,26 +99,78 @@ const useStyles = makeStyles((theme) => ({
   actions: {
     justifyContent: "space-between",
   },
+  customScrollbar: {
+    '&::-webkit-scrollbar': {
+      width: '6px',
+    },
+    '&::-webkit-scrollbar-track': {
+      background: '#f1f1f1',
+      borderRadius: '10px',
+    },
+    '&::-webkit-scrollbar-thumb': {
+      background: '#c1c1c1',
+      borderRadius: '10px',
+    },
+    '&::-webkit-scrollbar-thumb:hover': {
+      background: '#a8a8a8',
+    },
+    scrollbarWidth: 'thin',
+    scrollbarColor: '#c1c1c1 #f1f1f1',
+  },
 }));
 
-const StatusRow = ({ name, content }) => {
+const StatusRow = ({ name, content, isAlternate = false }) => {
   const classes = useStyles();
   const isDarkMode = localStorage.getItem("mode") === "dark";
 
   return (
-    <TableRow sx={{ marginBottom: 0 }}>
-      <TableCell className={classes.cell}>
+    <TableRow 
+      sx={{ 
+        marginBottom: 0,
+        backgroundColor: isAlternate ? (isDarkMode ? '#f8f8f8' : '#fcfdff') : (isDarkMode ? '#ffffff' : '#ffffff'),
+        '&:hover': {
+          backgroundColor: isDarkMode ? '#f0f0f0' : '#f7faff',
+          transition: 'background-color 0.2s ease',
+        },
+        borderRadius: '4px',
+        transition: 'background-color 0.3s ease',
+        border: 'none',
+      }}
+    >
+      <TableCell 
+        className={classes.cell}
+        sx={{ 
+          borderBottom: 'none',
+          padding: '8px 12px',
+          borderRight: 'none',
+        }}
+      >
         <Typography
           variant="subtitle2"
-          sx={{ color: isDarkMode ? "#000000" : "inherit" }}
+          sx={{ 
+            color: isDarkMode ? "#000000" : "#444444",
+            fontWeight: 600,
+            fontSize: '0.85rem',
+          }}
         >
           {name}
         </Typography>
       </TableCell>
-      <TableCell className={classes.cell}>
+      <TableCell 
+        className={classes.cell}
+        sx={{ 
+          borderBottom: 'none',
+          padding: '8px 12px',
+          border: 'none',
+        }}
+      >
         <Typography
           variant="body2"
-          sx={{ color: isDarkMode ? "#000000" : "inherit" }}
+          sx={{ 
+            color: isDarkMode ? "#000000" : "#666666",
+            fontWeight: 500,
+            fontSize: '0.85rem',
+          }}
         >
           {content}
         </Typography>
@@ -181,23 +243,20 @@ const StatusCard = ({ deviceId, onClose }) => {
       }
       navigate(`/settings/geofence/${item.id}`);
     } else {
-      throw Error(await response.text());
     }
   }, [navigate]);
 
   // Define the styles for the Card (as a style object)
   const CardStyles = {
-    backgroundColor: "rgba(255, 255, 255, 0.05)",
-    backdropFilter: "blur(10px)",
+    backgroundColor: "#FFFFFF",
     borderRadius: "12px",
-    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-    border: "1px solid rgba(255, 255, 255, 0.3)",
+    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)"
   };
 
   // Create a styled Menu component with the same styles as the Card
   const StyledMenu = styled(Menu)(({ theme }) => ({
     "& .MuiPaper-root": {
-      ...CardStyles, // Apply the same styles as the Card
+      ...CardStyles,
     },
   }));
 
@@ -206,22 +265,7 @@ const StatusCard = ({ deviceId, onClose }) => {
       {device && (
         <Draggable handle={`.${classes.media}, .${classes.header}`}>
           <Card elevation={3} className={classes.card}>
-            {/* {deviceImage ? (
-              <CardMedia
-                className={classes.media}
-                image={`/api/media/${device.uniqueId}/${deviceImage}`}>
-                <IconButton
-                  size='small'
-                  onClick={onClose}
-                  onTouchStart={onClose}>
-                  <HighlightOffIcon
-                    fontSize='small'
-                    className={classes.mediaButton}
-                  />
-                </IconButton>
-              </CardMedia>
-            ) : ( */}
-            <div className={classes.header} style={{ paddingBottom: 5 }}>
+            <div className={classes.header} style={{ paddingBottom: 7 }}>
               <Typography variant="h5" sx={{ color: "#000" }}>
                 {device.name ? device.name : ""}
               </Typography>
@@ -234,37 +278,32 @@ const StatusCard = ({ deviceId, onClose }) => {
                 className={classes.media}
                 image={`/api/media/${device.uniqueId}/${deviceImage}`}
               >
-                {/* <IconButton
-                  size='small'
-                  onClick={onClose}
-                  onTouchStart={onClose}>
-                  <HighlightOffIcon
-                    fontSize='small'
-                    className={classes.mediaButton}
-                  />
-                </IconButton> */}
               </CardMedia>
             )}
-
             {position && (
               <CardContent className={classes.content}>
-                <Table size="small" classes={{ root: classes.table }}>
-                  <TableBody>
-                    <div
-                      style={{
-                        maxHeight: 200,
-                        overflow: "auto",
-                        width: "100%",
-                        color: isDarkMode ? "#000000" : "inherit",
-                      }}
-                    >
+                <div
+                  className={classes.customScrollbar}
+                  style={{
+                    maxHeight: 200,
+                    overflow: "auto",
+                    width: "100%",
+                    color: isDarkMode ? "#000000" : "inherit",
+                    borderRadius: "8px",
+                    padding: "10px 6px",
+                    backgroundColor: isDarkMode ? "#ffffff" : "#ffffff",
+                    boxShadow: "none",
+                  }}
+                >
+                  <Table size="small" classes={{ root: classes.table }}>
+                    <TableBody>
                       {positionItems
                         .filter(
                           (key) =>
                             position.hasOwnProperty(key) ||
                             position.attributes.hasOwnProperty(key)
                         )
-                        .map((key) => (
+                        .map((key, index) => (
                           <StatusRow
                             key={key}
                             name={positionAttributes[key].name}
@@ -279,23 +318,28 @@ const StatusCard = ({ deviceId, onClose }) => {
                                 }
                               />
                             }
+                            isAlternate={index % 2 === 0}
                           />
                         ))}
                       <StatusRow
                         key={"key"}
                         name={"Identifier"}
                         content={device.uniqueId}
+                        isAlternate={positionItems.filter(
+                          (key) =>
+                            position.hasOwnProperty(key) ||
+                            position.attributes.hasOwnProperty(key)
+                        ).length % 2 === 0}
                       />
-                    </div>
-                  </TableBody>
-                </Table>
+                    </TableBody>
+                  </Table>
+                </div>
               </CardContent>
             )}
             <CardActions classes={{ root: classes.actions }} disableSpacing>
               <IconButton
                 onClick={() => setRemoving(true)}
                 disabled={deviceReadonly}
-                //className={classes.negative}
               >
                 {/* <DeleteIcon /> */}
                 <DeleteOutlineOutlinedIcon sx={{ color: "#000" }} />
@@ -322,7 +366,6 @@ const StatusCard = ({ deviceId, onClose }) => {
                 {/* <PublishIcon /> */}
               </IconButton>
               <IconButton
-                //color="secondary"
                 onClick={(e) => setAnchorEl(e.currentTarget)}
                 disabled={!position}
               >
@@ -338,11 +381,10 @@ const StatusCard = ({ deviceId, onClose }) => {
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}
           onClose={() => setAnchorEl(null)}
-          className={classes.card}
+          // className={classes.card}
         >
           <MenuItem
             onClick={() => {
-              //navigate(`/position/${position.id}`);
               navigate(`/device/${deviceId}/${position.id}`);
             }}
           >

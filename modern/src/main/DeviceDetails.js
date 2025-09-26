@@ -163,29 +163,116 @@ const useStyles = makeStyles((theme) => ({
     "& .MuiTableCell-sizeSmall": {
       paddingLeft: 0,
       paddingRight: 0,
+      border: "none",
+    },
+    borderCollapse: "separate",
+    borderSpacing: "0 2px",
+    width: "100%",
+    "& .MuiTableBody-root": {
+      borderRadius: "8px",
+      overflow: "hidden",
+    },
+    "& .MuiTableRow-root": {
+      border: "none",
     },
   },
   cell: {
     borderBottom: "none",
     padding: 1,
+    border: "none",
   },
   actions: {
     justifyContent: "space-between",
   },
+  customScrollbar: {
+    '&::-webkit-scrollbar': {
+      width: '6px',
+    },
+    '&::-webkit-scrollbar-track': {
+      background: '#f1f1f1',
+      borderRadius: '10px',
+    },
+    '&::-webkit-scrollbar-thumb': {
+      background: '#c1c1c1',
+      borderRadius: '10px',
+    },
+    '&::-webkit-scrollbar-thumb:hover': {
+      background: '#a8a8a8',
+    },
+    scrollbarWidth: 'thin',
+    scrollbarColor: '#c1c1c1 #f1f1f1',
+  },
+  responsiveTableContainer: {
+    height: 'auto',
+    [theme.breakpoints.up('xs')]: {
+      maxHeight: '200px',
+    },
+    [theme.breakpoints.up('sm')]: {
+      maxHeight: '250px',
+    },
+    [theme.breakpoints.up('md')]: {
+      maxHeight: 'calc(100vh - 400px)',
+    },
+    [theme.breakpoints.up('lg')]: {
+      maxHeight: 'calc(100vh - 350px)',
+    },
+  },
 }));
 
-const StatusRow = ({ name, content }) => {
+const StatusRow = ({ name, content, isAlternate = false }) => {
   const classes = useStyles();
+  const isDarkMode = localStorage.getItem("mode") === "dark";
 
   return (
-    <TableRow sx={{ marginBottom: 0 }}>
-      <TableCell className={classes.cell}>
-        <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
+    <TableRow 
+      sx={{ 
+        marginBottom: 0,
+        backgroundColor: isAlternate ? (isDarkMode ? '#ffffff' : '#ffffff') : (isDarkMode ? '#f0f0f0' : '#ebebeb'),
+        '&:hover': {
+          backgroundColor: isDarkMode ? '#e8e8e8' : '#e0e0e0',
+          transition: 'background-color 0.2s ease',
+        },
+        borderRadius: '4px',
+        transition: 'background-color 0.3s ease',
+        border: 'none',
+      }}
+    >
+      <TableCell 
+        className={classes.cell}
+        sx={{ 
+          borderBottom: 'none',
+          padding: '8px 12px',
+          borderRight: 'none',
+          border: 'none',
+        }}
+      >
+        <Typography
+          variant="subtitle2"
+          sx={{ 
+            color: isDarkMode ? "#000000" : "#444444",
+            fontWeight: 600,
+            fontSize: '0.85rem',
+          }}
+        >
           {name}
         </Typography>
       </TableCell>
-      <TableCell className={classes.cell}>
-        <Typography variant="body1" color="">
+      <TableCell 
+        className={classes.cell}
+        sx={{ 
+          borderBottom: 'none',
+          padding: '8px 12px',
+          border: 'none',
+        }}
+      >
+        <Typography
+          variant="body2"
+          sx={{ 
+            color: isDarkMode ? "#000000" : "#666666",
+            fontWeight: 500,
+            fontSize: '0.85rem',
+          }}
+        >
           {content}
         </Typography>
       </TableCell>
@@ -609,19 +696,6 @@ const DeviceDetails = (props) => {
                           }}
                           src={`/api/media/${deviceSingleData?.uniqueId}/${deviceSingleData?.attributes?.deviceImage}`}
                         />
-                        {/* <CardMedia
-                          className={classes.media}
-                          sx={{
-                            // maxWidth: 200,
-                            // maxHeight: 200,
-                            // display: 'flex',
-                            height: 200,
-                            borderRadius: 10,
-                          }}
-                          //image={`/api/media/${deviceSingleData?.uniqueId}/${deviceSingleData?.attributes?.deviceImage}`}
-                          image={
-                            '/api/media/00000868105047454085/device.png'
-                          }></CardMedia> */}
                       </div>
                     ) : (
                       <>
@@ -650,23 +724,28 @@ const DeviceDetails = (props) => {
                   </Typography>
 
                   {itemData && (
-                    <Table size="small" classes={{ root: classes.table }}>
-                      <TableBody>
-                        <div
-                          style={{
-                            maxHeight: 350,
-                            minHeight: 320,
-                            //height: 350,
-                            overflow: "auto",
-                          }}
-                        >
+                    <div
+                      className={`${classes.customScrollbar} ${classes.responsiveTableContainer}`}
+                      style={{
+                        overflow: "auto",
+                        width: "100%",
+                        color: isDarkMode ? "#000000" : "inherit",
+                        borderRadius: "8px",
+                        padding: "10px 6px",
+                        backgroundColor: isDarkMode ? "#ffffff" : "#f5f5f5",
+                        boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
+                        marginTop: "20px",
+                      }}
+                    >
+                      <Table size="small" classes={{ root: classes.table }}>
+                        <TableBody>
                           {positionItems
                             .filter(
                               (key) =>
                                 itemData.hasOwnProperty(key) ||
                                 itemData.attributes.hasOwnProperty(key)
                             )
-                            .map((key) => (
+                            .map((key, index) => (
                               <StatusRow
                                 key={key}
                                 name={positionAttributes[key].name}
@@ -681,25 +760,23 @@ const DeviceDetails = (props) => {
                                     }
                                   />
                                 }
+                                isAlternate={index % 2 === 0}
                               />
                             ))}
-                        </div>
-                      </TableBody>
-                    </Table>
+                        </TableBody>
+                      </Table>
+                    </div>
                   )}
-                </CardContent>
-              </Card>
-            </Box>
-            <Box sx={{ boxShadow: 0, borderRadius: 4, marginTop: 7 }}>
-              <Card
-                sx={{
-                  boxShadow: 3,
-                  borderRadius: 4,
-                  height: 112,
-                  maxHeight: 112,
-                  backgroundColor: isDarkMode ? "#040d1b" : "#ffffff",
-                }}
-              >
+                <Box sx={{ boxShadow: 0, borderRadius: 4, marginTop: 3 }}>
+                  <Card
+                    sx={{
+                      boxShadow: 3,
+                      borderRadius: 4,
+                      height: 112,
+                      maxHeight: 112,
+                      backgroundColor: isDarkMode ? "#040d1b" : "#ffffff",
+                    }}
+                >
                 <CardContent>
                   <Typography variant="subtitle1">Driver</Typography>
                   <Typography
@@ -709,11 +786,17 @@ const DeviceDetails = (props) => {
                   >
                     {itemData?.attributes?.driverName
                       ? itemData?.attributes?.driverName
-                      : ""}
+                      : "Not Assigned"}
                   </Typography>
                 </CardContent>
               </Card>
+              </Box>
+                </CardContent>
+              </Card>
             </Box>
+            {/* <Box sx={{ boxShadow: 0, borderRadius: 4, marginTop: 1 }}>
+              
+            </Box> */}
           </Grid>
           <Grid item xs={12} md={9}>
             <Grid container spacing={2} sx={{ paddingBottom: 0 }}>
