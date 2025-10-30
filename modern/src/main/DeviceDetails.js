@@ -204,17 +204,20 @@ const useStyles = makeStyles((theme) => ({
   },
   responsiveTableContainer: {
     height: 'auto',
+    flexGrow: 1,
+    display: 'flex',
+    flexDirection: 'column',
     [theme.breakpoints.up('xs')]: {
-      maxHeight: '200px',
+      minHeight: '200px',
     },
     [theme.breakpoints.up('sm')]: {
-      maxHeight: '250px',
+      minHeight: '250px',
     },
     [theme.breakpoints.up('md')]: {
-      maxHeight: 'calc(100vh - 400px)',
+      minHeight: '300px',
     },
     [theme.breakpoints.up('lg')]: {
-      maxHeight: 'calc(100vh - 350px)',
+      minHeight: '400px',
     },
   },
 }));
@@ -227,9 +230,9 @@ const StatusRow = ({ name, content, isAlternate = false }) => {
     <TableRow 
       sx={{ 
         marginBottom: 0,
-        backgroundColor: isAlternate ? (isDarkMode ? '#ffffff' : '#ffffff') : (isDarkMode ? '#f0f0f0' : '#ebebeb'),
+        backgroundColor: '#ffffff', // Always white regardless of theme or alternating rows
         '&:hover': {
-          backgroundColor: isDarkMode ? '#e8e8e8' : '#e0e0e0',
+          backgroundColor: '#f8f8f8', // Light gray on hover
           transition: 'background-color 0.2s ease',
         },
         borderRadius: '4px',
@@ -249,7 +252,7 @@ const StatusRow = ({ name, content, isAlternate = false }) => {
         <Typography
           variant="subtitle2"
           sx={{ 
-            color: isDarkMode ? "#000000" : "#444444",
+            color: "#444444", // Dark gray for name column
             fontWeight: 600,
             fontSize: '0.85rem',
           }}
@@ -320,7 +323,7 @@ const DeviceDetails = (props) => {
 
   const itemData = useSelector((state) => state.positions.items[id]);
 
-  console.log("itemData", itemData);
+  // console.log("itemData", itemData);
 
   // useEffectAsync(async () => {
   //   if (id) {
@@ -634,8 +637,9 @@ const DeviceDetails = (props) => {
     const query = new URLSearchParams({
       latitude: itemData?.latitude,
       longitude: itemData?.longitude,
-    });
-    const response = await fetch(`/api/server/geocode?${query.toString()}`);
+  });
+  
+  const response = await fetch(`/api/server/geocode?${query.toString()}`);
     if (response.ok) {
       setAddress(await response.text());
     } else {
@@ -648,6 +652,8 @@ const DeviceDetails = (props) => {
     "address",
     "totalDistance",
     "course",
+    "protocol",
+    "altitude",
   ]);
   const positionAttributes = usePositionAttributes(t);
 
@@ -657,7 +663,7 @@ const DeviceDetails = (props) => {
     }
   }, [itemData]);
 
-  console.log("itemData", itemData);
+  // console.log("itemData", itemData);
 
   return (
     <PageLayout
@@ -666,15 +672,19 @@ const DeviceDetails = (props) => {
     >
       <Header />
       <div
-        style={{ backgroundColor: isDarkMode ? "070818" : "#ffffff" }}
+        style={{ 
+          backgroundColor: isDarkMode ? "070818" : "#ffffff",
+          minHeight: 'calc(100vh - 64px)' // Subtract header height
+        }}
         className="header-padding horizontal-padding main-div"
       >
-        <Grid container spacing={2}>
+        <Grid container spacing={2} sx={{ minHeight: 'calc(100vh - 120px)' }}>
           <Grid item xs={12} md={3}>
             <Box
               sx={{
                 boxShadow: 0,
                 borderRadius: 4,
+                height: '100%', // Make the box take full height of its container
               }}
             >
               <Card
@@ -682,9 +692,12 @@ const DeviceDetails = (props) => {
                   boxShadow: 3,
                   borderRadius: 4,
                   backgroundColor: isDarkMode ? "#040d1b" : "#ffffff",
+                  height: '100%', // Make the card take full height of the box
+                  display: 'flex',
+                  flexDirection: 'column',
                 }}
               >
-                <CardContent>
+                <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                   <div>
                     {deviceSingleData?.attributes?.deviceImage ? (
                       <div style={{ width: "100%", maxHeight: "200px" }}>
@@ -731,19 +744,55 @@ const DeviceDetails = (props) => {
                         width: "100%",
                         color: isDarkMode ? "#000000" : "inherit",
                         borderRadius: "8px",
-                        padding: "10px 6px",
-                        backgroundColor: isDarkMode ? "#ffffff" : "#f5f5f5",
+                        padding: "15px 10px",
+                        backgroundColor: "#ffffff", // Always white regardless of theme
                         boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
                         marginTop: "20px",
+                        flexGrow: 1, // Make this div expand to fill available space
+                        display: "flex",
+                        flexDirection: "column",
                       }}
                     >
-                      <Table size="small" classes={{ root: classes.table }}>
+                      <Table size="small" classes={{ root: classes.table }} style={{ flexGrow: 1 }}>
                         <TableBody>
+                          {/* Protocol row - explicitly added */}
+                          {itemData && itemData.protocol && (
+                            <StatusRow
+                              key="protocol"
+                              name={positionAttributes.protocol.name}
+                              content={itemData.protocol}
+                              isAlternate={false}
+                            />
+                          )}
+                          
+                          {/* Altitude row - explicitly added */}
+                          {itemData && itemData.altitude !== undefined && (
+                            <StatusRow
+                              key="altitude"
+                              name={positionAttributes.altitude.name}
+                              content={
+                                <PositionValue
+                                  position={itemData}
+                                  property="altitude"
+                                  attribute={null}
+                                />
+                              }
+                              isAlternate={true}
+                            />
+                          )}
+                          
+                          {/* Original filtered items */}
                           {positionItems
                             .filter(
-                              (key) =>
-                                itemData.hasOwnProperty(key) ||
-                                itemData.attributes.hasOwnProperty(key)
+                              (key) => {
+                                // Skip protocol and altitude as we've added them manually
+                                if (key === 'protocol' || key === 'altitude') {
+                                  return false;
+                                }
+                                // For other keys, use the original logic
+                                return (itemData && (itemData.hasOwnProperty(key) ||
+                                  (itemData.attributes && itemData.attributes.hasOwnProperty(key))));
+                              }
                             )
                             .map((key, index) => (
                               <StatusRow
@@ -767,7 +816,7 @@ const DeviceDetails = (props) => {
                       </Table>
                     </div>
                   )}
-                <Box sx={{ boxShadow: 0, borderRadius: 4, marginTop: 3 }}>
+                {/* <Box sx={{ boxShadow: 0, borderRadius: 4, marginTop: 3 }}>
                   <Card
                     sx={{
                       boxShadow: 3,
@@ -790,13 +839,10 @@ const DeviceDetails = (props) => {
                   </Typography>
                 </CardContent>
               </Card>
-              </Box>
+              </Box> */}
                 </CardContent>
               </Card>
             </Box>
-            {/* <Box sx={{ boxShadow: 0, borderRadius: 4, marginTop: 1 }}>
-              
-            </Box> */}
           </Grid>
           <Grid item xs={12} md={9}>
             <Grid container spacing={2} sx={{ paddingBottom: 0 }}>
