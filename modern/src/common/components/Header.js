@@ -18,11 +18,12 @@ import {
   Container,
   Typography,
   AppBar,
-} from "@mui/material";
-import React, { useState } from "react";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { makeStyles, styled } from "@mui/styles";
-import { useTheme } from "@mui/material/styles";
+} from '@mui/material'
+import React, { useState } from 'react'
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
+import AccountCircleIcon from '@mui/icons-material/AccountCircle'
+import { makeStyles, styled } from '@mui/styles'
+import { useTheme } from '@mui/material/styles'
 import {
   Menu as MenuIcon,
   ModeCommentOutlined as MailIcon,
@@ -32,48 +33,48 @@ import {
   Search as SearchIcon,
   Send as SendIcon,
   ExpandMoreOutlined as ArrowDownIcon,
-} from "@mui/icons-material";
-import classNames from "classnames";
-import { useTranslation } from "./LocalizationProvider";
-import LogoutIcon from "@mui/icons-material/Logout";
-import { useSelector, useDispatch } from "react-redux";
-import { nativePostMessage } from "./NativeInterface";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { sessionActions } from "../../store";
-import DarkModeIcon from "@mui/icons-material/DarkMode";
+} from '@mui/icons-material'
+import classNames from 'classnames'
+import { useTranslation } from './LocalizationProvider'
+import LogoutIcon from '@mui/icons-material/Logout'
+import { useSelector, useDispatch } from 'react-redux'
+import { nativePostMessage } from './NativeInterface'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { sessionActions } from '../../store'
+import DarkModeIcon from '@mui/icons-material/DarkMode'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   sidebar: {
-    display: "flex",
-    flexDirection: "column",
-    position: "fixed",
+    display: 'flex',
+    flexDirection: 'column',
+    position: 'fixed',
     left: 0,
     top: 0,
     zIndex: 3,
     margin: theme.spacing(1.5),
     width: theme.dimensions.drawerWidthDesktop,
     bottom: theme.dimensions.bottomBarHeight,
-    transition: "transform .5s ease",
+    transition: 'transform .5s ease',
     // backgroundColor: "white",
-    [theme.breakpoints.down("md")]: {
-      width: "100%",
+    [theme.breakpoints.down('md')]: {
+      width: '100%',
       margin: 0,
     },
   },
   sidebarCollapsed: {
     transform: `translateX(-${theme.dimensions.drawerWidthDesktop})`,
     marginLeft: 0,
-    [theme.breakpoints.down("md")]: {
-      transform: "translateX(-100vw)",
+    [theme.breakpoints.down('md')]: {
+      transform: 'translateX(-100vw)',
     },
   },
   toolbarContainer: {
     zIndex: 4,
   },
   toolbar: {
-    display: "flex",
-    padding: theme.spacing(0, 1),
-    "& > *": {
+    'display': 'flex',
+    'padding': theme.spacing(0, 1),
+    '& > *': {
       margin: theme.spacing(0, 1),
     },
   },
@@ -81,124 +82,126 @@ const useStyles = makeStyles((theme) => ({
     flex: 1,
   },
   statusCard: {
-    position: "fixed",
+    position: 'fixed',
     zIndex: 5,
-    [theme.breakpoints.up("md")]: {
+    [theme.breakpoints.up('md')]: {
       left: `calc(50% + ${theme.dimensions.drawerWidthDesktop} / 2)`,
       bottom: theme.spacing(3),
     },
-    [theme.breakpoints.down("md")]: {
-      left: "50%",
+    [theme.breakpoints.down('md')]: {
+      left: '50%',
       bottom: `calc(${theme.spacing(3)} + ${
         theme.dimensions.bottomBarHeight
       }px)`,
     },
-    transform: "translateX(-50%)",
+    transform: 'translateX(-50%)',
   },
   sidebarToggle: {
-    position: "fixed",
+    position: 'fixed',
     left: theme.spacing(1.5),
     top: theme.spacing(3),
-    borderRadius: "0px",
+    borderRadius: '0px',
     minWidth: 0,
-    [theme.breakpoints.down("md")]: {
+    [theme.breakpoints.down('md')]: {
       left: 0,
     },
   },
   sidebarToggleText: {
     marginLeft: theme.spacing(1),
-    [theme.breakpoints.only("xs")]: {
-      display: "none",
+    [theme.breakpoints.only('xs')]: {
+      display: 'none',
     },
   },
   sidebarToggleBg: {
     //backgroundColor: "white",
     //color: "rgba(0, 0, 0, 0.6)",
-    "&:hover": {
+    '&:hover': {
       //backgroundColor: "white",
     },
   },
   bottomMenu: {
-    position: "fixed",
+    position: 'fixed',
     left: theme.spacing(1.5),
     bottom: theme.spacing(1.5),
     zIndex: 4,
     width: theme.dimensions.drawerWidthDesktop,
   },
   filterPanel: {
-    display: "flex",
-    flexDirection: "column",
+    display: 'flex',
+    flexDirection: 'column',
     padding: theme.spacing(2),
     gap: theme.spacing(2),
     width: theme.dimensions.drawerWidthTablet,
   },
   appbar: {
+    borderRadius: '0 !important',
     //background: "white",
-    display: "flex",
-    justifyContent: "flex-end",
-    padding: "15px 50px",
+    display: 'flex',
+    justifyContent: 'flex-end',
+    padding: '15px 50px',
     // borderBottom: "1px solid #d9d2d2",
-    [theme.breakpoints.up("xs")]: {
-      padding: "15px 5px",
+    [theme.breakpoints.up('xs')]: {
+      padding: '15px 5px',
+      borderRadius: '0 !important',
     },
   },
   count: {
-    display: "flex",
-    width: "30%",
-    justifyContent: "space-between",
+    display: 'flex',
+    width: '30%',
+    justifyContent: 'space-between',
   },
   circleCount: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   circle: {
     width: 20,
     height: 20,
-    borderRadius: "50%",
-    backgroundColor: "red",
+    borderRadius: '50%',
+    backgroundColor: 'red',
     marginBottom: 10,
   },
   green: {
-    backgroundColor: "green",
+    backgroundColor: 'green',
   },
   yellow: {
-    backgroundColor: "yellow",
+    backgroundColor: 'yellow',
   },
   profile: {
-    display: "flex",
-    alignItems: "center",
+    display: 'flex',
+    alignItems: 'center',
   },
   profileImg: {
     width: 25,
     height: 25,
-    borderRadius: "50%",
+    borderRadius: '50%',
     marginRight: 10,
     marginTop: 7,
-    [theme.breakpoints.only("xs")]: {
+    [theme.breakpoints.only('xs')]: {
       width: 40,
       height: 40,
     },
   },
   root: {
-    height: "100%",
+    height: '100%',
   },
   container: {
     margin: 0,
     padding: 20,
-    width: "100%",
-    height: "100%",
+    width: '100%',
+    height: '100%',
   },
   headerMenu: {
     marginTop: theme.spacing(4),
   },
   headerMenuList: {
-    display: "flex",
-    flexDirection: "column",
+    display: 'flex',
+    flexDirection: 'column',
   },
   headerMenuItem: {
-    "&:hover, &:focus": {
+    '&:hover, &:focus': {
       backgroundColor: theme.palette.background.light,
       // color: "white",
     },
@@ -207,20 +210,20 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 7.5,
     padding: theme.spacing(0.5),
     //color: "white",
-    [theme.breakpoints.down("xs")]: {
+    [theme.breakpoints.down('xs')]: {
       marginLeft: theme.spacing(0.5),
     },
   },
   headerMenuButtonSandwich: {
     // marginLeft: 25,
-    [theme.breakpoints.down("sm")]: {
+    [theme.breakpoints.down('sm')]: {
       marginLeft: 0,
     },
     padding: theme.spacing(0.5),
   },
   headerMenuButtonCollapse: {
     marginRight: 57.56,
-    [theme.breakpoints.down("xs")]: {
+    [theme.breakpoints.down('xs')]: {
       marginRight: 10,
     },
   },
@@ -229,71 +232,71 @@ const useStyles = makeStyles((theme) => ({
   },
   headerIcon: {
     fontSize: 24,
-    color: "#616161",
+    color: '#616161',
   },
   headerIconCollapse: {
-    color: "#616161",
+    color: '#616161',
   },
   profileMenu: {
     minWidth: 265,
   },
   profileMenuUser: {
-    display: "flex",
-    flexDirection: "column",
+    display: 'flex',
+    flexDirection: 'column',
     padding: theme.spacing(2),
   },
   profileMenuItem: {
     color: theme.palette.text.hint,
   },
   profileMenuIcon: {
-    marginRight: theme.spacing(2),
-    color: theme.palette.text.hint,
-    "&:hover": {
+    'marginRight': theme.spacing(2),
+    'color': theme.palette.text.hint,
+    '&:hover': {
       color: theme.palette.primary.main,
     },
   },
   profileMenuLink: {
-    fontSize: 16,
-    textDecoration: "none",
-    "&:hover": {
-      cursor: "pointer",
+    'fontSize': 16,
+    'textDecoration': 'none',
+    '&:hover': {
+      cursor: 'pointer',
     },
   },
-}));
+}))
 
 const Header = () => {
-  const classes = useStyles();
-  const t = useTranslation();
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const classes = useStyles()
+  const t = useTranslation()
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
 
-  var [profileMenu, setProfileMenu] = useState(null);
+  var [profileMenu, setProfileMenu] = useState(null)
 
-  const user = useSelector((state) => state.session.user);
+  const user = useSelector(state => state.session.user)
 
-  const userId = useSelector((state) => state.session.user.id);
+  const userId = useSelector(state => state.session.user.id)
 
   // Define the styles for the Card (as a style object)
   const CardStyles = {
-    backgroundColor: "rgba(255, 255, 255, 0.05)",
-    backdropFilter: "blur(10px)",
-    borderRadius: "12px",
-    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-    border: "1px solid rgba(255, 255, 255, 0.3)",
-  };
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    backdropFilter: 'blur(10px)',
+    borderRadius: '12px',
+    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+    border: '1px solid rgba(255, 255, 255, 0.3)',
+  }
 
   // Create a styled Menu component with the same styles as the Card
   const StyledMenu = styled(Menu)(({ theme }) => ({
-    "& .MuiPaper-root": {
+    '& .MuiPaper-root': {
       ...CardStyles, // Apply the same styles as the Card
     },
-  }));
+  }))
 
   const handleLogout = async () => {
-    const notificationToken = window.localStorage.getItem("notificationToken");
+    const notificationToken = window.localStorage.getItem('notificationToken')
     if (notificationToken) {
-      window.localStorage.removeItem("notificationToken");
-      const tokens = user.attributes.notificationTokens?.split(",") || [];
+      window.localStorage.removeItem('notificationToken')
+      const tokens = user.attributes.notificationTokens?.split(',') || []
       if (tokens.includes(notificationToken)) {
         const updatedUser = {
           ...user,
@@ -301,37 +304,36 @@ const Header = () => {
             ...user.attributes,
             notificationTokens:
               tokens.length > 1
-                ? tokens.filter((it) => it !== notificationToken).join(",")
+                ? tokens.filter(it => it !== notificationToken).join(',')
                 : undefined,
           },
-        };
+        }
         await fetch(`/api/users/${user.id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(updatedUser),
-        });
+        })
       }
     }
 
-    await fetch("/api/session", { method: "DELETE" });
-    nativePostMessage("logout");
-    navigate("/login");
-    dispatch(sessionActions.updateUser(null));
-  };
+    await fetch('/api/session', { method: 'DELETE' })
+    nativePostMessage('logout')
+    navigate('/login')
+    dispatch(sessionActions.updateUser(null))
+  }
 
   return (
-    <AppBar position="fixed" color="inherit">
+    <AppBar position='fixed' color='inherit' style={{ borderRadius: '0' }}>
       <div className={classes.appbar}>
         <IconButton
-          aria-haspopup="true"
-          color="inherit"
+          aria-haspopup='true'
+          color='inherit'
           className={classNames(classes.headerMenuButton, classes.profileArrow)}
-          aria-controls="profile-menu"
-          onClick={(e) => setProfileMenu(e.currentTarget)}
-        >
+          aria-controls='profile-menu'
+          onClick={e => setProfileMenu(e.currentTarget)}>
           <div
             className={classes.profile}
-            style={{ cursor: "pointer" }}
+            style={{ cursor: 'pointer' }}
             onClick={() => {
               // if (localStorage.getItem("mode")) {
               //   if (localStorage.getItem("mode") === "dark") {
@@ -344,32 +346,38 @@ const Header = () => {
               // }
               // window.location.reload();
               // console.log("call");
-            }}
-          >
+            }}>
             <div>
               {/* <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSrf1xjorLVFcNPL_A746ew0_fIzLFTY5Ngw&usqp=CAU"
-                alt="logo"
+                src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSrf1xjorLVFcNPL_A746ew0_fIzLFTY5Ngw&usqp=CAU'
+                alt='logo'
                 className={classes.profileImg}
               /> */}
+              <AccountCircleIcon
+                sx={{ fontSize: 24, color: 'gray', marginRight: 1 }}
+              />
             </div>
-            <Typography sx={{ fontSize: "12px" }} variant="h6" component={"h6"}>
-              {user.name}
+            <Typography
+              sx={{ fontSize: '16px', fontWeight: '500' }}
+              variant='h6'
+              component={'h6'}>
+              {user?.name
+                ? user?.name?.charAt(0).toUpperCase() + user?.name?.slice(1)
+                : 'User'}
             </Typography>
-            <KeyboardArrowDownIcon sx={{ color: "gray", marginLeft: 1 }} />
+            <KeyboardArrowDownIcon sx={{ color: 'gray', marginLeft: 1 }} />
           </div>
         </IconButton>
         <StyledMenu
-          id="profile-menu"
+          id='profile-menu'
           open={Boolean(profileMenu)}
           anchorEl={profileMenu}
           onClose={() => setProfileMenu(null)}
           className={classes.headerMenu}
           classes={{ paper: classes.profileMenu }}
-          disableAutoFocusItem
-        >
+          disableAutoFocusItem>
           <div className={classes.profileMenuUser}>
-            <Typography color={"#000000"} variant="h4" weight="medium">
+            <Typography color={'#000000'} variant='h4' weight='medium'>
               {user.name}
             </Typography>
           </div>
@@ -379,13 +387,12 @@ const Header = () => {
               classes.profileMenuItem,
               classes.headerMenuItem
             )}
-            sx={{ color: "#000000" }}
+            sx={{ color: '#000000' }}
             component={Link}
             to={`/settings/user/${userId}/profile`}
             onClick={() => {
-              setProfileMenu(null);
-            }}
-          >
+              setProfileMenu(null)
+            }}>
             <AccountIcon className={classes.profileMenuIcon} /> Profile
           </MenuItem>
           <MenuItem
@@ -393,42 +400,40 @@ const Header = () => {
               classes.profileMenuItem,
               classes.headerMenuItem
             )}
-            sx={{ color: "#000000" }}
+            sx={{ color: '#000000' }}
             onClick={() => {
-              if (localStorage.getItem("mode")) {
-                if (localStorage.getItem("mode") === "dark") {
-                  localStorage.setItem("mode", "light");
+              if (localStorage.getItem('mode')) {
+                if (localStorage.getItem('mode') === 'dark') {
+                  localStorage.setItem('mode', 'light')
                 } else {
-                  localStorage.setItem("mode", "dark");
+                  localStorage.setItem('mode', 'dark')
                 }
               } else {
-                localStorage.setItem("mode", "dark");
+                localStorage.setItem('mode', 'dark')
               }
-              window.location.reload();
-              console.log("call");
-            }}
-          >
-            <DarkModeIcon className={classes.profileMenuIcon} />{" "}
-            {localStorage.getItem("mode") &&
-            localStorage.getItem("mode") === "dark"
-              ? "Light"
-              : "Dark"}
+              window.location.reload()
+              console.log('call')
+            }}>
+            <DarkModeIcon className={classes.profileMenuIcon} />{' '}
+            {localStorage.getItem('mode') &&
+            localStorage.getItem('mode') === 'dark'
+              ? 'Light'
+              : 'Dark'}
           </MenuItem>
           <MenuItem
             className={classNames(
               classes.profileMenuItem,
               classes.headerMenuItem
             )}
-            sx={{ color: "red" }}
-            onClick={handleLogout}
-          >
-            <LogoutIcon className={classes.profileMenuIcon} />{" "}
-            {t("loginLogout")}
+            sx={{ color: 'red' }}
+            onClick={handleLogout}>
+            <LogoutIcon className={classes.profileMenuIcon} />{' '}
+            {t('loginLogout')}
           </MenuItem>
         </StyledMenu>
       </div>
     </AppBar>
-  );
-};
+  )
+}
 
-export default Header;
+export default Header

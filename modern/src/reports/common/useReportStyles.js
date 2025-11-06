@@ -1,10 +1,10 @@
-import { makeStyles } from "@mui/styles";
+import { makeStyles } from '@mui/styles'
 
-export default makeStyles((theme) => ({
+export default makeStyles(theme => ({
   batteryText: {
-    fontSize: "0.75rem",
-    fontWeight: "normal",
-    lineHeight: "0.875rem",
+    fontSize: '0.75rem',
+    fontWeight: 'normal',
+    lineHeight: '0.875rem',
   },
   positive: {
     color: theme.palette.colors.positive,
@@ -19,43 +19,49 @@ export default makeStyles((theme) => ({
     color: theme.palette.colors.neutral,
   },
   container: {
-    height: "100vh",
-    display: "flex",
-    flexDirection: "column",
+    height: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
   },
   containerMap: {
-    flexBasis: "40%",
+    flexBasis: '40%',
     flexShrink: 0,
   },
   containerMain: {
-    overflow: "auto",
+    overflow: 'auto',
   },
   header: {
-    position: "sticky",
+    position: 'sticky',
     left: 0,
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "stretch",
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'stretch',
   },
   columnAction: {
-    width: "1%",
+    width: '1%',
     paddingLeft: theme.spacing(1),
   },
   filter: {
-    display: "inline-flex",
-    flexWrap: "wrap",
+    display: 'inline-flex',
+    flexWrap: 'wrap',
     gap: theme.spacing(2),
     padding: theme.spacing(3, 2, 2),
     // [theme.breakpoints.up("xs")]: {
     //   padding: 0,
     // },
   },
+  filterDeviceDetails: {
+    display: 'inline-flex',
+    flexWrap: 'wrap',
+    gap: theme.spacing(2),
+    padding: 0,
+  },
   filterItem: {
     minWidth: 0,
     flex: `1 1 ${theme.dimensions.filterFormWidth}`,
   },
   filterButtons: {
-    display: "flex",
+    display: 'flex',
     gap: theme.spacing(1),
     flex: `1 1 ${theme.dimensions.filterFormWidth}`,
   },
@@ -64,7 +70,7 @@ export default makeStyles((theme) => ({
   },
   chart: {
     flexGrow: 1,
-    overflow: "hidden",
-    height: "70vh",
+    overflow: 'hidden',
+    height: '70vh',
   },
-}));
+}))
