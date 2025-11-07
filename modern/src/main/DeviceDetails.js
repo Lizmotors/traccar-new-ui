@@ -1596,14 +1596,7 @@ const DeviceDetails = props => {
                       backgroundColor: isDarkMode ? '#040d1b' : '#ffffff',
                     }}>
                     <CardContent sx={{ padding: '25px' }}>
-                      <div
-                        style={{
-                          display: 'flex',
-                          flexDirection: 'column',
-                          gap: '22px',
-                          minHeight: '10vh',
-                          maxHeight: '100vh',
-                        }}>
+                      <div className={classes.container}>
                         {selectedItem && (
                           <div className={classes.containerMap}>
                             <MapView>
